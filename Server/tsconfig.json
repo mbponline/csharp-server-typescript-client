@@ -1,0 +1,21 @@
+{
+  "version": "1.8.6",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "sourceMap": true,
+    "moduleResolution": "classic"
+  },
+  "compileOnSave": true,
+  "atom": {
+    "rewriteTsconfig": true
+  },
+  "filesGlob": [
+    "./**/*.ts",
+    "!./node_modules/**/*.ts",
+    "!./bower_components/**/*.ts"
+  ]
+}

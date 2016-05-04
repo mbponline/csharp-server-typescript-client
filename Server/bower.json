@@ -1,0 +1,29 @@
+{
+  "name": "csharp-server-typescript-client",
+  "version": "0.0.1",
+  "description": "C# REST API for Existing Databases (MySQL, MSSQL) and Managing Client-Side Data (TypeScript). Experiment / Proof of concept. Under development.",
+  "keywords": [
+    "rest",
+    "mysql",
+    "mssql",
+    "C#",
+    "typescript"
+  ],
+  "authors": [
+    "marianc"
+  ],
+  "license": "GPL-3.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.0",
+    "knockout": "^3.4.0",
+    "requirejs": "^2.1.22",
+    "text": "requirejs-text#^2.0.14"
+  }
+}

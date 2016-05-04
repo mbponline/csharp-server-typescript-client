@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="marianc">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Demo application</title>
+
+    <link href="app.css" rel="stylesheet" />
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+
+    <script src="bower_components/requirejs/require.js"></script>
+
+    <script type="text/javascript">
+        define('jquery', function () { return jQuery; });
+        define('knockout', ko);
+    </script>
+
+    <script src="main.js"></script>
+</head>
+<body>
+    <div id="applicationHost">
+        <div data-bind="visible: items().length !==0" style="display: none;">
+            <div>
+                <button type="button" data-bind="click: previous, enable: previousEnabled">Previous</button>
+                <button type="button" data-bind="click: next, enable: nextEnabled">Next</button>
+                <span data-bind="text: pageDisplay"></span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Film</th>
+                        <th>Language</th>
+                        <th>Actors</th>
+                        <th>Category</th>
+                    </tr>
+
+                </thead>
+                <tbody data-bind="foreach: items">
+                    <tr>
+                        <td data-bind="text: Title">&nbsp;</td>
+                        <td data-bind="text: Language.Name">&nbsp;</td>
+                        <td>
+                            <ul data-bind="foreach: FilmActors">
+                                <li data-bind="text: Actor.FirstName + ', ' + Actor.LastName"></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul data-bind="foreach: FilmCategories">
+                                <li data-bind="text: Category.Name"></li>
+                            </ul>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div data-bind="visible: items().length === 0">
+            <h1>Initializing...</h1>
+        </div>
+    </div>
+</body>
+</html>
