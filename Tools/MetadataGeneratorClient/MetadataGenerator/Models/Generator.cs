@@ -1,5 +1,4 @@
 ﻿using CodeGenerator.Models.Common;
-using Server.Models.Utils.DAL.Common;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,10 +6,10 @@ namespace MetadataGenerator.Models
 {
     internal static class Generator
     {
-        public static string GenerateModel(Metadata metadata)
+        public static string GenerateModel(Metadata metadata, OperationsDefinition operationsDefinition)
         {
-            metadata.Functions = OperationsDefinition.Functions;
-            metadata.Actions = OperationsDefinition.Actions;
+            metadata.Functions = operationsDefinition.Functions;
+            metadata.Actions = operationsDefinition.Actions;
 
             var entityTypes = metadata.EntityTypes.ToList();
 

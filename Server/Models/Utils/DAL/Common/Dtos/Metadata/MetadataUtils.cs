@@ -11,17 +11,25 @@ namespace Server.Models.Utils.DAL.Common
         public static Metadata Deserialize(string metadataFileName)
         {
             Metadata metadata;
+            OperationsDefinition operationsDefinition;
 
-            var path = HostingEnvironment.MapPath(string.Format(@"~/App_Data/{0}.json", metadataFileName));
-
-            // read json file
-            using (StreamReader r = new StreamReader(path))
+            // read json files
+            var pathMetadata = HostingEnvironment.MapPath(string.Format(@"~/App_Data/{0}.json", metadataFileName));
+            using (StreamReader r = new StreamReader(pathMetadata))
             {
                 var jsonText = r.ReadToEnd();
                 metadata = JsonConvert.DeserializeObject<Metadata>(jsonText);
             }
-            metadata.Functions = OperationsDefinition.Functions;
-            metadata.Actions = OperationsDefinition.Actions;
+
+            var pathOperationsDefinition = HostingEnvironment.MapPath(@"~/App_Data/operationsDefinition.json");
+            using (StreamReader r = new StreamReader(pathOperationsDefinition))
+            {
+                var jsonText = r.ReadToEnd();
+                operationsDefinition = JsonConvert.DeserializeObject<OperationsDefinition>(jsonText);
+            }
+
+            metadata.Functions = operationsDefinition.Functions;
+            metadata.Actions = operationsDefinition.Actions;
 
             return metadata;
         }

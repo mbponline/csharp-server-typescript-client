@@ -116,6 +116,7 @@
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Metadata.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\NavigationProperty.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\Operation.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\OperationsDefinition.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\Parameter.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\ReturnType.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Multiplicity.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="Models\Utils\DAL\dataProvider.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\DataUtils.cs" />
     <Compile Include="Models\Utils\DAL\DataProviderDto.cs" />
-    <Compile Include="Models\Utils\DAL\OperationsDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +168,7 @@
     <Content Include="App_Data\metadata_mysql.json" />
     <Content Include="bower.json" />
     <Content Include="tsconfig.json" />
+    <Content Include="App_Data\operationsDefinition.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

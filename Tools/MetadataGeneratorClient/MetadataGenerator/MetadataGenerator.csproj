@@ -54,18 +54,19 @@
     <Compile Include="Models\Common\Metadata\Multiplicity.cs" />
     <Compile Include="Models\Common\Metadata\NavigationProperty.cs" />
     <Compile Include="Models\Common\Metadata\Operations\Operation.cs" />
+    <Compile Include="Models\Common\Metadata\Operations\OperationsDefinition.cs" />
     <Compile Include="Models\Common\Metadata\Operations\Parameter.cs" />
     <Compile Include="Models\Common\Metadata\Operations\ReturnType.cs" />
     <Compile Include="Models\Common\Metadata\Property.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\GeneratorUtils.cs" />
-    <Compile Include="App_Data\OperationsDefinition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="App_Data\metadata_mysql.json" />
+    <None Include="App_Data\operationsDefinition.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

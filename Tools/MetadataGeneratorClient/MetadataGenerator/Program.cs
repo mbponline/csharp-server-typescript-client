@@ -17,21 +17,29 @@ namespace MetadataGenerator
             {
                 path = Path.GetDirectoryName(path);
             }
-            path = Path.Combine(path, "App_Data", "metadata_mysql.json");
 
-            // read json file
+            // read json files
             Metadata metadata;
-            using (StreamReader r = new StreamReader(path))
+            var pathMetadata = Path.Combine(path, "App_Data", "metadata_mysql.json");
+            using (StreamReader r = new StreamReader(pathMetadata))
             {
                 var jsonText = r.ReadToEnd();
                 metadata = JsonConvert.DeserializeObject<Metadata>(jsonText);
             }
 
-            // generate metadata
-            var dataProvider = Generator.GenerateModel(metadata);
+            var pathOperationsDefinition = Path.Combine(path, "App_Data", "operationsDefinition.json");
+            OperationsDefinition operationsDefinition;
+            using (StreamReader r = new StreamReader(pathOperationsDefinition))
+            {
+                var jsonText = r.ReadToEnd();
+                operationsDefinition = JsonConvert.DeserializeObject<OperationsDefinition>(jsonText);
+            }
+
+            // generate code
+            var generatedCode = Generator.GenerateModel(metadata, operationsDefinition);
 
             // save metadata file on disk
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 2; i++)
             {
                 path = Path.GetDirectoryName(path);
             }
@@ -41,7 +49,7 @@ namespace MetadataGenerator
                 Directory.CreateDirectory(path);
             }
             path = Path.Combine(path, "dataProvider.ts");
-            File.WriteAllText(path, dataProvider);
+            File.WriteAllText(path, generatedCode);
             Console.WriteLine("Done. Press a key to exit...");
             Console.ReadLine();
             Process.Start("notepad.exe", path);
