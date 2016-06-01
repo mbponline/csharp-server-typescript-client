@@ -16,12 +16,12 @@ namespace MetadataGenerator.Models
             var function = metadata.Functions != null ? metadata.Functions : Enumerable.Empty<Operation>();
             var action = metadata.Actions != null ? metadata.Actions : Enumerable.Empty<Operation>();
 
-            Dictionary<string, string> dbType = null;
+            Dictionary<string, string> dbTypeConvert = null;
 
             switch (metadata.Database.Dialect)
             {
                 case "MSSQL":
-                    dbType = new Dictionary<string, string>()
+                    dbTypeConvert = new Dictionary<string, string>()
                         {
                             { "int", "number" },
                             { "smallint", "number" },
@@ -33,7 +33,7 @@ namespace MetadataGenerator.Models
                         };
                     break;
                 case "MYSQL":
-                    dbType = new Dictionary<string, string>()
+                    dbTypeConvert = new Dictionary<string, string>()
                         {
                             { "int", "number" },
                             { "smallint", "number" },
@@ -59,7 +59,7 @@ namespace MetadataGenerator.Models
                     break;
             }
 
-            var opType = new Dictionary<string, string>()
+            var opTypeConvert = new Dictionary<string, string>()
                         {
                             { "int", "number" },
                             { "DateTime", "Date" },
@@ -78,67 +78,50 @@ namespace MetadataGenerator.Models
                 .WriteLine("//------------------------------------------------------------------------------")
                 .WriteLine();
 
-            br.WriteLine("import DataAdapter = require(\"./Common/Dtos/DataAdapter\");")
-                .WriteLine("import DataViewRemote = require(\"./Common/Entities/DataViews/DataViewRemote\");")
-                .WriteLine("import RemoteViewsBase = require(\"./Common/Entities/DataViews/RemoteViewsBase\");")
-                .WriteLine("import DataViewLocal = require(\"./Common/Entities/DataViews/DataViewLocal\");")
-                .WriteLine("import LocalViewsBase = require(\"./Common/Entities/DataViews/LocalViewsBase\");")
-                .WriteLine("import DataContext = require(\"./Common/Entities/DataContext\");")
-                .WriteLine("import DataServiceBase = require(\"./Common/Entities/DataServiceBase\");")
-                .WriteLine();
-
             br.BeginBlock("module dataProvider {")
                 .WriteLine();
 
+            // IServiceFunctions
             br.BeginBlock("export interface IServiceFunctions {");
             foreach (var fc in function)
             {
-                br.WriteLine(fc.Name + "?: (" + GeneratorUtils.GetFunctionParamList(fc, opType) + ")" + " => JQueryDeferred<" + GeneratorUtils.GetParamResult(fc.ReturnType, opType) + ">;");
+                br.WriteLine(fc.Name + "?: (" + GeneratorUtils.GetFunctionParamList(fc, opTypeConvert) + ")" + " => JQueryDeferred<" + GeneratorUtils.GetParamResult(fc.ReturnType, opTypeConvert) + ">;");
             }
             br.EndBlock();
 
+            // IServiceActions
             br.BeginBlock("export interface IServiceActions {");
             foreach (var ac in action)
             {
-                br.WriteLine(ac.Name + "?: (" + GeneratorUtils.GetActionParamList(ac, opType) + ")" + " => JQueryDeferred<" + GeneratorUtils.GetParamResult(ac.ReturnType, opType) + ">;");
+                br.WriteLine(ac.Name + "?: (" + GeneratorUtils.GetActionParamList(ac, opTypeConvert) + ")" + " => JQueryDeferred<" + GeneratorUtils.GetParamResult(ac.ReturnType, opTypeConvert) + ">;");
             }
             br.EndBlock();
 
-            br.BeginBlock("export class LocalViews extends LocalViewsBase {")
-                .WriteLine("constructor(dataContext: DataContext) { super(dataContext); }")
-                .WriteLine();
+            // ILocalViews
+            br.BeginBlock("export interface ILocalViews {");
             foreach (var entityType in entityTypes)
             {
-                br.WriteLine(string.Format("get {0}() {{ return this.getPropertyValue<{1}>(\"{1}\"); }}", entityType.Value.EntitySetName, entityType.Key));
+                br.WriteLine(string.Format("{0}?: IDataViewLocal<{1}>;", entityType.Value.EntitySetName, entityType.Key));
             }
             br.EndBlock();
 
-            br.BeginBlock("export class RemoteViews extends RemoteViewsBase {")
-                .WriteLine("constructor(dataAdapter: DataAdapter, dataContext: DataContext) { super(dataAdapter, dataContext); }")
-                .WriteLine();
+            // IRemoteViews
+            br.BeginBlock("export interface IRemoteViews {");
             foreach (var entityType in entityTypes)
             {
-                br.WriteLine(string.Format("get {0}() {{ return this.getPropertyValue<{1}>(\"{1}\"); }}", entityType.Value.EntitySetName, entityType.Key));
+                br.WriteLine(string.Format("{0}?: IDataViewRemote<{1}>;", entityType.Value.EntitySetName, entityType.Key));
             }
             br.EndBlock();
 
-            br.BeginBlock("export class DataService extends DataServiceBase<LocalViews, RemoteViews, IServiceFunctions, IServiceActions> {");
-            br.BeginBlock("constructor(metadata: metadataTypes.Metadata, baseUrl: string) {")
-                .WriteLine("super(metadata, baseUrl);");
-            br.BeginBlock("this.from = {")
-                .WriteLine("local: new LocalViews(this.dataContext),")
-                .WriteLine("remote: new RemoteViews(this.dataAdapter, this.dataContext),");
-            br.EndBlock("};", false);
-            br.EndBlock("}", false);
-            br.EndBlock("}");
-
+            // entityTypes
             br.BeginBlock("export var entityTypes = {");
             foreach (var entityType in entityTypes)
             {
-                br.WriteLine(string.Format("{0}: '{0}',", entityType.Key));
+                br.WriteLine(string.Format("{0}: \"{0}\",", entityType.Key));
             }
             br.EndBlock();
 
+            // rules
             br.BeginBlock("export var rules = {");
             foreach (var entityType in entityTypes)
             {
@@ -154,6 +137,7 @@ namespace MetadataGenerator.Models
             }
             br.EndBlock();
 
+            // Entities
             foreach (var entityType in entityTypes)
             {
                 // with constructor generator
@@ -162,14 +146,14 @@ namespace MetadataGenerator.Models
                 var etp = entityType.Value.Properties;
                 foreach (var property in etp)
                 {
-                    br.WriteLine(property.Key + ": " + dbType[property.Value.Type] + ";");
+                    br.WriteLine(property.Key + ": " + dbTypeConvert[property.Value.Type] + ";");
                 }
                 br.WriteLine();
 
                 // navigation properties for intellisense
                 NavigationProperty anp;
-                var etnp = entityType.Value.NavigationProperties;
-                foreach (var navigationProperty in etnp)
+                var navigationProperties = entityType.Value.NavigationProperties;
+                foreach (var navigationProperty in navigationProperties)
                 {
                     anp = navigationProperty.Value;
                     br.WriteLine(navigationProperty.Key + ": " + anp.EntityTypeName + (anp.Multiplicity == "multi" ? "[]" : "") + ";");

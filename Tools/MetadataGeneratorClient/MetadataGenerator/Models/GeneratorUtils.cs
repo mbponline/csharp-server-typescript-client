@@ -8,7 +8,7 @@ namespace MetadataGenerator.Models
 
     internal static class GeneratorUtils
     {
-        public static void WriteRules(BlockWriter br, Property entityTypeProperty,Metadata metadata)
+        public static void WriteRules(BlockWriter br, Property entityTypeProperty, Metadata metadata)
         {
             if (!entityTypeProperty.Nullable)
             {
@@ -35,7 +35,7 @@ namespace MetadataGenerator.Models
                             br.WriteLine("date: true,");
                             break;
                         default:
-                            throw new ArgumentException("Tip de date necunoscut.");
+                            throw new ArgumentException("Unknown data type.");
                     }
 
                     break;
@@ -69,7 +69,7 @@ namespace MetadataGenerator.Models
                         case "blob":
                             break;
                         default:
-                            throw new ArgumentException("Tip de date necunoscut.");
+                            throw new ArgumentException("Unknown data type.");
                     }
                     break;
                 default:
@@ -77,9 +77,9 @@ namespace MetadataGenerator.Models
             }
         }
 
-        public static string GetFunctionParamList(Operation fc, Dictionary<string, string> opType)
+        public static string GetFunctionParamList(Operation fc, Dictionary<string, string> opTypeConvert)
         {
-            var result = fc.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, opType[it.Type])).ToList();
+            var result = fc.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, opTypeConvert[it.Type])).ToList();
             if (fc.ReturnType.IsEntity && fc.ReturnType.IsCollection)
             {
                 result.Add("queryObject: IQueryObject");
@@ -87,13 +87,13 @@ namespace MetadataGenerator.Models
             return string.Join(", ", result);
         }
 
-        public static string GetActionParamList(Operation ac, Dictionary<string, string> opType)
+        public static string GetActionParamList(Operation ac, Dictionary<string, string> opTypeConvert)
         {
-            var result = ac.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, opType[it.Type]));
+            var result = ac.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, opTypeConvert[it.Type]));
             return string.Join(", ", result);
         }
 
-        public static string GetParamResult(ReturnType returnTypeParam, Dictionary<string, string> opType)
+        public static string GetParamResult(ReturnType returnTypeParam, Dictionary<string, string> opTypeConvert)
         {
             if (returnTypeParam == null)
             {
@@ -101,7 +101,7 @@ namespace MetadataGenerator.Models
             }
             else if (returnTypeParam.IsEntity && returnTypeParam.IsCollection)
             {
-                return string.Format("IResult <{0}>", returnTypeParam.Type);
+                return string.Format("IResult<{0}>", returnTypeParam.Type);
             }
             else if (returnTypeParam.IsEntity && !returnTypeParam.IsCollection)
             {
@@ -109,11 +109,11 @@ namespace MetadataGenerator.Models
             }
             else if (!returnTypeParam.IsEntity && returnTypeParam.IsCollection)
             {
-                return string.Format("{0}[]", opType[returnTypeParam.Type]);
+                return string.Format("{0}[]", opTypeConvert[returnTypeParam.Type]);
             }
             else
             {
-                return opType[returnTypeParam.Type];
+                return opTypeConvert[returnTypeParam.Type];
             }
         }
     }

@@ -8,10 +8,6 @@ interface IPredicate<T> {
     (item: T): boolean;
 }
 
-interface ICompare<T> {
-    (a: T, b: T): boolean;
-}
-
 interface IEntity {
     _attach(entitySet: IDictionary<IEntitySet<any>>): void;
     _detach(): void;

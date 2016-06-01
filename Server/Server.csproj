@@ -189,11 +189,13 @@
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Dtos\queryUtils.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Dtos\types.d.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataContext.ts" />
-    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataServiceBase.ts" />
+    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataService.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\DataViewLocal.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\DataViewRemote.ts" />
-    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\LocalViewsBase.ts" />
-    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\RemoteViewsBase.ts" />
+    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\LocalViews.ts" />
+    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\RemoteViews.ts" />
+    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\types.d.ts" />
+    <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\DataViews\viewsUtils.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\Entity.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\EntitySet.ts" />
     <TypeScriptCompile Include="Modules\Utils\DAL\Common\Entities\NavigationHelper.ts" />

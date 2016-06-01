@@ -2,11 +2,12 @@
 import $ = require("jquery");
 
 import dataProvider = require("Modules/Utils/DAL/dataProvider");
+import DataService = require("Modules/Utils/DAL/Common/Entities/DataService");
 
 class DataAgent {
     constructor() { }
 
-    private _dataService: dataProvider.DataService;
+    private _dataService: DataService;
     get dataService() {
         return this._dataService;
     }
@@ -14,7 +15,7 @@ class DataAgent {
     initialize() {
         var baseUrl = "/api/datasource/";
         return $.getJSON(baseUrl + "crud/metadata").then((metadata: metadataTypes.Metadata) => {
-            this._dataService = new dataProvider.DataService(metadata, baseUrl);
+            this._dataService = new DataService(metadata, baseUrl);
         }).then(() => this.loadCacheData());
     }
 

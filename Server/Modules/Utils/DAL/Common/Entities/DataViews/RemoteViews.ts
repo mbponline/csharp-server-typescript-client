@@ -1,14 +1,18 @@
 ﻿
+import dataProvider = require("../../../dataProvider");
 import DataAdapter = require("../Dtos/DataAdapter");
 import DataContext = require("../DataContext");
 import DataViewRemote = require("./DataViewRemote");
+import viewsUtils = require("./viewsUtils");
 
-class RemoteViewsBase {
-    constructor(protected dataAdapter: DataAdapter, protected dataContext: DataContext) { }
+class RemoteViews implements dataProvider.IRemoteViews {
+    constructor(private dataAdapter: DataAdapter, private dataContext: DataContext, private metadata: metadataTypes.Metadata) {
+        viewsUtils.initializeProperties(this, metadata);
+    }
 
     private propertyBag: IDictionary<DataViewRemote<any>> = {};
 
-    protected getPropertyValue<T>(entityTypeName: string): DataViewRemote<T> {
+    private getPropertyValue<T>(entityTypeName: string): DataViewRemote<T> {
         var instance: DataViewRemote<T>;
         if (this.propertyBag.hasOwnProperty(entityTypeName)) {
             instance = this.propertyBag[entityTypeName];
@@ -21,4 +25,4 @@ class RemoteViewsBase {
 
 }
 
-export = RemoteViewsBase;
+export = RemoteViews;

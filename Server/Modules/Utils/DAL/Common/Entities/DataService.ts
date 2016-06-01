@@ -1,28 +1,35 @@
 
+import dataProvider = require("../../dataProvider");
 import DataAdapter = require("../Dtos/DataAdapter");
-import LocalViewsBase = require("./DataViews/LocalViewsBase");
-import RemoteViewsBase = require("./DataViews/RemoteViewsBase");
+import LocalViews = require("./DataViews/LocalViews");
+import RemoteViews = require("./DataViews/RemoteViews");
 import DataContext = require("./DataContext");
 import OperationsProvider = require("./OperationsProvider");
 
-abstract class DataServiceBase<TLocal extends LocalViewsBase, TRemote extends RemoteViewsBase, TFunction, TAction> {
+class DataService {
     constructor(private metadata: metadataTypes.Metadata, baseUrl: string) {
         this.dataAdapter = new DataAdapter(this.metadata, baseUrl);
         this.dataContext = new DataContext(this.metadata);
+
+        this.from = {
+            local: new LocalViews(this.dataContext, this.metadata),
+            remote: new RemoteViews(this.dataAdapter, this.dataContext, this.metadata),
+        };
 
         var op = new OperationsProvider(this.dataAdapter, this.dataContext);
         this.operation = {
             function: op.initializeOperations("functions"),
             action: op.initializeOperations("actions"),
         };
+
     }
 
-    from: IServiceLocation<TLocal, TRemote>;
-    operation: IServiceOperation<TFunction, TAction>;
+    from: IServiceLocation<dataProvider.ILocalViews, dataProvider.IRemoteViews>;
+    operation: IServiceOperation<dataProvider.IServiceFunctions, dataProvider.IServiceActions>;
 
     protected dataAdapter: DataAdapter;
     protected dataContext: DataContext;
 
 }
 
-export = DataServiceBase;
+export = DataService;

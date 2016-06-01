@@ -6,93 +6,71 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 //------------------------------------------------------------------------------
 
-import DataAdapter = require("./Common/Dtos/DataAdapter");
-import DataViewRemote = require("./Common/Entities/DataViews/DataViewRemote");
-import RemoteViewsBase = require("./Common/Entities/DataViews/RemoteViewsBase");
-import DataViewLocal = require("./Common/Entities/DataViews/DataViewLocal");
-import LocalViewsBase = require("./Common/Entities/DataViews/LocalViewsBase");
-import DataContext = require("./Common/Entities/DataContext");
-import DataServiceBase = require("./Common/Entities/DataServiceBase");
-
 module dataProvider {
     
     export interface IServiceFunctions {
-        GetFilmsWithActors?: (releaseYear: number, queryObject: IQueryObject) => JQueryDeferred<IResult <Film>>;
+        GetFilmsWithActors?: (releaseYear: number, queryObject: IQueryObject) => JQueryDeferred<IResult<Film>>;
     };
 
     export interface IServiceActions {
         TestAction?: (param1: number) => JQueryDeferred<void>;
     };
 
-    export class LocalViews extends LocalViewsBase {
-        constructor(dataContext: DataContext) { super(dataContext); }
-        
-        get Actors() { return this.getPropertyValue<Actor>("Actor"); }
-        get Addresses() { return this.getPropertyValue<Address>("Address"); }
-        get Categories() { return this.getPropertyValue<Category>("Category"); }
-        get Cities() { return this.getPropertyValue<City>("City"); }
-        get Countries() { return this.getPropertyValue<Country>("Country"); }
-        get Customers() { return this.getPropertyValue<Customer>("Customer"); }
-        get Films() { return this.getPropertyValue<Film>("Film"); }
-        get FilmActors() { return this.getPropertyValue<FilmActor>("FilmActor"); }
-        get FilmCategories() { return this.getPropertyValue<FilmCategory>("FilmCategory"); }
-        get FilmTexts() { return this.getPropertyValue<FilmText>("FilmText"); }
-        get Inventories() { return this.getPropertyValue<Inventory>("Inventory"); }
-        get Languages() { return this.getPropertyValue<Language>("Language"); }
-        get Payments() { return this.getPropertyValue<Payment>("Payment"); }
-        get Rentals() { return this.getPropertyValue<Rental>("Rental"); }
-        get Staffs() { return this.getPropertyValue<Staff>("Staff"); }
-        get Stores() { return this.getPropertyValue<Store>("Store"); }
+    export interface ILocalViews {
+        Actors?: IDataViewLocal<Actor>;
+        Addresses?: IDataViewLocal<Address>;
+        Categories?: IDataViewLocal<Category>;
+        Cities?: IDataViewLocal<City>;
+        Countries?: IDataViewLocal<Country>;
+        Customers?: IDataViewLocal<Customer>;
+        Films?: IDataViewLocal<Film>;
+        FilmActors?: IDataViewLocal<FilmActor>;
+        FilmCategories?: IDataViewLocal<FilmCategory>;
+        FilmTexts?: IDataViewLocal<FilmText>;
+        Inventories?: IDataViewLocal<Inventory>;
+        Languages?: IDataViewLocal<Language>;
+        Payments?: IDataViewLocal<Payment>;
+        Rentals?: IDataViewLocal<Rental>;
+        Staffs?: IDataViewLocal<Staff>;
+        Stores?: IDataViewLocal<Store>;
     };
 
-    export class RemoteViews extends RemoteViewsBase {
-        constructor(dataAdapter: DataAdapter, dataContext: DataContext) { super(dataAdapter, dataContext); }
-        
-        get Actors() { return this.getPropertyValue<Actor>("Actor"); }
-        get Addresses() { return this.getPropertyValue<Address>("Address"); }
-        get Categories() { return this.getPropertyValue<Category>("Category"); }
-        get Cities() { return this.getPropertyValue<City>("City"); }
-        get Countries() { return this.getPropertyValue<Country>("Country"); }
-        get Customers() { return this.getPropertyValue<Customer>("Customer"); }
-        get Films() { return this.getPropertyValue<Film>("Film"); }
-        get FilmActors() { return this.getPropertyValue<FilmActor>("FilmActor"); }
-        get FilmCategories() { return this.getPropertyValue<FilmCategory>("FilmCategory"); }
-        get FilmTexts() { return this.getPropertyValue<FilmText>("FilmText"); }
-        get Inventories() { return this.getPropertyValue<Inventory>("Inventory"); }
-        get Languages() { return this.getPropertyValue<Language>("Language"); }
-        get Payments() { return this.getPropertyValue<Payment>("Payment"); }
-        get Rentals() { return this.getPropertyValue<Rental>("Rental"); }
-        get Staffs() { return this.getPropertyValue<Staff>("Staff"); }
-        get Stores() { return this.getPropertyValue<Store>("Store"); }
+    export interface IRemoteViews {
+        Actors?: IDataViewRemote<Actor>;
+        Addresses?: IDataViewRemote<Address>;
+        Categories?: IDataViewRemote<Category>;
+        Cities?: IDataViewRemote<City>;
+        Countries?: IDataViewRemote<Country>;
+        Customers?: IDataViewRemote<Customer>;
+        Films?: IDataViewRemote<Film>;
+        FilmActors?: IDataViewRemote<FilmActor>;
+        FilmCategories?: IDataViewRemote<FilmCategory>;
+        FilmTexts?: IDataViewRemote<FilmText>;
+        Inventories?: IDataViewRemote<Inventory>;
+        Languages?: IDataViewRemote<Language>;
+        Payments?: IDataViewRemote<Payment>;
+        Rentals?: IDataViewRemote<Rental>;
+        Staffs?: IDataViewRemote<Staff>;
+        Stores?: IDataViewRemote<Store>;
     };
-
-    export class DataService extends DataServiceBase<LocalViews, RemoteViews, IServiceFunctions, IServiceActions> {
-        constructor(metadata: metadataTypes.Metadata, baseUrl: string) {
-            super(metadata, baseUrl);
-            this.from = {
-                local: new LocalViews(this.dataContext),
-                remote: new RemoteViews(this.dataAdapter, this.dataContext),
-            };
-        }
-    }
 
     export var entityTypes = {
-        Actor: 'Actor',
-        Address: 'Address',
-        Category: 'Category',
-        City: 'City',
-        Country: 'Country',
-        Customer: 'Customer',
-        Film: 'Film',
-        FilmActor: 'FilmActor',
-        FilmCategory: 'FilmCategory',
-        FilmText: 'FilmText',
-        Inventory: 'Inventory',
-        Language: 'Language',
-        Payment: 'Payment',
-        Rental: 'Rental',
-        Staff: 'Staff',
-        Store: 'Store',
+        Actor: "Actor",
+        Address: "Address",
+        Category: "Category",
+        City: "City",
+        Country: "Country",
+        Customer: "Customer",
+        Film: "Film",
+        FilmActor: "FilmActor",
+        FilmCategory: "FilmCategory",
+        FilmText: "FilmText",
+        Inventory: "Inventory",
+        Language: "Language",
+        Payment: "Payment",
+        Rental: "Rental",
+        Staff: "Staff",
+        Store: "Store",
     };
 
     export var rules = {
