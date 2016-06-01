@@ -158,6 +158,34 @@ namespace Server.Models.Utils.DAL.Common
             }
             return keyName;
         }
+
+
+
+        public static bool KeyPresent(string entityTypeName, Dto dto, Metadata metadata)
+        {
+            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            foreach (var keyName in keyNames)
+            {
+                if (!dto.ContainsKey(keyName))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool KeysPresent(string entityTypeName, Dto[] dtos, Metadata metadata)
+        {
+            foreach (var dto in dtos)
+            {
+                if (!KeyPresent(entityTypeName, dto, metadata))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
 }

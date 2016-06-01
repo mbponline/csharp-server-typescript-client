@@ -83,15 +83,28 @@ namespace Server.Models.Utils.DAL.Common
         public T DeleteItem(Dto partialEntity)
         {
             var dataDto = base.DeleteItem(this.entityTypeName, partialEntity);
-            var result = this.dataContext.AttachSingleEntitiy<T>(dataDto);
-            return result;
+            var entity = this.dataContext.entitySets[this.entityTypeName].FindByKey((IEntity)partialEntity);
+            if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
+            {
+                this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
+            }
+            return (T)entity;
         }
 
         public IEnumerable<T> DeleteItems(Dto[] partialEntities)
         {
             var dataDto = base.DeleteItems(this.entityTypeName, partialEntities);
-            var result = this.dataContext.AttachEntities<T>(dataDto);
-            return result;
+            var entities = new List<T>();
+            if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
+            {
+                foreach (var partialEntity in partialEntities)
+                {
+                    var entity = this.dataContext.entitySets[this.entityTypeName].FindByKey((IEntity)partialEntity);
+                    entities.Add((T)entity);
+                    this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
+                }
+            }
+            return entities;
         }
     }
 

@@ -158,7 +158,7 @@ namespace MetadataGenerator.Models
 
             br.WriteLine("#pragma warning restore SA1649, SA1128, SA1005, SA1516, SA1402, SA1028, SA1119, SA1507, SA1502, SA1508, SA1122, SA1633, SA1300");
 
-            return br.Result;
+            return br.ToString();
         }
     }
 

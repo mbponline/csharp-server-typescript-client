@@ -7,33 +7,28 @@ namespace CodeGenerator.Models.Common
     {
         private int currentIndent;
 
-        private StringBuilder stringBuilder;
-
-        public string Result
-        {
-            get { return this.stringBuilder.ToString(); }
-        }
+        private StringBuilder lines;
 
         public BlockWriter(string result = "", int startIndent = 0)
         {
-            this.stringBuilder = new StringBuilder();
+            this.lines = new StringBuilder();
             if (!string.IsNullOrEmpty(result))
             {
-                this.stringBuilder.AppendLine(result);
+                this.lines.AppendLine(result);
             }
             this.currentIndent = startIndent;
         }
 
         public BlockWriter BeginBlock(string text)
         {
-            this.stringBuilder.AppendLine(this.Indent(this.currentIndent) + text);
+            this.lines.AppendLine(this.WriteIndent(this.currentIndent) + text);
             this.currentIndent += 1;
             return this;
         }
 
         public BlockWriter WriteLine(string text = "", bool parentIndent = false)
         {
-            this.stringBuilder.AppendLine(this.Indent(this.currentIndent - (parentIndent ? 1 : 0)) + text);
+            this.lines.AppendLine(this.WriteIndent(this.currentIndent - (parentIndent ? 1 : 0)) + text);
             return this;
         }
 
@@ -41,16 +36,21 @@ namespace CodeGenerator.Models.Common
         {
             var endText = string.IsNullOrEmpty(text) ? "};" : text;
             this.currentIndent -= 1;
-            this.stringBuilder.AppendLine(this.Indent(this.currentIndent) + endText);
+            this.lines.AppendLine(this.WriteIndent(this.currentIndent) + endText);
             if (addEmptyLine)
             {
-                this.stringBuilder.AppendLine();
+                this.lines.AppendLine();
             }
 
             return this;
         }
 
-        private string Indent(int count)
+        public override string ToString()
+        {
+            return this.lines.ToString();
+        }
+
+        private string WriteIndent(int count)
         {
             var indentSize = 4; // numarul de caractere pentru un indent
             var space = " ";

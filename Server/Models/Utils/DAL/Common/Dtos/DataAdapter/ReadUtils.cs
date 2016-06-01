@@ -10,11 +10,8 @@ namespace Server.Models.Utils.DAL.Common
     {
         internal static int Count(string entityTypeName, QueryObject queryObject, Metadata metadata, Dialect dialect, string connectionString)
         {
-            var countRows = 0;
-            BuildEntityTypeQuery(entityTypeName, queryObject, metadata, dialect, (entityTypeQuerySelect, entityTypeQueryCount, entityTypeQueryRoot) =>
-            {
-                countRows = DatabaseOperations.CountQuery(entityTypeQueryCount, dialect, connectionString);
-            });
+            var entityTypeQueries = BuildEntityTypeQueries(entityTypeName, queryObject, metadata, dialect);
+            var countRows = DatabaseOperations.CountQuery(entityTypeQueries.QueryCount, dialect, connectionString);
             return countRows;
         }
 
@@ -46,7 +43,7 @@ namespace Server.Models.Utils.DAL.Common
         internal static ResultSerialData Fetch(string entityTypeName, QueryObject queryObject, Metadata metadata, Dialect dialect, string connectionString)
         {
             var queries = GetQueryResult(entityTypeName, queryObject, metadata, dialect);
-            var data = new ResultSerialData();
+            var resultSerialData = new ResultSerialData();
             foreach (var et in queries)
             {
                 if (!string.IsNullOrEmpty(et.EntityTypeName))
@@ -54,52 +51,49 @@ namespace Server.Models.Utils.DAL.Common
                     var result = DatabaseOperations.ExecuteQuery(et.QueryText, dialect, connectionString);
                     if (et.EntityTypeName == entityTypeName)
                     {
-                        data.Items = result.ToList();
-                        data.EntityTypeName = entityTypeName;
+                        resultSerialData.Items = result.ToList();
+                        resultSerialData.EntityTypeName = entityTypeName;
                     }
                     else
                     {
-                        if (data.RelatedItems == null)
+                        if (resultSerialData.RelatedItems == null)
                         {
-                            data.RelatedItems = new Dictionary<string, IEnumerable<object>>();
+                            resultSerialData.RelatedItems = new Dictionary<string, IEnumerable<object>>();
                         }
-                        data.RelatedItems.Add(et.EntityTypeName, result.OfType<object>().ToList());
+                        resultSerialData.RelatedItems.Add(et.EntityTypeName, result.OfType<object>().ToList());
                     }
                 }
                 else
                 {
                     var result = DatabaseOperations.CountQuery(et.QueryText, dialect, connectionString);
-                    data.TotalCount = result;
+                    resultSerialData.TotalCount = result;
                 }
             }
-            return data;
+            return resultSerialData;
         }
 
         internal static List<QueryResult> GetQueryResult(string entityTypeName, QueryObject queryObject, Metadata metadata, Dialect dialect)
         {
             var result = new List<QueryResult>();
 
-            var entityTypeQueryLocal = string.Empty;
+            var entityTypeQueries = BuildEntityTypeQueries(entityTypeName, queryObject, metadata, dialect);
 
-            BuildEntityTypeQuery(entityTypeName, queryObject, metadata, dialect, (entityTypeQuerySelect, entityTypeQueryCount, entityTypeQueryRoot) =>
-             {
-                 entityTypeQueryLocal = entityTypeQueryRoot;
+            var queryRoot = entityTypeQueries.QueryRoot;
 
-                 result.Add(new QueryResult()
-                 {
-                     EntityTypeName = entityTypeName,
-                     QueryText = entityTypeQuerySelect
-                 });
+            result.Add(new QueryResult()
+            {
+                EntityTypeName = entityTypeName,
+                QueryText = entityTypeQueries.QuerySelect
+            });
 
-                 if (queryObject.Count != null)
-                 {
-                     result.Add(new QueryResult()
-                     {
-                         EntityTypeName = null,
-                         QueryText = entityTypeQueryCount
-                     });
-                 }
-             });
+            if (queryObject.Count != null)
+            {
+                result.Add(new QueryResult()
+                {
+                    EntityTypeName = null,
+                    QueryText = entityTypeQueries.QueryCount
+                });
+            }
 
             if (queryObject.Expand != null && queryObject.Expand.Length > 0)
             {
@@ -114,12 +108,12 @@ namespace Server.Models.Utils.DAL.Common
                         result.Add(new QueryResult()
                         {
                             EntityTypeName = entityTypeNameLocal,
-                            QueryText = NavigationBranchToQueryText(entityTypeName, entityTypeQueryLocal, metadata, dialect, navs)
+                            QueryText = NavigationBranchToQueryText(entityTypeName, queryRoot, navs, metadata, dialect)
                         });
                     }
                     else
                     {
-                        foundEntityType.QueryText += " UNION " + NavigationBranchToQueryText(entityTypeName, entityTypeQueryLocal, metadata, dialect, navs);
+                        foundEntityType.QueryText += " UNION " + NavigationBranchToQueryText(entityTypeName, queryRoot, navs, metadata, dialect);
                     }
                 });
             }
@@ -127,7 +121,7 @@ namespace Server.Models.Utils.DAL.Common
             return result;
         }
 
-        internal static void BuildEntityTypeQuery(string entityTypeName, QueryObject queryObject, Metadata metadata, Dialect dialect, Action<string, string, string> callback)
+        internal static EntityTypeQueries BuildEntityTypeQueries(string entityTypeName, QueryObject queryObject, Metadata metadata, Dialect dialect)
         {
             var select = "it.*";
             var filter = string.Empty;
@@ -227,14 +221,19 @@ namespace Server.Models.Utils.DAL.Common
                 default:
                     break;
             }
-            var entityTypeQueryCount = "COUNT(*) AS count";
-            entityTypeQueryCount = string.Format(entityTypeQuery.ToString() + filter, entityTypeQueryCount);
+            var queryCount = "COUNT(*) AS count";
+            queryCount = string.Format(entityTypeQuery.ToString() + filter, queryCount);
             entityTypeQuery.Append(filter + orderBy + top + skip);
 
-            var entityTypeQuerySelect = string.Format(entityTypeQuery.ToString(), select);
-            var entityTypeQueryRoot = string.Format(entityTypeQuery.ToString(), "it.*");
+            var querySelect = string.Format(entityTypeQuery.ToString(), select);
+            var queryRoot = string.Format(entityTypeQuery.ToString(), "it.*");
 
-            callback(entityTypeQuerySelect, entityTypeQueryCount, entityTypeQueryRoot);
+            return new EntityTypeQueries()
+            {
+                QuerySelect = querySelect,
+                QueryCount = queryCount,
+                QueryRoot = queryRoot
+            };
         }
 
         private static string ReplaceFieldNames(string tableName, string source, Dictionary<string, string> fields, Dialect dialect)
@@ -286,7 +285,7 @@ namespace Server.Models.Utils.DAL.Common
             return select;
         }
 
-        internal static string NavigationBranchToQueryText(string entityTypeName, string entityTypeQuery, Metadata metadata, Dialect dialect, List<NavigationProperty> navBranch)
+        internal static string NavigationBranchToQueryText(string entityTypeName, string entityTypeQuery, List<NavigationProperty> navBranch, Metadata metadata, Dialect dialect)
         {
             // A INNER JOIN B ON A.IdDepartament = B.IdDepartament AND A.IdPersoana = B.IdPersoana INNER JOIN C ON ...
             var entityTypeNameLocal = entityTypeName;
@@ -328,6 +327,10 @@ namespace Server.Models.Utils.DAL.Common
             }
             foreach (var keyName in keyNames)
             {
+                if (!partialEntity.ContainsKey(keyName))
+                {
+                    throw new Exception("Key field not present");
+                }
                 result.Add(keyName + "=" + partialEntity[keyName]);
             }
             return string.Join(" AND ", result);

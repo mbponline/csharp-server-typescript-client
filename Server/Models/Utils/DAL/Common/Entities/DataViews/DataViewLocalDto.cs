@@ -20,7 +20,7 @@ namespace Server.Models.Utils.DAL.Common
 
         public ResultSerialData GetItems(Func<T, bool> predicate, string[] expand)
         {
-            var result = new ResultSerialData()
+            var resultSerialData = new ResultSerialData()
             {
                 Items = { },
                 EntityTypeName = this.entityTypeName,
@@ -30,15 +30,15 @@ namespace Server.Models.Utils.DAL.Common
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
                 var entitySetItems = this.dataContext.entitySets[this.entityTypeName].Items.Select((it) => it as T);
-                result.Items = entitySetItems.Where(predicate).ToArray();
-                DataViewLocalDtoUtils.FillResultRelatedItems(this.entityTypeName, result, expand, this.metadata);
+                resultSerialData.Items = entitySetItems.Where(predicate).ToArray();
+                DataViewLocalDtoUtils.FillResultRelatedItems(this.entityTypeName, resultSerialData, expand, this.dataContext, this.metadata);
             }
-            return result;
+            return resultSerialData;
         }
 
         public ResultSerialData GetMultipleItems(List<IEntity> partialEntities, string[] expand)
         {
-            var result = new ResultSerialData()
+            var resultSerialData = new ResultSerialData()
             {
                 Items = null,
                 EntityTypeName = this.entityTypeName,
@@ -58,15 +58,15 @@ namespace Server.Models.Utils.DAL.Common
                         items.Add(item);
                     }
                 }
-                result.Items = items;
-                DataViewLocalDtoUtils.FillResultRelatedItems(this.entityTypeName, result, expand, this.metadata);
+                resultSerialData.Items = items;
+                DataViewLocalDtoUtils.FillResultRelatedItems(this.entityTypeName, resultSerialData, expand, this.dataContext, this.metadata);
             }
-            return result;
+            return resultSerialData;
         }
 
         public ResultSingleSerialData GetSingleItem(Func<T, bool> predicate, string[] expand)
         {
-            var result = new ResultSingleSerialData()
+            var resultSingleSerialData = new ResultSingleSerialData()
             {
                 Item = null,
                 EntityTypeName = this.entityTypeName,
@@ -75,15 +75,15 @@ namespace Server.Models.Utils.DAL.Common
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
                 var entitySetItems = this.dataContext.entitySets[this.entityTypeName].Items.Select((it) => it as T);
-                result.Item = entitySetItems.FirstOrDefault(predicate);
-                DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, result, expand, this.metadata);
+                resultSingleSerialData.Item = entitySetItems.FirstOrDefault(predicate);
+                DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, resultSingleSerialData, expand, this.dataContext, this.metadata);
             }
-            return result;
+            return resultSingleSerialData;
         }
 
         public ResultSingleSerialData GetSingleItem1(T partialEntity, string[] expand)
         {
-            var result = new ResultSingleSerialData()
+            var resultSingleSerialData = new ResultSingleSerialData()
             {
                 Item = null,
                 EntityTypeName = this.entityTypeName,
@@ -92,35 +92,35 @@ namespace Server.Models.Utils.DAL.Common
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
                 var value = this.dataContext.entitySets[this.entityTypeName] as IEntitySet<T>;
-                result.Item = value.FindByKey(partialEntity /*partialEntity*/);
-                DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, result, expand, this.metadata);
+                resultSingleSerialData.Item = value.FindByKey(partialEntity /*partialEntity*/);
+                DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, resultSingleSerialData, expand, this.dataContext, this.metadata);
             }
-            return result;
+            return resultSingleSerialData;
         }
 
-        public T CreateItemDetached()
-        {
-            var item = this.dataContext.CreateItemDetached<T>(this.entityTypeName);
-            return item;
-        }
+        //public T CreateItemDetached()
+        //{
+        //    var item = this.dataContext.CreateItemDetached<T>(this.entityTypeName);
+        //    return item;
+        //}
 
-        public void DetachItem(T entity)
-        {
-            this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
-        }
+        //public void DetachItem(T entity)
+        //{
+        //    this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
+        //}
 
-        public void DetachItems(T[] entities)
-        {
-            foreach (var entity in entities)
-            {
-                this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
-            }
-        }
+        //public void DetachItems(T[] entities)
+        //{
+        //    foreach (var entity in entities)
+        //    {
+        //        this.dataContext.entitySets[this.entityTypeName].DeleteEntity(entity);
+        //    }
+        //}
 
-        public void DetachAll()
-        {
-            this.dataContext.entitySets[this.entityTypeName].DeleteAll();
-        }
+        //public void DetachAll()
+        //{
+        //    this.dataContext.entitySets[this.entityTypeName].DeleteAll();
+        //}
     }
 
 }

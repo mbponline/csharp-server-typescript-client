@@ -28,6 +28,13 @@ namespace Server.Models.Utils.DAL.Common
             return result;
         }
 
+        public IEnumerable<IEntity> GetRelatedEntities(string entityTypeName, IEnumerable<object> entities, string navigationPropertyName)
+        {
+            var navElement = this.metadata.EntityTypes[entityTypeName].NavigationProperties[navigationPropertyName];
+            var remoteEntitySet = this.entitySets.ContainsKey(navElement.EntityTypeName) ? this.entitySets[navElement.EntityTypeName] : null;
+            return remoteEntitySet != null ? remoteEntitySet.NavigateAllRelated(entities, navElement.KeyLocal, navElement.KeyRemote) : new List<IEntity>();
+        }
+
         public T CreateItemDetached<T>(string entityTypeName)
         {
             //if (!this.entitySets.ContainsKey(entityTypeName))

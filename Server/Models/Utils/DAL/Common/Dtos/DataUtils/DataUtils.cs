@@ -134,22 +134,22 @@ namespace Server.Models.Utils.DAL.Common
 
         public static List<NavigationProperty> BranchToNavigation(string entityTypeName, List<string> branch, Metadata metadata)
         {
-            var result = new List<NavigationProperty>();
-            var et = entityTypeName;
-            foreach (var navProp in branch)
+            var navigationPropertyList = new List<NavigationProperty>();
+            var entityTypeNameLocal = entityTypeName;
+            foreach (var navigationPropertyName in branch)
             {
-                var np = metadata.EntityTypes[et].NavigationProperties;
-                if (np.ContainsKey(navProp))
+                var navigationProperties = metadata.EntityTypes[entityTypeNameLocal].NavigationProperties;
+                if (navigationProperties.ContainsKey(navigationPropertyName))
                 {
-                    result.Add(np[navProp]);
+                    navigationPropertyList.Add(navigationProperties[navigationPropertyName]);
                 }
                 else
                 {
                     throw new Exception("invalid navigation property");
                 }
-                et = np[navProp].EntityTypeName;
+                entityTypeNameLocal = navigationProperties[navigationPropertyName].EntityTypeName;
             }
-            return result;
+            return navigationPropertyList;
         }
     }
 

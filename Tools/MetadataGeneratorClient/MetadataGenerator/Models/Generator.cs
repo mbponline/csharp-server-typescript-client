@@ -182,7 +182,7 @@ namespace MetadataGenerator.Models
 
             br.WriteLine("export = dataProvider;");
 
-            return br.Result;
+            return br.ToString();
         }
     }
 

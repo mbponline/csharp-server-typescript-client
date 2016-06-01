@@ -45,10 +45,10 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData LoadOne(string entityTypeName, Dto dto, string[] expand)
         {
-            var result = ReadUtils.FetchOne(entityTypeName, dto, expand, this.metadata, this.dialect, this.connectionString);
-            if (result.Items.Count() > 0)
+            var resultSerialData = ReadUtils.FetchOne(entityTypeName, dto, expand, this.metadata, this.dialect, this.connectionString);
+            if (resultSerialData.Items.Count() > 0)
             {
-                return result.ToSingle();
+                return resultSerialData.ToSingle();
             }
             else
             {
@@ -69,15 +69,19 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData PostItem(string entityTypeName, Dto dto)
         {
-            var dataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() > 0)
+            ResultSerialData resultSerialDataOriginal = null;
+            if (CudUtils.KeyPresent(entityTypeName, dto, this.metadata))
+            {
+                resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+            }
+            if (resultSerialDataOriginal != null && resultSerialDataOriginal.Items.Count() > 0)
             {
                 throw new HttpException(httpCode: 409, message: "Conflict");
             }
             else
             {
-                var result = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
-                return result.ToSingle();
+                var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                return resultSerialData.ToSingle();
             }
         }
 
@@ -86,8 +90,12 @@ namespace Server.Models.Utils.DAL.Common
         */
         public List<ResultSingleSerialData> PostItems(string entityTypeName, Dto[] dtos)
         {
-            var dataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() > 0)
+            ResultSerialData resultSerialDataOriginal = null;
+            if (CudUtils.KeysPresent(entityTypeName, dtos, this.metadata))
+            {
+                resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+            }
+            if (resultSerialDataOriginal != null && resultSerialDataOriginal.Items.Count() > 0)
             {
                 throw new HttpException(httpCode: 409, message: "Conflict");
             }
@@ -96,8 +104,8 @@ namespace Server.Models.Utils.DAL.Common
                 var entityInserts = new List<ResultSingleSerialData>();
                 foreach (var dto in dtos)
                 {
-                    var entity = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
-                    entityInserts.Add(entity.ToSingle());
+                    var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                    entityInserts.Add(resultSerialData.ToSingle());
                 }
                 return entityInserts;
             }
@@ -108,20 +116,20 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData PutItem(string entityTypeName, Dto dto)
         {
-            var dataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() == 0)
+            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+            if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
             else
             {
                 const bool returnUpdated = false;
-                var result = CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(dataOriginal.Items.FirstOrDefault()), dto, this.metadata, this.dialect, this.connectionString, returnUpdated);
+                var resultSerialData = CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(resultSerialDataOriginal.Items.FirstOrDefault()), dto, this.metadata, this.dialect, this.connectionString, returnUpdated);
                 if (returnUpdated)
                 {
-                    if (result.Items.Count() > 0)
+                    if (resultSerialData.Items.Count() > 0)
                     {
-                        return result.ToSingle();
+                        return resultSerialData.ToSingle();
                     }
                     else
                     {
@@ -140,41 +148,41 @@ namespace Server.Models.Utils.DAL.Common
          */
         public List<ResultSingleSerialData> PutItems(string entityTypeName, Dto[] dtos)
         {
-            var dataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() == 0)
+            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+            if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
-            else if (dataOriginal.Items.Count() != dtos.Length)
+            else if (resultSerialDataOriginal.Items.Count() != dtos.Length)
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
             else
             {
                 var keyNames = this.metadata.EntityTypes[entityTypeName].Key;
-                var entityUpdates = DalUtils.LeftJoin(dataOriginal.Items, dtos,
+                var resultSerialDataList = DalUtils.LeftJoin(resultSerialDataOriginal.Items, dtos,
                     (ent, dto) => CudUtils.CompareByKey(JObject.FromObject(ent).ToObject<Dto>(), dto, keyNames),
                     (ent, dto) => CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(ent), dto, this.metadata, this.dialect, this.connectionString)
                 );
-                var updated = new List<ResultSingleSerialData>();
-                foreach (var next in entityUpdates)
+                var resultSingleSerialDataList = new List<ResultSingleSerialData>();
+                foreach (var resultSerialData in resultSerialDataList)
                 {
-                    if (next.Items.Count() > 0)
+                    if (resultSerialData.Items.Count() > 0)
                     {
-                        updated.Add(next.ToSingle());
+                        resultSingleSerialDataList.Add(resultSerialData.ToSingle());
                     }
                 }
 
-                if (updated.Count > 0)
+                if (resultSingleSerialDataList.Count > 0)
                 {
-                    return updated;
+                    return resultSingleSerialDataList;
                 }
                 else
                 {
                     var total = 0;
-                    foreach (var next in entityUpdates)
+                    foreach (var resultSerialData in resultSerialDataList)
                     {
-                        total += next.Items.Count();
+                        total += resultSerialData.Items.Count();
                     }
                     if (total > 0)
                     {
@@ -193,15 +201,15 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData DeleteItem(string entityTypeName, Dto dto)
         {
-            var dataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() == 0)
+            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+            if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
             else
             {
                 CudUtils.DeleteEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
-                return dataOriginal.ToSingle();
+                return resultSerialDataOriginal.ToSingle();
             }
         }
 
@@ -210,8 +218,8 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSerialData DeleteItems(string entityTypeName, Dto[] dtos)
         {
-            var dataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
-            if (dataOriginal.Items.Count() == 0)
+            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+            if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
@@ -221,7 +229,7 @@ namespace Server.Models.Utils.DAL.Common
                 {
                     CudUtils.DeleteEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
                 }
-                return dataOriginal;
+                return resultSerialDataOriginal;
             }
         }
     }

@@ -105,7 +105,8 @@
     <Compile Include="Models\Utils\DAL\Common\Dtos\ApiProviderUtils.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\CudUtils.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\DatabaseOperations.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\QueryResult.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\Types\EntityTypeQueries.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\Types\QueryResult.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\ReadUtils.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataViewDto.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DialectUtils.cs" />

@@ -13,6 +13,8 @@ namespace Server.Models.Utils.DAL.Common
 
         IEnumerable<T> NavigateMulti(IEntity remoteEntity, string[] remoteEntityKey, string[] navigationKey);
 
+        IEnumerable<T> NavigateAllRelated(IEnumerable<object> remoteEntities, string[] remoteEntityKey, string[] navigationKey);
+
         T FindByKey(T partialEntity);
 
         T Find(Func<T, bool> predicate);

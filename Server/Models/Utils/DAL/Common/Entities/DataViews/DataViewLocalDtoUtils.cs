@@ -7,99 +7,71 @@ namespace Server.Models.Utils.DAL.Common
 
     internal static class DataViewLocalDtoUtils
     {
-        public static void FillResultSingleRelatedItems(string entityTypeName, ResultSingleSerialData destination, string[] expand, Metadata metadata)
+        public static void FillResultSingleRelatedItems(string entityTypeName, ResultSingleSerialData resultSingleSerialData, string[] expand, DataContext dataContext, Metadata metadata)
         {
-            if (destination.Item != null)
+            if (resultSingleSerialData.Item != null)
             {
-                var result = new ResultSerialData()
+                var resultSerialData = new ResultSerialData()
                 {
-                    Items = new List<object>() { destination.Item },
+                    Items = new List<object>() { resultSingleSerialData.Item },
                     EntityTypeName = entityTypeName,
                     TotalCount = 0,
                     RelatedItems = { }
                 };
-                FillResultRelatedItems(entityTypeName, result, expand, metadata);
-                destination.RelatedItems = result.RelatedItems;
+                FillResultRelatedItems(entityTypeName, resultSerialData, expand, dataContext, metadata);
+                resultSingleSerialData.RelatedItems = resultSerialData.RelatedItems;
             }
         }
 
-        public static void FillResultRelatedItems(string entityTypeName, ResultSerialData destination, string[] expand, Metadata metadata)
+        public static void FillResultRelatedItems(string entityTypeName, ResultSerialData resultSerialData, string[] expand, DataContext dataContext, Metadata metadata)
         {
-            if (expand != null && expand.Length > 0 && destination.Items != null && destination.Items.Count() > 0)
+            if (expand != null && expand.Length > 0 && resultSerialData.Items != null && resultSerialData.Items.Count() > 0)
             {
                 var splitExpand = DataUtils.SplitExpand(expand, (el) => el);
                 DataUtils.ForEachNavigation(splitExpand, (branch) =>
                 {
                     var navs = DataUtils.BranchToNavigation(entityTypeName, branch, metadata);
                     var lastNav = navs[navs.Count - 1];
+                    var rootEntityTypeName = string.Empty;
                     IEnumerable<object> rootItems;
                     if (branch.Count == 1)
                     {
-                        rootItems = destination.Items;
+                        rootEntityTypeName = entityTypeName;
+                        rootItems = resultSerialData.Items;
                     }
                     else
                     {
-                        var rootEntityName = navs[navs.Count - 2].EntityTypeName;
-                        rootItems = destination.RelatedItems[rootEntityName];
+                        rootEntityTypeName = navs[navs.Count - 2].EntityTypeName;
+                        rootItems = resultSerialData.RelatedItems[rootEntityTypeName];
                     }
-                    var navProp = branch[branch.Count - 1];
-                    var relatedEntityTypeName = lastNav.EntityTypeName;
-                    var relatedEntityItems = new List<object>();
-                    if (lastNav.Multiplicity == "multi")
+                    var navigationPropertyName = branch[branch.Count - 1];
+                    var entityTypeNameLocal = lastNav.EntityTypeName;
+                    var relatedEntityItems = dataContext.GetRelatedEntities(rootEntityTypeName, rootItems, navigationPropertyName).ToList();
+                    if (resultSerialData.RelatedItems == null)
                     {
-                        foreach (var it in rootItems)
-                        {
-                            var value = (IEnumerable<object>)it.GetType().GetProperty(navProp).GetValue(it, null);
-                            PushMultiIfNotThere(value, relatedEntityItems);
-                        }
+                        resultSerialData.RelatedItems = new Dictionary<string, IEnumerable<object>>();
+                    }
+                    if (!resultSerialData.RelatedItems.ContainsKey(entityTypeNameLocal))
+                    {
+                        resultSerialData.RelatedItems[entityTypeNameLocal] = relatedEntityItems;
                     }
                     else
                     {
-                        foreach (var it in rootItems)
-                        {
-                            var value = it.GetType().GetProperty(navProp).GetValue(it, null);
-                            PushSingleIfNotThere(value, relatedEntityItems);
-                        }
+                        var items = resultSerialData.RelatedItems[entityTypeNameLocal].ToList();
+                        PushMultiIfNotThere(relatedEntityItems, items);
+                        resultSerialData.RelatedItems[entityTypeNameLocal] = items;
                     }
-                    destination.AddRelatedItems(relatedEntityTypeName, relatedEntityItems);
                 });
             }
         }
 
-        public static void AddRelatedItems(this ResultSerialData resultSerial, string entityTypeName, IEnumerable<object> items)
+        public static void PushMultiIfNotThere(IEnumerable<object> sourceList, List<object> destinationList)
         {
-            if (resultSerial.RelatedItems == null)
+            foreach (var item in sourceList)
             {
-                resultSerial.RelatedItems = new Dictionary<string, IEnumerable<object>>();
-            }
-            if (!resultSerial.RelatedItems.ContainsKey(entityTypeName))
-            {
-                resultSerial.RelatedItems[entityTypeName] = items;
-            }
-            else
-            {
-                throw new ArgumentException(string.Format("RelatedItems have already been populated for {0}", entityTypeName));
-                //var existingItems = resultSerial.RelatedItems[entityTypeName].ToList();
-                //existingItems.AddRange(items);
-                //resultSerial.RelatedItems[entityTypeName] = existingItems;
-            }
-        }
-
-        public static void PushSingleIfNotThere(object item, List<object> destination)
-        {
-            if (!destination.Contains(item))
-            {
-                destination.Add(item);
-            }
-        }
-
-        public static void PushMultiIfNotThere(IEnumerable<object> items, List<object> destination)
-        {
-            foreach (var item in items)
-            {
-                if (!destination.Contains(item))
+                if (!destinationList.Contains(item))
                 {
-                    destination.Add(item);
+                    destinationList.Add(item);
                 }
             }
         }

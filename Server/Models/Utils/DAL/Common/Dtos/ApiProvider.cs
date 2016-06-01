@@ -24,8 +24,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.GetSingleItem(entityTypeName, queryObject.Keys[0], queryObject.Expand);
-            return result;
+            var resultSingleSerialData = dataService.DataViewDto.GetSingleItem(entityTypeName, queryObject.Keys[0], queryObject.Expand);
+            return resultSingleSerialData;
         }
 
         public static ResultSerialData HandleGetMany(string entitySetName, QueryParams queryParams, DataServiceDto dataService)
@@ -37,8 +37,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.GetMultipleItems(entityTypeName, queryObject.Keys, queryObject.Expand);
-            return result;
+            var resultSerialData = dataService.DataViewDto.GetMultipleItems(entityTypeName, queryObject.Keys, queryObject.Expand);
+            return resultSerialData;
         }
 
         public static ResultSingleSerialData HandleUpdateEntity(string entitySetName, QueryParams queryParams, Dto dto, DataServiceDto dataService)
@@ -54,8 +54,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys[0]));
-            return result;
+            var resultSingleSerialData = dataService.DataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys[0]));
+            return resultSingleSerialData;
         }
 
         public static List<ResultSingleSerialData> HandleUpdateEntityBatch(string entitySetName, Dto[] dtos, DataServiceDto dataService)
@@ -66,8 +66,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.UpdateItems(entityTypeName, dtos);
-            return result;
+            var resultSingleSerialDataList = dataService.DataViewDto.UpdateItems(entityTypeName, dtos);
+            return resultSingleSerialDataList;
         }
 
         public static ResultSingleSerialData HandleInsertEntity(string entitySetName, Dto dto, DataServiceDto dataService)
@@ -78,8 +78,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.InsertItem(entityTypeName, dto);
-            return result;
+            var resultSingleSerialData = dataService.DataViewDto.InsertItem(entityTypeName, dto);
+            return resultSingleSerialData;
         }
 
         public static List<ResultSingleSerialData> HandleInsertEntityBatch(string entitySetName, Dto[] dtos, DataServiceDto dataService)
@@ -90,8 +90,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.InsertItems(entityTypeName, dtos);
-            return result;
+            var resultSingleSerialDataList = dataService.DataViewDto.InsertItems(entityTypeName, dtos);
+            return resultSingleSerialDataList;
         }
 
         public static ResultSingleSerialData HandleDeleteEntity(string entitySetName, QueryParams queryParams, DataServiceDto dataService)
@@ -103,8 +103,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.DeleteItem(entityTypeName, queryObject.Keys[0]);
-            return result;
+            var resultSingleSerialData = dataService.DataViewDto.DeleteItem(entityTypeName, queryObject.Keys[0]);
+            return resultSingleSerialData;
         }
 
         //// in aceasta varianta informatiile de stergere sunt trimise in body ca dtos[]
@@ -116,8 +116,8 @@ namespace Server.Models.Utils.DAL.Common
         //    {
         //        throw new HttpException(httpCode: 400, message: "Bad Request");
         //    }
-        //    var result = dataService.DataViewDto.DeleteItems(entityTypeName, dtos);
-        //    return result;
+        //    var resultSerialData = dataService.DataViewDto.DeleteItems(entityTypeName, dtos);
+        //    return resultSerialData;
         //}
 
         // in aceasta varianta informatiile de stergere sunt trimise in query string
@@ -131,8 +131,8 @@ namespace Server.Models.Utils.DAL.Common
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-            var result = dataService.DataViewDto.DeleteItems(entityTypeName, queryObject.Keys);
-            return result;
+            var resultSerialData = dataService.DataViewDto.DeleteItems(entityTypeName, queryObject.Keys);
+            return resultSerialData;
         }
 
     }

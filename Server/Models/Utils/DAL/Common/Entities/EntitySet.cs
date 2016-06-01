@@ -48,6 +48,22 @@ namespace Server.Models.Utils.DAL.Common
             return result;
         }
 
+        public IEnumerable<T> NavigateAllRelated(IEnumerable<object> remoteEntities, string[] remoteEntityKey, string[] navigationKey)
+        {
+            var result = this.Items.Where((it) =>
+            {
+                foreach (var remoteEntity in remoteEntities)
+                {
+                    if (this.HaveSameKeysNavigation(it as Dto, navigationKey, (Dto)remoteEntity, remoteEntityKey))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            return result;
+        }
+
         public T FindByKey(T partialEntity)
         {
             var result = this.Items.FirstOrDefault((it) => this.HaveSameKeysLocal(it as Dto, partialEntity as Dto));
