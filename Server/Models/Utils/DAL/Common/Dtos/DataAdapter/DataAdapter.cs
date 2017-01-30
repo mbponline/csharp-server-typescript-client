@@ -59,7 +59,7 @@ namespace Server.Models.Utils.DAL.Common
         /**
          * Retrive multiple entities
          */
-        public ResultSerialData LoadMany(string entityTypeName, Dto[] dtos, string[] expand)
+        public ResultSerialData LoadMany(string entityTypeName, IEnumerable<Dto> dtos, string[] expand)
         {
             return ReadUtils.FetchMany(entityTypeName, dtos, expand, this.metadata, this.dialect, this.connectionString);
         }
@@ -88,7 +88,7 @@ namespace Server.Models.Utils.DAL.Common
         /**
         * Insert multiple entities
         */
-        public List<ResultSingleSerialData> PostItems(string entityTypeName, Dto[] dtos)
+        public List<ResultSingleSerialData> PostItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
             ResultSerialData resultSerialDataOriginal = null;
             if (CudUtils.KeysPresent(entityTypeName, dtos, this.metadata))
@@ -146,14 +146,14 @@ namespace Server.Models.Utils.DAL.Common
         /**
          * Update multiple entities
          */
-        public List<ResultSingleSerialData> PutItems(string entityTypeName, Dto[] dtos)
+        public List<ResultSingleSerialData> PutItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
             var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
-            else if (resultSerialDataOriginal.Items.Count() != dtos.Length)
+			else if (resultSerialDataOriginal.Items.Count() != dtos.Count())
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
@@ -216,7 +216,7 @@ namespace Server.Models.Utils.DAL.Common
         /**
          * Delete multiple entities
          */
-        public ResultSerialData DeleteItems(string entityTypeName, Dto[] dtos)
+        public ResultSerialData DeleteItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
             var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)

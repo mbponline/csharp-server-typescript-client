@@ -17,7 +17,7 @@ namespace MetadataGenerator
             {
                 path = Path.GetDirectoryName(path);
             }
-            path = Path.Combine(path, "App_Data", "metadata_mysql.json");
+            path = "/" + Path.Combine(path, "App_Data", "metadata_mysql.json");
 
             // read json file
             Metadata metadata;
@@ -40,7 +40,7 @@ namespace MetadataGenerator
             {
                 Directory.CreateDirectory(path);
             }
-            path = Path.Combine(path, "dataProvider.cs");
+            path = Path.Combine(path, "DataProvider.cs");
             File.WriteAllText(path, dataProvider);
             Console.WriteLine("Done. Press a key to exit...");
             Console.ReadLine();

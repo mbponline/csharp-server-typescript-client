@@ -3,68 +3,65 @@
 namespace Server.Models.Utils.DAL.Common
 {
 
-    public class DataViewRemoteDto<T> : DataViewDto
-        where T : class, IEntity
-    {
-        public DataViewRemoteDto(DataAdapter dataAdapter)
-            : base(dataAdapter)
-        {
-            this.entityTypeName = typeof(T).Name;
-            this.dataAdapter = dataAdapter;
-        }
+	public class DataViewRemoteDto : DataViewDto
+	{
+		public DataViewRemoteDto(string entityTypeName, DataAdapter dataAdapter)
+			: base(dataAdapter)
+		{
+			this.entityTypeName = entityTypeName;
+		}
 
-        private readonly string entityTypeName;
-        private readonly DataAdapter dataAdapter;
+		private readonly string entityTypeName;
 
-        public int Count(QueryObject queryObject)
-        {
-            return base.Count(this.entityTypeName, queryObject);
-        }
+		public int Count(QueryObject queryObject)
+		{
+			return base.Count(this.entityTypeName, queryObject);
+		}
 
-        public ResultSerialData GetItems(QueryObject queryObject)
-        {
-            return base.GetItems(this.entityTypeName, queryObject);
-        }
+		public ResultSerialData GetItems(QueryObject queryObject)
+		{
+			return base.GetItems(this.entityTypeName, queryObject);
+		}
 
-        public ResultSingleSerialData GetSingleItem(Dto partialEntity, string[] expand = null)
-        {
-            return this.GetSingleItem(this.entityTypeName, partialEntity, expand);
-        }
+		public ResultSingleSerialData GetSingleItem(Dto partialDto, string[] expand = null)
+		{
+			return this.GetSingleItem(this.entityTypeName, partialDto, expand);
+		}
 
-        public ResultSerialData GetMultipleItems(Dto[] partialEntities, string[] expand = null)
-        {
-            return this.GetMultipleItems(this.entityTypeName, partialEntities, expand);
-        }
+		public ResultSerialData GetMultipleItems(IEnumerable<Dto> partialDtos, string[] expand = null)
+		{
+			return this.GetMultipleItems(this.entityTypeName, partialDtos, expand);
+		}
 
-        public ResultSingleSerialData InsertItem(Dto entity)
-        {
-            return this.InsertItem(this.entityTypeName, entity);
-        }
+		public ResultSingleSerialData InsertItem(Dto dto)
+		{
+			return this.InsertItem(this.entityTypeName, dto);
+		}
 
-        public List<ResultSingleSerialData> InsertItems(Dto[] entities)
-        {
-            return this.InsertItems(this.entityTypeName, entities);
-        }
+		public List<ResultSingleSerialData> InsertItems(IEnumerable<Dto> dtos)
+		{
+			return this.InsertItems(this.entityTypeName, dtos);
+		}
 
-        public ResultSingleSerialData UpdateItem(Dto partialEntity)
-        {
-            return this.UpdateItem(this.entityTypeName, partialEntity);
-        }
+		public ResultSingleSerialData UpdateItem(Dto partialDto)
+		{
+			return this.UpdateItem(this.entityTypeName, partialDto);
+		}
 
-        public List<ResultSingleSerialData> UpdateItems(Dto[] partialEntities)
-        {
-            return this.UpdateItems(this.entityTypeName, partialEntities);
-        }
+		public List<ResultSingleSerialData> UpdateItems(IEnumerable<Dto> partialDtos)
+		{
+			return this.UpdateItems(this.entityTypeName, partialDtos);
+		}
 
-        public ResultSingleSerialData DeleteItem(Dto partialEntity)
-        {
-            return this.DeleteItem(this.entityTypeName, partialEntity);
-        }
+		public ResultSingleSerialData DeleteItem(Dto partialDto)
+		{
+			return this.DeleteItem(this.entityTypeName, partialDto);
+		}
 
-        public ResultSerialData DeleteItems(Dto[] partialEntities)
-        {
-            return this.DeleteItems(this.entityTypeName, partialEntities);
-        }
-    }
+		public ResultSerialData DeleteItems(IEnumerable<Dto> partialDtos)
+		{
+			return this.DeleteItems(this.entityTypeName, partialDtos);
+		}
+	}
 
 }

@@ -1,10 +1,10 @@
 ﻿namespace Server.Models.Utils.DAL.Common
 {
     public abstract class DataServiceEntity<TLocalEntity, TLocalDto, TRemoteEntity, TRemoteDto> : DataServiceDto
-        where TLocalEntity : PropertyList
-        where TLocalDto : PropertyList
-        where TRemoteEntity : PropertyList
-        where TRemoteDto : PropertyList
+        where TLocalEntity : LocalEntityViewsBase
+        where TLocalDto : LocalDtoViewsBase
+        where TRemoteEntity : RemoteEntityViewsBase
+        where TRemoteDto : RemoteDtoViewsBase
     {
         protected DataServiceEntity(string metadataFileName = "", string connectionString = "")
             : base(metadataFileName, connectionString)

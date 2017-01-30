@@ -71,7 +71,7 @@ namespace Server.Models.Utils.DAL.Common
         {
             var result = new List<string>();
 
-            if (queryObject.Keys != null && queryObject.Keys.Length > 0)
+            if (queryObject.Keys != null && queryObject.Keys.Count() > 0)
             {
                 result.Add("keys=" + GetStringFromKey(queryObject.Keys));
             }
@@ -129,7 +129,7 @@ namespace Server.Models.Utils.DAL.Common
          * ... will become:
          * keys=[ { key1: 1, key2: 4}, { key1: 2, key2: 5 }, { key1: 2, key2: 6 }, { key1: 4, key2: 7 } ]
          */
-        private static Dto[] GetKeyFromString(string keys)
+		private static IEnumerable<Dto> GetKeyFromString(string keys)
         {
             var keyValueSet = new Dictionary<string, int[]>();
             var count = 0;
@@ -160,7 +160,7 @@ namespace Server.Models.Utils.DAL.Common
                 }
                 result.Add(resultItem);
             }
-            return result.ToArray();
+            return result;
         }
 
         /**
@@ -168,7 +168,7 @@ namespace Server.Models.Utils.DAL.Common
          * ... will become:
          * keys=key1:1,2,3,4;key2:4,5,6,7
          */
-        private static string GetStringFromKey(Dto[] keys)
+		private static string GetStringFromKey(IEnumerable<Dto> keys)
         {
             var keySet = new Dictionary<string, List<object>>();
             foreach (var dto in keys)

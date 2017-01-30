@@ -22,14 +22,14 @@ namespace Server.Models.Utils.DAL.Common
             return this.dataAdapter.QueryAll(entityTypeName, queryObject);
         }
 
-        public ResultSingleSerialData GetSingleItem(string entityTypeName, Dto partialEntity, string[] expand = null)
+		public ResultSingleSerialData GetSingleItem(string entityTypeName, Dto partialDto, string[] expand = null)
         {
-            return this.dataAdapter.LoadOne(entityTypeName, partialEntity, expand);
+            return this.dataAdapter.LoadOne(entityTypeName, partialDto, expand);
         }
 
-        public ResultSerialData GetMultipleItems(string entityTypeName, Dto[] partialEntities, string[] expand = null)
+		public ResultSerialData GetMultipleItems(string entityTypeName, IEnumerable<Dto> partialDtos, string[] expand = null)
         {
-            return this.dataAdapter.LoadMany(entityTypeName, partialEntities, expand);
+            return this.dataAdapter.LoadMany(entityTypeName, partialDtos, expand);
         }
 
         public ResultSingleSerialData InsertItem(string entityTypeName, Dto entity)
@@ -37,29 +37,29 @@ namespace Server.Models.Utils.DAL.Common
             return this.dataAdapter.PostItem(entityTypeName, entity);
         }
 
-        public List<ResultSingleSerialData> InsertItems(string entityTypeName, Dto[] entities)
+		public List<ResultSingleSerialData> InsertItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
-            return this.dataAdapter.PostItems(entityTypeName, entities);
+            return this.dataAdapter.PostItems(entityTypeName, dtos);
         }
 
-        public ResultSingleSerialData UpdateItem(string entityTypeName, Dto partialEntity)
+		public ResultSingleSerialData UpdateItem(string entityTypeName, Dto partialDto)
         {
-            return this.dataAdapter.PutItem(entityTypeName, partialEntity);
+            return this.dataAdapter.PutItem(entityTypeName, partialDto);
         }
 
-        public List<ResultSingleSerialData> UpdateItems(string entityTypeName, Dto[] partialEntities)
+		public List<ResultSingleSerialData> UpdateItems(string entityTypeName, IEnumerable<Dto> partialDtos)
         {
-            return this.dataAdapter.PutItems(entityTypeName, partialEntities);
+            return this.dataAdapter.PutItems(entityTypeName, partialDtos);
         }
 
-        public ResultSingleSerialData DeleteItem(string entityTypeName, Dto partialEntity)
+		public ResultSingleSerialData DeleteItem(string entityTypeName, Dto partialDto)
         {
-            return this.dataAdapter.DeleteItem(entityTypeName, partialEntity);
+            return this.dataAdapter.DeleteItem(entityTypeName, partialDto);
         }
 
-        public ResultSerialData DeleteItems(string entityTypeName, Dto[] partialEntities)
+		public ResultSerialData DeleteItems(string entityTypeName, IEnumerable<Dto> partialDtos)
         {
-            return this.dataAdapter.DeleteItems(entityTypeName, partialEntities);
+            return this.dataAdapter.DeleteItems(entityTypeName, partialDtos);
         }
     }
 

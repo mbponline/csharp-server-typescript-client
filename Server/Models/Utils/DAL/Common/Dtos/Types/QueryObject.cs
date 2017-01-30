@@ -5,7 +5,7 @@ namespace Server.Models.Utils.DAL.Common
 
     public class QueryObject
     {
-        public Dto[] Keys { get; set; }
+		public IEnumerable<Dto> Keys { get; set; }
 
         public string[] Select { get; set; }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Server.Models.Utils.DAL.Common
@@ -32,9 +34,9 @@ namespace Server.Models.Utils.DAL.Common
             return result;
         }
 
-        public static bool ValidKeys(string entityTypeName, Dto[] dtos, Metadata metadata)
+        public static bool ValidKeys(string entityTypeName, IEnumerable<Dto> dtos, Metadata metadata)
         {
-            if (dtos == null || dtos.Length == 0)
+			if (dtos == null || dtos.Count() == 0)
             {
                 return false;
             }

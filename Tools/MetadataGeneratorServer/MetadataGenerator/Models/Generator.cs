@@ -67,13 +67,16 @@ namespace MetadataGenerator.Models
                 .WriteLine();
 
             br.WriteLine("using Newtonsoft.Json;");
-            br.WriteLine("using Server.Models.Utils.DAL.Common;");
             br.WriteLine("using System;");
+			br.WriteLine("using System.Linq;");
             br.WriteLine("using System.Collections.Generic;");
-            br.WriteLine();
+            br.WriteLine("using Server.Models.Utils.DAL.Common;");
+			br.WriteLine();
 
             br.WriteLine("namespace " + metadata.Namespace);
             br.BeginBlock("{");
+
+            //var json = JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
 
             // DataService
             br.WriteLine("public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>");
@@ -89,47 +92,67 @@ namespace MetadataGenerator.Models
             br.EndBlock("}");
 
             // LocalEntityViews
-            br.WriteLine("public class LocalEntityViews : PropertyList");
+            br.WriteLine("public class LocalEntityViews : LocalEntityViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public LocalEntityViews(DataContext dataContext) : base(dataContext) { }")
-                .WriteLine();
+            br.WriteLine("public LocalEntityViews(DataContext dataContext) : base(dataContext)");
+            br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewLocalEntity<{0}> {1} {{ get {{ return this.GetPropertyValue<DataViewLocalEntity<{0}>>(); }} }}", es.entityTypeName, es.name));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalEntity<{1}>(dataContext);", es.name, es.entityTypeName));
             }
+            br.EndBlock("}");
+            foreach (var es in entitySets)
+            {
+				br.WriteLine(string.Format("public DataViewLocalEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+			}
             br.EndBlock("}");
 
             // RemoteEntityViews
-            br.WriteLine("public class RemoteEntityViews : PropertyList");
+            br.WriteLine("public class RemoteEntityViews : RemoteEntityViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public RemoteEntityViews(DataAdapter dataAdapter, DataContext dataContext) : base(dataAdapter, dataContext) { }")
-                .WriteLine();
+            br.WriteLine("public RemoteEntityViews(DataAdapter dataAdapter, DataContext dataContext) : base(dataAdapter, dataContext)");
+            br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewRemoteEntity<{0}> {1} {{ get {{ return this.GetPropertyValue<DataViewRemoteEntity<{0}>>(); }} }}", es.entityTypeName, es.name));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteEntity<{1}>(dataAdapter, dataContext);", es.name, es.entityTypeName));
             }
+            br.EndBlock("}");
+            foreach (var es in entitySets)
+            {
+                br.WriteLine(string.Format("public DataViewRemoteEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+			}
             br.EndBlock("}");
 
             // LocalDtoViews
-            br.WriteLine("public class LocalDtoViews : PropertyList");
+            br.WriteLine("public class LocalDtoViews : LocalDtoViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public LocalDtoViews(DataContext dataContext, Metadata metadata) : base(dataContext, metadata) { }")
-                .WriteLine();
+            br.WriteLine("public LocalDtoViews(DataContext dataContext, Metadata metadata) : base(dataContext, metadata)");
+            br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewLocalDto<{0}> {1} {{ get {{ return this.GetPropertyValue<DataViewLocalDto<{0}>>(); }} }}", es.entityTypeName, es.name));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalDto<{1}>(dataContext, metadata);", es.name, es.entityTypeName));
             }
+            br.EndBlock("}");
+            foreach (var es in entitySets)
+            {
+                br.WriteLine(string.Format("public DataViewLocalDto<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+			}
             br.EndBlock("}");
 
             // RemoteDtoViews
-            br.WriteLine("public class RemoteDtoViews : PropertyList");
+            br.WriteLine("public class RemoteDtoViews : RemoteDtoViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public RemoteDtoViews(DataAdapter dataAdapter) : base(dataAdapter) { }")
-                .WriteLine();
+            br.WriteLine("public RemoteDtoViews(DataAdapter dataAdapter) : base(dataAdapter)");
+            br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewRemoteDto<{0}> {1} {{ get {{ return this.GetPropertyValue<DataViewRemoteDto<{0}>>(); }} }}", es.entityTypeName, es.name));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteDto<{1}>(dataAdapter);", es.name, es.entityTypeName));
             }
+            br.EndBlock("}");
+            foreach (var es in entitySets)
+            {
+                br.WriteLine(string.Format("public DataViewRemoteDto {0} {{ get {{ return this.GetPropertyValue(\"{1}\"); }} }}", es.name, es.entityTypeName));
+			}
             br.EndBlock("}");
 
             // Entities
@@ -139,13 +162,17 @@ namespace MetadataGenerator.Models
                 var etnp = et.Value.NavigationProperties ?? new Dictionary<string, NavigationProperty>();
 
                 // with constructor generator
-                br.WriteLine(string.Format("public sealed class {0} : Entity", et.Key));
+                br.WriteLine(string.Format("public sealed class {0} : IDerivedEntity", et.Key));
                 br.BeginBlock("{");
-                br.WriteLine(string.Format("public {0}() : base()", et.Key));
-                br.BeginBlock("{");
-                GeneratorUtils.WriteDefaultValues(br, etp);
+                br.WriteLine(string.Format("public {0}(Entity entity)", et.Key));
+				br.BeginBlock("{")
+				  .WriteLine(string.Format("if (entity.entityTypeName != \"{0}\") {{ throw new ArgumentException(\"Incorrect entity type\"); }}", et.Key))
+				  .WriteLine("this.entity = entity;");
                 br.EndBlock("}");
 
+				br.WriteLine("public Entity entity { get; private set; }")
+				  .WriteLine();
+				  
                 GeneratorUtils.WriteProperties(br, etp, types);
 
                 // navigation properties for intellisense

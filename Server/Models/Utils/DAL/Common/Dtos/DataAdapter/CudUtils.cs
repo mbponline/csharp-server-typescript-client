@@ -174,7 +174,7 @@ namespace Server.Models.Utils.DAL.Common
             return true;
         }
 
-        public static bool KeysPresent(string entityTypeName, Dto[] dtos, Metadata metadata)
+        public static bool KeysPresent(string entityTypeName, IEnumerable<Dto> dtos, Metadata metadata)
         {
             foreach (var dto in dtos)
             {

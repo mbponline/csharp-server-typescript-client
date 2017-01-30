@@ -7,7 +7,7 @@ namespace Server.Models.Utils.DAL.Common
     {
 
         public static ResultSerialResponse HandleGet<T>(QueryParams queryParams, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var result = ApiProvider.HandleGet(entityTypeName, queryParams, dataService);
@@ -15,7 +15,7 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         public static ResultSingleSerialData HandleGetSingle<T>(QueryParams queryParams, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialData = ApiProvider.HandleGetSingle(entityTypeName, queryParams, dataService);
@@ -23,7 +23,7 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         public static ResultSerialData HandleGetMany<T>(QueryParams queryParams, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSerialData = ApiProvider.HandleGetMany(entityTypeName, queryParams, dataService);
@@ -31,15 +31,15 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         public static ResultSingleSerialData HandleUpdateEntity<T>(QueryParams queryParams, Dto dto, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialData = ApiProvider.HandleUpdateEntity(entityTypeName, queryParams, dto, dataService);
             return resultSingleSerialData;
         }
 
-        public static List<ResultSingleSerialData> HandleUpdateEntityBatch<T>(Dto[] dtos, DataServiceDto dataService)
-            where T : class, IEntity
+        public static List<ResultSingleSerialData> HandleUpdateEntityBatch<T>(IEnumerable<Dto> dtos, DataServiceDto dataService)
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialDataList = ApiProvider.HandleUpdateEntityBatch(entityTypeName, dtos, dataService);
@@ -47,15 +47,15 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         public static ResultSingleSerialData HandleInsertEntity<T>(Dto dto, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialData = ApiProvider.HandleInsertEntity(entityTypeName, dto, dataService);
             return resultSingleSerialData;
         }
 
-        public static List<ResultSingleSerialData> HandleInsertEntityBatch<T>(Dto[] dtos, DataServiceDto dataService)
-            where T : class, IEntity
+        public static List<ResultSingleSerialData> HandleInsertEntityBatch<T>(IEnumerable<Dto> dtos, DataServiceDto dataService)
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialDataList = ApiProvider.HandleInsertEntityBatch(entityTypeName, dtos, dataService);
@@ -63,7 +63,7 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         public static ResultSingleSerialData HandleDeleteEntity<T>(QueryParams queryParams, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialData = ApiProvider.HandleDeleteEntity(entityTypeName, queryParams, dataService);
@@ -71,8 +71,8 @@ namespace Server.Models.Utils.DAL.Common
         }
 
         //// in aceasta varianta informatiile de stergere sunt trimise in body ca dtos[]
-        //public static ResultSerialData<T> HandleDeleteEntityBatch1<T>(Dto[] dtos, DataServiceDto dataService)
-        //    where T : class, IEntity
+        //public static ResultSerialData<T> HandleDeleteEntityBatch1<T>(IEnumerable<Dto> dtos, DataServiceDto dataService)
+        //    where T : class
         //{
         //    var entityTypeName = typeof(T).Name;
         //    var resultSerialData = ApiProvider.HandleDeleteEntityBatch1(entityTypeName, dtos, dataService);
@@ -82,7 +82,7 @@ namespace Server.Models.Utils.DAL.Common
         // in aceasta varianta informatiile de stergere sunt trimise in query string
         // similar cu handleGetMany
         public static ResultSerialData HandleDeleteEntityBatch<T>(QueryParams queryParams, DataServiceDto dataService)
-            where T : class, IEntity
+            where T : class
         {
             var entityTypeName = typeof(T).Name;
             var resultSerialData = ApiProvider.HandleDeleteEntityBatch(entityTypeName, queryParams, dataService);

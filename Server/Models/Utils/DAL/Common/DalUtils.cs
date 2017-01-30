@@ -112,6 +112,7 @@ namespace Server.Models.Utils.DAL.Common
             return target;
         }
 
+		/*
         public static IList CreatList(Type entityType)
         {
             // Info credit: http://stackoverflow.com/questions/4661211/c-sharp-instantiate-generic-list-from-reflected-type/4661237#4661237#answer-4661237
@@ -120,5 +121,6 @@ namespace Server.Models.Utils.DAL.Common
             var result = (IList)Activator.CreateInstance(constructedListType);
             return result;
         }
+		*/
     }
 }
