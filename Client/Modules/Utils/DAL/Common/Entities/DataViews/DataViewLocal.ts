@@ -1,5 +1,5 @@
 
-import DataAdapter = require("../Dtos/DataAdapter");
+import DataAdapter = require("../../Dtos/DataAdapter");
 import DataContext = require("../DataContext");
 
 class DataViewLocal<T> {

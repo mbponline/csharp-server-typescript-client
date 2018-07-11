@@ -1,6 +1,6 @@
 ﻿
 import dataProvider = require("../../../dataProvider");
-import DataAdapter = require("../Dtos/DataAdapter");
+import DataAdapter = require("../../Dtos/DataAdapter");
 import DataContext = require("../DataContext");
 import DataViewRemote = require("./DataViewRemote");
 import viewsUtils = require("./viewsUtils");

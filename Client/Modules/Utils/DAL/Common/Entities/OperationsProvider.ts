@@ -18,7 +18,7 @@ class OperationsProvider {
 
     private getItems(operationName: string, paramsQueryString: string, queryObject: IQueryObject, returnTypeName: string): JQueryDeferred<IResult<any>> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<IResult<any>>();
 
         var dataSet: any[] = [];
 
@@ -102,7 +102,7 @@ class OperationsProvider {
 
     private getItemsPostOperation(operationName: string, paramsQueryString: string, queryObject: IQueryObject, returnTypeName: string): JQueryDeferred<IResult<any>> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<IResult<any>>();
 
         var dataSet: any[] = [];
 
@@ -117,7 +117,7 @@ class OperationsProvider {
                 entityTypeName: returnTypeName,
                 relatedItems: undefined
             }
-            var dataSet = this.dataContext.attachSingleEntitiy(data);
+            var dataSet = this.dataContext.attachSingleEntitiy<any>(data);
             dfd.resolve(dataSet);
             BusyIndicator.instance.stop();
         };

@@ -33,6 +33,7 @@ module dataProvider {
         Rentals?: IDataViewLocal<Rental>;
         Staffs?: IDataViewLocal<Staff>;
         Stores?: IDataViewLocal<Store>;
+        [propName: string]: any;
     };
 
     export interface IRemoteViews {
@@ -52,6 +53,7 @@ module dataProvider {
         Rentals?: IDataViewRemote<Rental>;
         Staffs?: IDataViewRemote<Staff>;
         Stores?: IDataViewRemote<Store>;
+        [propName: string]: any;
     };
 
     export var entityTypes = {

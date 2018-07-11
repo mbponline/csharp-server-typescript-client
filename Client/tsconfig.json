@@ -1,5 +1,5 @@
 {
-  "version": "1.8.6",
+  "version": "2.8.1",
   "compilerOptions": {
     "target": "es5",
     "module": "amd",
@@ -13,9 +13,11 @@
   "atom": {
     "rewriteTsconfig": true
   },
-  "filesGlob": [
-    "./**/*.ts",
-    "!./node_modules/**/*.ts",
-    "!./bower_components/**/*.ts"
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules/**/*.ts",
+    "./bower_components/**/*.ts"
   ]
 }

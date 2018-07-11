@@ -1,6 +1,6 @@
 
 require.config({
-    baseUrl: '/',
+    baseUrl: '',
     paths: {
         //'jquery': 'Scripts/jquery-1.10.2.min',
         //'knockout': 'Scripts/knockout-3.1.0.debug',

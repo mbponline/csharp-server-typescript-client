@@ -4,6 +4,8 @@ import $ = require("jquery");
 import dataProvider = require("Modules/Utils/DAL/dataProvider");
 import DataService = require("Modules/Utils/DAL/Common/Entities/DataService");
 
+declare var baseUrl: string;
+
 class DataAgent {
     constructor() { }
 
@@ -11,11 +13,11 @@ class DataAgent {
     get dataService() {
         return this._dataService;
     }
-    
+
     initialize() {
-        var baseUrl = "/api/datasource/";
-        return $.getJSON(baseUrl + "crud/metadata").then((metadata: metadataTypes.Metadata) => {
-            this._dataService = new DataService(metadata, baseUrl);
+        var apiUrl = baseUrl + "api/datasource/";
+        return $.getJSON(apiUrl + "crud/metadata").then((metadata: metadataTypes.Metadata) => {
+            this._dataService = new DataService(metadata, apiUrl);
         }).then(() => this.loadCacheData());
     }
 

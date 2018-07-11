@@ -1,7 +1,7 @@
 import $ = require("jquery");
 import ko = require("knockout");
 import dataProvider = require("Modules/Utils/DAL/dataProvider");
-import dataAgent = require("Modules/Utils/DAL/DataAgent");
+import dataAgent = require("Modules/Utils/DAL/dataAgent");
 
 export function start() {
 

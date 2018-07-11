@@ -256,7 +256,7 @@ class DataAdapter {
      * Query entity collection
      */
     queryAllNext(url: string, callbackSuccess: (data: any, response: any) => void, callbackError: (err: any) => void): void {
-        var jqxhr = $.getJSON(url);
+        var jqxhr = $.getJSON(this.baseUrl.replace("api/datasource/", "") + url);
         jqxhr.then(callbackSuccess).fail(callbackError);
     }
 

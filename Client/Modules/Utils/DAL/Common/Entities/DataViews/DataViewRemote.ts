@@ -11,7 +11,7 @@ class DataViewRemote<T> {
 
     getItems(query?: IQueryObject): JQueryDeferred<IResult<T>> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<IResult<T>>();
 
         var dataSet: T[] = [];
 
@@ -47,7 +47,7 @@ class DataViewRemote<T> {
 
     getSingleItem(partialEntity: any, expand: string[]): JQueryDeferred<T> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<T>();
 
         var queryFailed = (error: any) => {
             dfd.reject(error);
@@ -55,7 +55,7 @@ class DataViewRemote<T> {
         };
 
         var querySucceeded = (dto: IResultSingleSerialData) => {
-            var data = this.dataContext.attachSingleEntitiy(dto);
+            var data = this.dataContext.attachSingleEntitiy<T>(dto);
             dfd.resolve(data);
             BusyIndicator.instance.stop();
         };
@@ -68,7 +68,7 @@ class DataViewRemote<T> {
 
     getMultipleItems(partialEntities: any[], expand: string[]): JQueryDeferred<T[]> {
 
-        let dfd = $.Deferred();
+        let dfd = $.Deferred<T[]>();
 
         let queryFailed = (error: any) => {
             dfd.reject(error);
@@ -76,7 +76,7 @@ class DataViewRemote<T> {
         };
 
         let querySucceeded = (dto: IResultSerialData) => {
-            let data = this.dataContext.attachEntities(dto);
+            let data = this.dataContext.attachEntities<T>(dto);
             dfd.resolve(data);
             BusyIndicator.instance.stop();
         };
@@ -89,7 +89,7 @@ class DataViewRemote<T> {
 
     insertItem(entity: any): JQueryDeferred<T> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<T>();
 
         var queryFailed = (error: any) => {
             dfd.reject(error);
@@ -97,7 +97,7 @@ class DataViewRemote<T> {
         };
 
         var querySucceeded = (dto: IResultSingleSerialData) => {
-            var data = this.dataContext.attachSingleEntitiy(dto);
+            var data = this.dataContext.attachSingleEntitiy<T>(dto);
             dfd.resolve(data);
             BusyIndicator.instance.stop();
         };
@@ -114,7 +114,7 @@ class DataViewRemote<T> {
 
     insertItems(entities: any[]): JQueryDeferred<T[]> {
 
-        var dfd = $.Deferred();
+        var dfd = $.Deferred<T[]>();
 
         if (entities.length === 0) {
             //throw "Introduceti cel putin o entitate in lista pentru a putea continua derularea operatiunii";
@@ -136,7 +136,7 @@ class DataViewRemote<T> {
                 totalCount: undefined,
                 relatedItems: undefined,
             }
-            var dataSet = this.dataContext.attachEntities(data);
+            var dataSet = this.dataContext.attachEntities<T>(data);
             dfd.resolve(dataSet);
             BusyIndicator.instance.stop();
         };
