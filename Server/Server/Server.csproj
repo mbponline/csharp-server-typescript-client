@@ -86,7 +86,6 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="app.config" />
-    <Content Include="index.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -155,7 +154,6 @@
     <Compile Include="Models\Utils\DAL\Common\Entities\Types\IEntitySet.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\metadata_mssql.json" />
     <None Include="App_Data\metadata_mysql.json" />
     <None Include="App_Data\operationsDefinition.json" />
   </ItemGroup>
