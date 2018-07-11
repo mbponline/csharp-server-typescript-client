@@ -2,9 +2,11 @@
 using Server.Models.Utils.DAL.Common;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Server.Controllers.Dtos
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/datasource/crud")]
     public class CrudController : ApiController
     {
