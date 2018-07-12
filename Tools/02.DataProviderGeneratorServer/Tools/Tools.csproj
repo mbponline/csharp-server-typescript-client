@@ -47,18 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Models\Common\BlockWriter.cs" />
-    <Compile Include="Models\Common\Metadata\Database.cs" />
-    <Compile Include="Models\Common\Metadata\EntityType.cs" />
-    <Compile Include="Models\Common\Metadata\Metadata.cs" />
-    <Compile Include="Models\Common\Metadata\Multiplicity.cs" />
-    <Compile Include="Models\Common\Metadata\NavigationProperty.cs" />
-    <Compile Include="Models\Common\Metadata\Operations\Operation.cs" />
-    <Compile Include="Models\Common\Metadata\Operations\Parameter.cs" />
-    <Compile Include="Models\Common\Metadata\Operations\ReturnType.cs" />
-    <Compile Include="Models\Common\Metadata\Property.cs" />
-    <Compile Include="Models\Generator.cs" />
-    <Compile Include="Models\GeneratorUtils.cs" />
+    <Compile Include="Modules\Common\BlockWriter.cs" />
+    <Compile Include="Modules\Common\Metadata\Database.cs" />
+    <Compile Include="Modules\Common\Metadata\EntityType.cs" />
+    <Compile Include="Modules\Common\Metadata\Metadata.cs" />
+    <Compile Include="Modules\Common\Metadata\Multiplicity.cs" />
+    <Compile Include="Modules\Common\Metadata\NavigationProperty.cs" />
+    <Compile Include="Modules\Common\Metadata\Operations\Operation.cs" />
+    <Compile Include="Modules\Common\Metadata\Operations\Parameter.cs" />
+    <Compile Include="Modules\Common\Metadata\Operations\ReturnType.cs" />
+    <Compile Include="Modules\Common\Metadata\Property.cs" />
+    <Compile Include="Modules\Generator.cs" />
+    <Compile Include="Modules\GeneratorUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

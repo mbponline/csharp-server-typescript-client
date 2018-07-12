@@ -4,7 +4,7 @@
     "version": 5,
     "description": "5.7.10-log"
   },
-  "namespace": "Server.Models.Utils.DAL",
+  "namespace": "Server.Modules.Utils.DAL",
   "max": 256,
   "multiplicity": {
     "multi": "multi",

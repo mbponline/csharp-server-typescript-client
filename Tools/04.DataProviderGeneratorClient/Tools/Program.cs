@@ -1,9 +1,9 @@
 ﻿using System;
-using Tools.Models;
+using Tools.Modules;
 using System.IO;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using CodeGenerator.Models.Common;
+using CodeGenerator.Modules.Common;
 
 namespace Tools
 {
