@@ -1,6 +1,6 @@
 ﻿namespace Tools.Modules
 {
-    public class DataBaseDescription
+    public class DatabaseDescription
     {
         public string Description { get; set; }
 

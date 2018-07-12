@@ -6,7 +6,7 @@ namespace Tools.Modules
 {
     internal static class Generator
     {
-        public static string GenerateModel(Metadata metadata)
+        public static string Generate(Metadata metadata)
         {
             var entityTypes = metadata.EntityTypes.ToList();
             var entitySets = (from t in metadata.EntityTypes select new { name = t.Value.EntitySetName, entityTypeName = t.Key }).ToList();

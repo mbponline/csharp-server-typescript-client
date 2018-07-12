@@ -17,7 +17,7 @@ namespace Tools
             {
                 path = Path.GetDirectoryName(path);
             }
-            path = Path.Combine(path, "App_Data", "metadata_mysql.json");
+            path = Path.Combine(path, "App_Data", "metadata_srv.json");
 
             // read json file
             Metadata metadata;
@@ -28,7 +28,7 @@ namespace Tools
             }
 
             // generate metadata
-            var dataProvider = Generator.GenerateModel(metadata);
+            var dataProvider = Generator.Generate(metadata);
 
             // save metadata file on disk
             for (int i = 0; i < 4; i++)

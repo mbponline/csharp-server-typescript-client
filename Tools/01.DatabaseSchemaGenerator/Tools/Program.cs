@@ -10,7 +10,7 @@ namespace Tools
     {
         static void Main(string[] args)
         {
-            var metadata = MetadataGenerator.Generate();
+            var metadata = Generator.Generate();
 
             var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             path = path.Substring(8);
@@ -26,7 +26,7 @@ namespace Tools
                 Directory.CreateDirectory(path);
             }
 
-            path = Path.Combine(path, "metadata_mysql.json");
+            path = Path.Combine(path, "metadata_srv.json");
 
             var json = JsonConvert.SerializeObject(metadata, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Include, DefaultValueHandling = DefaultValueHandling.Include });
 

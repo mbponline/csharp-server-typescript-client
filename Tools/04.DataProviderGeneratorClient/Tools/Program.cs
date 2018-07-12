@@ -20,14 +20,14 @@ namespace Tools
 
             // read json files
             Metadata metadata;
-            var pathMetadata = Path.Combine(path, "App_Data", "metadata_mysql.json");
+            var pathMetadata = Path.Combine(path, "App_Data", "metadata_srv.json");
             using (StreamReader r = new StreamReader(pathMetadata))
             {
                 var jsonText = r.ReadToEnd();
                 metadata = JsonConvert.DeserializeObject<Metadata>(jsonText);
             }
 
-            var pathOperationsDefinition = Path.Combine(path, "App_Data", "operationsDefinition.json");
+            var pathOperationsDefinition = Path.Combine(path, "App_Data", "metadata_cli_operations.json");
             OperationsDefinition operationsDefinition;
             using (StreamReader r = new StreamReader(pathOperationsDefinition))
             {
@@ -36,7 +36,7 @@ namespace Tools
             }
 
             // generate code
-            var generatedCode = Generator.GenerateModel(metadata, operationsDefinition);
+            var generatedCode = Generator.Generate(metadata, operationsDefinition);
 
             // save metadata file on disk
             for (int i = 0; i < 2; i++)

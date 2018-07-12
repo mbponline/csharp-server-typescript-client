@@ -6,7 +6,7 @@ using System.Linq;
 namespace Tools.Modules
 {
 
-    public static class MetadataGeneratorUtils
+    public static class GeneratorUtils
     {
         public static string CamelCase(this string tableOrFieldName)
         {

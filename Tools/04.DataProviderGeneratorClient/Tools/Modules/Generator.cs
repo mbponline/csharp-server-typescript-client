@@ -6,7 +6,7 @@ namespace Tools.Modules
 {
     internal static class Generator
     {
-        public static string GenerateModel(Metadata metadata, OperationsDefinition operationsDefinition)
+        public static string Generate(Metadata metadata, OperationsDefinition operationsDefinition)
         {
             metadata.Functions = operationsDefinition.Functions;
             metadata.Actions = operationsDefinition.Actions;

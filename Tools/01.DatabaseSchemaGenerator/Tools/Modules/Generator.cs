@@ -7,7 +7,7 @@ using WebMatrix.Data.StronglyTyped;
 
 namespace Tools.Modules
 {
-    public static class MetadataGenerator
+    public static class Generator
     {
         public static Metadata Generate()
         {
@@ -18,7 +18,7 @@ namespace Tools.Modules
             var entityTypes = new Dictionary<string, EntityType>();
 
             var databaseDescriptionSql = "SELECT @@VERSION as Description"; // SELECT VERSION() AS Description;
-            var databaseDescription = db.Query<DataBaseDescription>(databaseDescriptionSql);
+            var databaseDescription = db.Query<DatabaseDescription>(databaseDescriptionSql);
 
             var tablesSql = string.Format("SELECT TABLE_NAME AS Name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME <> 'sysdiagrams' AND TABLE_SCHEMA = '{0}' AND TABLE_TYPE != 'VIEW';", tableSchema);
             var columnsSql = string.Format("SELECT c.TABLE_NAME AS 'Table', c.COLUMN_NAME AS Name, CASE c.COLUMN_TYPE WHEN 'tinyint(1)' THEN 'bit' ELSE c.DATA_TYPE END AS Type, c.COLUMN_DEFAULT AS 'Default', c.CHARACTER_MAXIMUM_LENGTH AS MaxLength, CASE c.IS_NULLABLE WHEN 'NO' THEN 0 WHEN 'YES' THEN 1 END AS IsNullable, CASE WHEN cu.COLUMN_NAME IS NULL THEN 0 ELSE 1 END AS IsKey, CASE c.EXTRA WHEN 'auto_increment' THEN 1 ELSE 0 END AS IsIdentity FROM INFORMATION_SCHEMA.COLUMNS AS c LEFT JOIN (SELECT t.TABLE_SCHEMA, t.TABLE_NAME, k.COLUMN_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS t LEFT JOIN INFORMATION_SCHEMA.key_column_usage AS k USING(constraint_name, table_schema, table_name) WHERE t.CONSTRAINT_TYPE='PRIMARY KEY') AS cu ON cu.TABLE_SCHEMA = c.TABLE_SCHEMA AND cu.TABLE_NAME = c.TABLE_NAME AND cu.COLUMN_NAME = c.COLUMN_NAME WHERE c.TABLE_SCHEMA = '{0}' ORDER BY c.TABLE_NAME, c.ORDINAL_POSITION;", tableSchema);
@@ -77,7 +77,7 @@ namespace Tools.Modules
                     FieldName = col.Name,
                     Type = col.Type,
                     Nullable = col.IsNullable.ToBoolean(),
-                    Default = MetadataGeneratorUtils.GetDefaultValue(col),
+                    Default = GeneratorUtils.GetDefaultValue(col),
                     MaxLength = (int?)col.MaxLength
                 });
                 var cp = (from t in columns where t.IsComputed.ToBoolean() || t.IsIdentity.ToBoolean() select t.Name.CamelCase()).ToList();
@@ -107,7 +107,7 @@ namespace Tools.Modules
 
                 foreach (var relation in relations)
                 {
-                    proposedName = MetadataGeneratorUtils.GetNavigationPropertyName(relation.referencedTable, et.Value.NavigationProperties);
+                    proposedName = GeneratorUtils.GetNavigationPropertyName(relation.referencedTable, et.Value.NavigationProperties);
                     et.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
                     {
                         EntityTypeName = relation.referencedTable,
@@ -117,7 +117,7 @@ namespace Tools.Modules
                     });
 
                     var ret = (from t in entityTypes where t.Key == relation.referencedTable select t).FirstOrDefault();
-                    proposedName = MetadataGeneratorUtils.GetNavigationPropertyName(relation.parentTable.Pluralize(), ret.Value.NavigationProperties);
+                    proposedName = GeneratorUtils.GetNavigationPropertyName(relation.parentTable.Pluralize(), ret.Value.NavigationProperties);
                     ret.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
                     {
                         EntityTypeName = relation.parentTable,
