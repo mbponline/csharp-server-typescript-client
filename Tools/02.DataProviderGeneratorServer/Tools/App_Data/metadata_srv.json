@@ -1,11 +1,8 @@
 {
-  "database": {
-    "dialect": "MYSQL",
-    "version": 5,
-    "description": "5.7.10-log"
-  },
-  "namespace": "Server.Modules.Utils.DAL",
-  "max": 256,
+  "dialect": "MYSQL",
+  "version": "v0.0.1",
+  "description": "5.7.20",
+  "namespace": "Server.Models.Utils.DAL",
   "multiplicity": {
     "multi": "multi",
     "single": "single"
@@ -1300,7 +1297,5 @@
         }
       }
     }
-  },
-  "functions": null,
-  "actions": null
+  }
 }

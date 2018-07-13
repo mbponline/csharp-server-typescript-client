@@ -1,22 +1,23 @@
-﻿using CodeGenerator.Modules.Common;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tools.Modules.Common;
 
 namespace Tools.Modules
 {
     internal static class Generator
     {
-        public static string Generate(Metadata metadata)
+        public static string Generate(Metadata metadataSrv)
         {
-            var entityTypes = metadata.EntityTypes.ToList();
-            var entitySets = (from t in metadata.EntityTypes select new { name = t.Value.EntitySetName, entityTypeName = t.Key }).ToList();
+            var entityTypes = metadataSrv.EntityTypes.ToList();
+            var entitySets = (from t in metadataSrv.EntityTypes select new { name = t.Value.EntitySetName, entityTypeName = t.Key }).ToList();
 
-            Dictionary<string, string> types = null;
+            Dictionary<string, string> dbTypeConvert = null;
 
-            switch (metadata.Database.Dialect)
+            switch (metadataSrv.Dialect)
             {
                 case "MSSQL":
-                    types = new Dictionary<string, string>()
+                    dbTypeConvert = new Dictionary<string, string>()
                         {
                             { "int", "int" },
                             { "smallint", "short" },
@@ -28,14 +29,14 @@ namespace Tools.Modules
                         };
                     break;
                 case "MYSQL":
-                    types = new Dictionary<string, string>()
+                    dbTypeConvert = new Dictionary<string, string>()
                         {
                             { "int", "int" },
-                            { "smallint", "short" },
+                            { "smallint", "short" }, // or "int"
                             { "float", "float" },
                             { "decimal", "float" },
                             { "mediumint", "int" },
-                            { "tinyint", "sbyte" },
+                            { "tinyint", "sbyte" }, // or "byte"
                             { "datetime", "DateTime" },
                             { "timestamp", "DateTime" },
                             { "bit", "bool" },
@@ -51,7 +52,7 @@ namespace Tools.Modules
                         };
                     break;
                 default:
-                    break;
+                    throw new Exception("Unknown dialect");
             }
 
             var br = new BlockWriter();
@@ -68,12 +69,12 @@ namespace Tools.Modules
 
             br.WriteLine("using Newtonsoft.Json;");
             br.WriteLine("using System;");
-			br.WriteLine("using System.Linq;");
+            br.WriteLine("using System.Linq;");
             br.WriteLine("using System.Collections.Generic;");
-            br.WriteLine("using Server.Modules.Utils.DAL.Common;");
-			br.WriteLine();
+            br.WriteLine("using Server.Models.Utils.DAL.Common;");
+            br.WriteLine();
 
-            br.WriteLine("namespace " + metadata.Namespace);
+            br.WriteLine("namespace " + metadataSrv.Namespace);
             br.BeginBlock("{");
 
             //var json = JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
@@ -103,8 +104,8 @@ namespace Tools.Modules
             br.EndBlock("}");
             foreach (var es in entitySets)
             {
-				br.WriteLine(string.Format("public DataViewLocalEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
-			}
+                br.WriteLine(string.Format("public DataViewLocalEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+            }
             br.EndBlock("}");
 
             // RemoteEntityViews
@@ -120,7 +121,7 @@ namespace Tools.Modules
             foreach (var es in entitySets)
             {
                 br.WriteLine(string.Format("public DataViewRemoteEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
-			}
+            }
             br.EndBlock("}");
 
             // LocalDtoViews
@@ -136,7 +137,7 @@ namespace Tools.Modules
             foreach (var es in entitySets)
             {
                 br.WriteLine(string.Format("public DataViewLocalDto<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
-			}
+            }
             br.EndBlock("}");
 
             // RemoteDtoViews
@@ -152,31 +153,32 @@ namespace Tools.Modules
             foreach (var es in entitySets)
             {
                 br.WriteLine(string.Format("public DataViewRemoteDto {0} {{ get {{ return this.GetPropertyValue(\"{1}\"); }} }}", es.name, es.entityTypeName));
-			}
+            }
             br.EndBlock("}");
 
             // Entities
             foreach (var et in entityTypes)
             {
-                var etp = et.Value.Properties;
-                var etnp = et.Value.NavigationProperties ?? new Dictionary<string, NavigationProperty>();
+                var entityTypeName = et.Key;
+                var properties = et.Value.Properties;
+                var navigationProperties = et.Value.NavigationProperties ?? new Dictionary<string, NavigationProperty>();
 
                 // with constructor generator
-                br.WriteLine(string.Format("public sealed class {0} : IDerivedEntity", et.Key));
+                br.WriteLine(string.Format("public sealed class {0} : IDerivedEntity", entityTypeName));
                 br.BeginBlock("{");
-                br.WriteLine(string.Format("public {0}(Entity entity)", et.Key));
-				br.BeginBlock("{")
-				  .WriteLine(string.Format("if (entity.entityTypeName != \"{0}\") {{ throw new ArgumentException(\"Incorrect entity type\"); }}", et.Key))
-				  .WriteLine("this.entity = entity;");
+                br.WriteLine(string.Format("public {0}(Entity entity)", entityTypeName));
+                br.BeginBlock("{")
+                  .WriteLine(string.Format("if (entity.entityTypeName != \"{0}\") {{ throw new ArgumentException(\"Incorrect entity type\"); }}", entityTypeName))
+                  .WriteLine("this.entity = entity;");
                 br.EndBlock("}");
 
-				br.WriteLine("public Entity entity { get; private set; }")
-				  .WriteLine();
-				  
-                GeneratorUtils.WriteProperties(br, etp, types);
+                br.WriteLine("public Entity entity { get; private set; }")
+                  .WriteLine();
+
+                GeneratorUtils.WriteProperties(br, properties, dbTypeConvert);
 
                 // navigation properties for intellisense
-                GeneratorUtils.WriteNavigationProperties(br, et.Key, etnp);
+                GeneratorUtils.WriteNavigationProperties(br, entityTypeName, navigationProperties);
 
                 br.EndBlock("}");
             }

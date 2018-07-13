@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CodeGenerator.Modules.Common
+namespace Tools.Modules.Common
 {
 
     public class BlockWriter
