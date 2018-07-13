@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using Tools.Modules;
-using Tools.Modules.Common;
+using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools
 {
@@ -12,8 +12,8 @@ namespace Tools
         {
             var pathToAppData = ProgramUtils.GetPathToAppData();
 
-            var metadataSrv = pathToAppData.GetJsonFromAppDataAs<Metadata>("metadata_srv.json");
-            var metadataCliOperations = pathToAppData.GetJsonFromAppDataAs<Metadata>("metadata_cli_operations.json");
+            var metadataSrv = pathToAppData.GetJsonFromAppDataAs<MetadataCli.Metadata>("metadata_srv.json");
+            var metadataCliOperations = pathToAppData.GetJsonFromAppDataAs<MetadataCli.Metadata>("metadata_cli_operations.json");
 
             var metadataCliFull = Generator.GenerateMetadataCliFull(metadataSrv, metadataCliOperations);
             var metadataCli = Generator.GenerateMetadataCli(metadataCliFull);

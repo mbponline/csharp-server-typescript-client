@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tools.Modules.Common;
+using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
 namespace Tools.Modules
 {
     public static class Generator
     {
-        public static Metadata Generate()
+        public static MetadataSrv.Metadata Generate()
         {
             var db = new DatabaseOperations("MYSQL", @"Server=localhost;Database=sakila;Uid=root;Pwd=Pass@word1;");
 
             var tableSchema = "sakila";
 
-            var entityTypes = new Dictionary<string, EntityType>();
+            var entityTypes = new Dictionary<string, MetadataSrv.EntityType>();
 
             var databaseDescriptionSql = "SELECT @@VERSION as Description"; // SELECT VERSION() AS Description;
             var databaseDescription = db.Query<DatabaseDescription>(databaseDescriptionSql);
@@ -55,21 +56,21 @@ namespace Tools.Modules
 
                 tableNames.Add(entityTypeName, table.Name);
 
-                var et = new EntityType()
+                var et = new MetadataSrv.EntityType()
                 {
                     TableName = originalTableName[table.Name],
                     EntitySetName = entitySetName,
                     Key = null,
                     Properties = null,
                     CalculatedProperties = null,
-                    NavigationProperties = new Dictionary<string, NavigationProperty>(),
+                    NavigationProperties = new Dictionary<string, MetadataSrv.NavigationProperty>(),
                 };
                 entityTypes.Add(entityTypeName, et);
 
                 var columns = allColumns.Where((it) => it.Table == table.Name);
 
-                et.Key = (from t in columns where t.IsKey.ToBoolean() select t.Name.CamelCase()).ToList();
-                et.Properties = (from t in columns select t).ToDictionary(col => col.Name.CamelCase(), col => new Property()
+                et.Key = (from t in columns where t.IsKey.ToBoolean() select t.Name.CamelCase()).ToArray();
+                et.Properties = (from t in columns select t).ToDictionary(col => col.Name.CamelCase(), col => new MetadataSrv.Property()
                 {
                     FieldName = col.Name,
                     Type = col.Type,
@@ -77,8 +78,8 @@ namespace Tools.Modules
                     Default = GeneratorUtils.GetDefaultValue(col),
                     MaxLength = (int?)col.MaxLength
                 });
-                var cp = (from t in columns where t.IsComputed.ToBoolean() || t.IsIdentity.ToBoolean() select t.Name.CamelCase()).ToList();
-                et.CalculatedProperties = cp.Count == 0 ? null : cp;
+                var cp = (from t in columns where t.IsComputed.ToBoolean() || t.IsIdentity.ToBoolean() select t.Name.CamelCase()).ToArray();
+                et.CalculatedProperties = cp.Length == 0 ? null : cp;
             }
 
             foreach (var et in entityTypes)
@@ -105,22 +106,22 @@ namespace Tools.Modules
                 foreach (var relation in relations)
                 {
                     proposedName = et.Value.NavigationProperties.GetNavigationPropertyName(relation.referencedTable);
-                    et.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
+                    et.Value.NavigationProperties.Add(proposedName, new MetadataSrv.NavigationProperty()
                     {
                         EntityTypeName = relation.referencedTable,
                         Multiplicity = "single",
-                        KeyLocal = relation.referentialConstraints.Select((it) => it.property.CamelCase()).ToList(),
-                        KeyRemote = relation.referentialConstraints.Select((it) => it.referencedProperty.CamelCase()).ToList()
+                        KeyLocal = relation.referentialConstraints.Select((it) => it.property.CamelCase()).ToArray(),
+                        KeyRemote = relation.referentialConstraints.Select((it) => it.referencedProperty.CamelCase()).ToArray()
                     });
 
                     var ret = (from t in entityTypes where t.Key == relation.referencedTable select t).FirstOrDefault();
                     proposedName = ret.Value.NavigationProperties.GetNavigationPropertyName(relation.parentTable.Pluralize());
-                    ret.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
+                    ret.Value.NavigationProperties.Add(proposedName, new MetadataSrv.NavigationProperty()
                     {
                         EntityTypeName = relation.parentTable,
                         Multiplicity = "multi",
-                        KeyLocal = relation.referentialConstraints.Select((it) => it.referencedProperty.CamelCase()).ToList(),
-                        KeyRemote = relation.referentialConstraints.Select((it) => it.property.CamelCase()).ToList()
+                        KeyLocal = relation.referentialConstraints.Select((it) => it.referencedProperty.CamelCase()).ToArray(),
+                        KeyRemote = relation.referentialConstraints.Select((it) => it.property.CamelCase()).ToArray()
                     });
                 }
             }
@@ -128,13 +129,13 @@ namespace Tools.Modules
             var description = databaseDescription.FirstOrDefault().Description.Split(new char[] { '(', '-' }).FirstOrDefault().Trim();
             //var version = Convert.ToInt32(description.Split(new char[] { '.' }).FirstOrDefault().Trim());
 
-            var metadataSrv = new Metadata
+            var metadataSrv = new MetadataSrv.Metadata
             {
                 Dialect = "MYSQL",
                 Version = "v0.0.1",
                 Description = description,
                 Namespace = "Server.Models.Utils.DAL",
-                Multiplicity = new Multiplicity()
+                Multiplicity = new MetadataSrv.Multiplicity()
                 {
                     Multi = "multi",
                     Single = "single"

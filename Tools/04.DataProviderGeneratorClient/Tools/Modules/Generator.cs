@@ -1,16 +1,17 @@
 ﻿using System.Linq;
 using Tools.Modules.Common;
+using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools.Modules
 {
     internal static class Generator
     {
-        public static string Generate(Metadata metadataCli)
+        public static string Generate(MetadataCli.Metadata metadataCli)
         {
             var entityTypes = metadataCli.EntityTypes.ToList();
 
-            var function = metadataCli.Functions != null ? metadataCli.Functions : Enumerable.Empty<Operation>();
-            var action = metadataCli.Actions != null ? metadataCli.Actions : Enumerable.Empty<Operation>();
+            var function = metadataCli.Functions != null ? metadataCli.Functions : Enumerable.Empty<MetadataCli.Operation>();
+            var action = metadataCli.Actions != null ? metadataCli.Actions : Enumerable.Empty<MetadataCli.Operation>();
 
             var br = new BlockWriter();
 
@@ -106,7 +107,7 @@ namespace Tools.Modules
                 br.WriteLine();
 
                 // navigation properties for intellisense
-                NavigationProperty anp;
+                MetadataCli.NavigationProperty anp;
                 var navigationProperties = entityType.Value.NavigationProperties;
                 foreach (var navigationProperty in navigationProperties)
                 {

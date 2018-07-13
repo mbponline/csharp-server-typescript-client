@@ -46,14 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\Common\BlockWriter.cs" />
-    <Compile Include="Modules\Common\Metadata\EntityType.cs" />
-    <Compile Include="Modules\Common\Metadata\Metadata.cs" />
-    <Compile Include="Modules\Common\Metadata\Multiplicity.cs" />
-    <Compile Include="Modules\Common\Metadata\NavigationProperty.cs" />
-    <Compile Include="Modules\Common\Metadata\Operations\Operation.cs" />
-    <Compile Include="Modules\Common\Metadata\Operations\Parameter.cs" />
-    <Compile Include="Modules\Common\Metadata\Operations\ReturnType.cs" />
-    <Compile Include="Modules\Common\Metadata\Property.cs" />
+    <Compile Include="Modules\Common\MetadataCli\EntityType.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Metadata.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Multiplicity.cs" />
+    <Compile Include="Modules\Common\MetadataCli\NavigationProperty.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Operations\Operation.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Operations\Parameter.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Operations\ReturnType.cs" />
+    <Compile Include="Modules\Common\MetadataCli\Property.cs" />
     <Compile Include="Modules\Generator.cs" />
     <Compile Include="Modules\GeneratorUtils.cs" />
     <Compile Include="Program.cs" />

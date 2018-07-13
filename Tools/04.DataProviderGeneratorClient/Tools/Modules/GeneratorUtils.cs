@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Tools.Modules.Common;
+using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools.Modules
 {
 
     internal static class GeneratorUtils
     {
-        public static void WriteRules(BlockWriter br, Property entityTypeProperty, Metadata metadata)
+        public static void WriteRules(BlockWriter br, MetadataCli.Property entityTypeProperty, MetadataCli.Metadata metadataCli)
         {
             if (!entityTypeProperty.Nullable)
             {
@@ -35,7 +36,7 @@ namespace Tools.Modules
             }
         }
 
-        public static string GetFunctionParamList(Operation fc)
+        public static string GetFunctionParamList(MetadataCli.Operation fc)
         {
             var result = fc.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, it.Type)).ToList();
             if (fc.ReturnType.IsEntity && fc.ReturnType.IsCollection)
@@ -45,13 +46,13 @@ namespace Tools.Modules
             return string.Join(", ", result);
         }
 
-        public static string GetActionParamList(Operation ac)
+        public static string GetActionParamList(MetadataCli.Operation ac)
         {
             var result = ac.Parameters.Select((it) => string.Format("{0}: {1}", it.Name, it.Type));
             return string.Join(", ", result);
         }
 
-        public static string GetParamResult(ReturnType returnTypeParam)
+        public static string GetParamResult(MetadataCli.ReturnType returnTypeParam)
         {
             if (returnTypeParam == null)
             {

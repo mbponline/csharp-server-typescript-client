@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tools.Modules.Common;
+using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools.Modules
 {
@@ -48,7 +48,7 @@ namespace Tools.Modules
             }
         }
 
-        public static string GetNavigationPropertyName(this Dictionary<string, NavigationProperty> navigationProperties, string proposedName)
+        public static string GetNavigationPropertyName(this Dictionary<string, MetadataCli.NavigationProperty> navigationProperties, string proposedName)
         {
             var result = proposedName;
 
@@ -71,10 +71,10 @@ namespace Tools.Modules
             return result;
         }
 
-        public static void CreateRelation(this Dictionary<string, EntityType> entityTypes, string entityTypeNameLocal, string entityTypeNameRemote, List<string> keyRemote)
+        public static void CreateRelation(this Dictionary<string, MetadataCli.EntityType> entityTypes, string entityTypeNameLocal, string entityTypeNameRemote, string[] keyRemote)
         {
             var entityTypeLocal = entityTypes[entityTypeNameLocal];
-            var navigationPropertyLocal = new NavigationProperty()
+            var navigationPropertyLocal = new MetadataCli.NavigationProperty()
             {
                 EntityTypeName = entityTypeNameRemote,
                 Multiplicity = "multi",
@@ -92,7 +92,7 @@ namespace Tools.Modules
                     throw new ArgumentException("Could not find coresponding navigation property");
                 }
             }
-            var navigationPropertyRemote = new NavigationProperty()
+            var navigationPropertyRemote = new MetadataCli.NavigationProperty()
             {
                 EntityTypeName = entityTypeNameLocal,
                 Multiplicity = "single",
@@ -105,7 +105,7 @@ namespace Tools.Modules
             AddAnnotation(entityTypeLocal, navigationPropertyNameLocal, entityTypeRemote, navigationPropertyNameRemote);
         }
 
-        public static void AddAnnotation(EntityType entityTypeLocal, string navigationPropertyNameLocal, EntityType entityTypeRemote, string navigationPropertyNameRemote)
+        public static void AddAnnotation(MetadataCli.EntityType entityTypeLocal, string navigationPropertyNameLocal, MetadataCli.EntityType entityTypeRemote, string navigationPropertyNameRemote)
         {
             var navigationPropertyLocal = entityTypeLocal.NavigationProperties[navigationPropertyNameLocal];
             var navigationPropertyRemote = entityTypeRemote.NavigationProperties[navigationPropertyNameRemote];
@@ -151,7 +151,7 @@ namespace Tools.Modules
             }
         }
 
-        public static void RemoveEntityType(this Dictionary<string, EntityType> entityTypes, string entityTypeName)
+        public static void RemoveEntityType(this Dictionary<string, MetadataCli.EntityType> entityTypes, string entityTypeName)
         {
             var entityType = entityTypes[entityTypeName];
 
@@ -178,7 +178,7 @@ namespace Tools.Modules
             entityTypes.Remove(entityTypeName);
         }
 
-        public static void ConvertPropertyTypes(this Dictionary<string, EntityType> entityTypes, Dictionary<string, string> typeConvert)
+        public static void ConvertPropertyTypes(this Dictionary<string, MetadataCli.EntityType> entityTypes, Dictionary<string, string> typeConvert)
         {
             foreach (var item in entityTypes)
             {
@@ -191,7 +191,7 @@ namespace Tools.Modules
             }
         }
 
-        public static void ConvertOperationType(this Operation[] operations, Dictionary<string, string> typeConvert)
+        public static void ConvertOperationType(this MetadataCli.Operation[] operations, Dictionary<string, string> typeConvert)
         {
             foreach (var operation in operations)
             {
@@ -206,7 +206,7 @@ namespace Tools.Modules
             }
         }
 
-        public static void AddAnnotation(this EntityType entityType, string key, object value)
+        public static void AddAnnotation(this MetadataCli.EntityType entityType, string key, object value)
         {
             if (entityType.Annotations == null)
             {

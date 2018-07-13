@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tools.Modules.Common;
+using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
 namespace Tools.Modules
 {
@@ -107,7 +107,7 @@ namespace Tools.Modules
             return defaultValue;
         }
 
-        public static string GetNavigationPropertyName(this Dictionary<string, NavigationProperty> navigationProperties, string proposedName)
+        public static string GetNavigationPropertyName(this Dictionary<string, MetadataSrv.NavigationProperty> navigationProperties, string proposedName)
         {
             var result = proposedName;
 

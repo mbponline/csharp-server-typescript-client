@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tools.Modules.Common;
+using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
 namespace Tools.Modules
 {
     internal static class Generator
     {
-        public static string Generate(Metadata metadataSrv)
+        public static string Generate(MetadataSrv.Metadata metadataSrv)
         {
             var entityTypes = metadataSrv.EntityTypes.ToList();
             var entitySets = (from t in metadataSrv.EntityTypes select new { name = t.Value.EntitySetName, entityTypeName = t.Key }).ToList();
@@ -161,7 +162,7 @@ namespace Tools.Modules
             {
                 var entityTypeName = et.Key;
                 var properties = et.Value.Properties;
-                var navigationProperties = et.Value.NavigationProperties ?? new Dictionary<string, NavigationProperty>();
+                var navigationProperties = et.Value.NavigationProperties ?? new Dictionary<string, MetadataSrv.NavigationProperty>();
 
                 // with constructor generator
                 br.WriteLine(string.Format("public sealed class {0} : IDerivedEntity", entityTypeName));

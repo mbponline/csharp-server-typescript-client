@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace Tools.Modules.Common
 {
     public class Relation
@@ -8,6 +7,6 @@ namespace Tools.Modules.Common
 
         public string TableRemote { get; set; }
 
-        public List<string> KeyRemote { get; set; }
+        public string[] KeyRemote { get; set; }
     }
 }

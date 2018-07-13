@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tools.Modules.Common;
+using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
 namespace Tools.Modules
 {
@@ -8,7 +9,7 @@ namespace Tools.Modules
     internal static class GeneratorUtils
     {
 
-        public static void WriteProperties(BlockWriter br, Dictionary<string, Property> properties, Dictionary<string, string> dbTypeConvert)
+        public static void WriteProperties(BlockWriter br, Dictionary<string, MetadataSrv.Property> properties, Dictionary<string, string> dbTypeConvert)
         {
             foreach (var property in properties)
             {
@@ -20,7 +21,7 @@ namespace Tools.Modules
             br.WriteLine();
         }
 
-        public static void WriteNavigationProperties(BlockWriter br, string entityTypeName, Dictionary<string, NavigationProperty> navigationProperties)
+        public static void WriteNavigationProperties(BlockWriter br, string entityTypeName, Dictionary<string, MetadataSrv.NavigationProperty> navigationProperties)
         {
             foreach (var navigationProperty in navigationProperties)
             {

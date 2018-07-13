@@ -1,15 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using Tools.Modules.Common;
+using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools.Modules
 {
     public static class Generator
     {
-        public static Metadata GenerateMetadataCliFull(Metadata metadataSrv, Metadata metadataCliOperations)
+        public static MetadataCli.Metadata GenerateMetadataCliFull(MetadataCli.Metadata metadataSrv, MetadataCli.Metadata metadataCliOperations)
         {
-            Metadata metadataCliFull = null;
+            MetadataCli.Metadata metadataCliFull = null;
 
             Dictionary<string, string> dbTypeConvert = null;
 
@@ -56,7 +56,7 @@ namespace Tools.Modules
 
             // Concateneaza toate entityTypes-urile
 
-            var entityTypes = new Dictionary<string, EntityType>();
+            var entityTypes = new Dictionary<string, MetadataCli.EntityType>();
 
             metadataSrv.EntityTypes.ConvertPropertyTypes(dbTypeConvert);
             foreach (var item in metadataSrv.EntityTypes)
@@ -69,14 +69,13 @@ namespace Tools.Modules
                 entityTypes.Add(entityTypeName, entityType);
             }
 
-            metadataCliFull = new Metadata
+            metadataCliFull = new MetadataCli.Metadata
             {
                 Dialect = "CS",
                 Version = "v0.0.1",
                 Description = "Sakila client metadata, full version (used also by tools)",
-                Namespace = "Server.Models.Utils.DAL",
                 Max = 256,
-                Multiplicity = new Multiplicity()
+                Multiplicity = new MetadataCli.Multiplicity()
                 {
                     Multi = "multi",
                     Single = "single"
@@ -89,14 +88,14 @@ namespace Tools.Modules
             return metadataCliFull;
         }
 
-        public static JObject GenerateMetadataCli(Metadata metadataCliFull)
+        public static JObject GenerateMetadataCli(MetadataCli.Metadata metadataCliFull)
         {
             if (metadataCliFull.Dialect != "CS")
             {
                 throw new ArgumentException("Unknown dialect");
             }
 
-            var metadataCli = JObject.FromObject(metadataCliFull).ToObject<Metadata>();
+            var metadataCli = JObject.FromObject(metadataCliFull).ToObject<MetadataCli.Metadata>();
 
             var opTypeConvert = new Dictionary<string, string>()
                 {
