@@ -1,10 +1,7 @@
 {
-  "database": {
-    "dialect": "MYSQL",
-    "version": 5,
-    "description": "5.7.10-log"
-  },
-  "namespace": "Server.Modules.Utils.DAL",
+  "dialect": "TS",
+  "version": "v0.0.1",
+  "description": "Sakila client metadata",
   "max": 256,
   "multiplicity": {
     "multi": "multi",
@@ -12,36 +9,31 @@
   },
   "entityTypes": {
     "Actor": {
-      "tableName": "actor",
       "entitySetName": "Actors",
       "key": [
         "ActorId"
       ],
       "properties": {
         "ActorId": {
-          "fieldName": "actor_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "FirstName": {
-          "fieldName": "first_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "LastName": {
-          "fieldName": "last_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -64,71 +56,61 @@
       }
     },
     "Address": {
-      "tableName": "address",
       "entitySetName": "Addresses",
       "key": [
         "AddressId"
       ],
       "properties": {
         "AddressId": {
-          "fieldName": "address_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Address1": {
-          "fieldName": "address",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 50
         },
         "Address2": {
-          "fieldName": "address2",
-          "type": "varchar",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 50
         },
         "District": {
-          "fieldName": "district",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 20
         },
         "CityId": {
-          "fieldName": "city_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "PostalCode": {
-          "fieldName": "postal_code",
-          "type": "varchar",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 10
         },
         "Phone": {
-          "fieldName": "phone",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 20
         },
         "Location": {
-          "fieldName": "location",
-          "type": "geometry",
+          "type": "any",
           "nullable": false,
           "default": "ST_GeomFromText('POINT(0 0)')",
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -181,29 +163,25 @@
       }
     },
     "Category": {
-      "tableName": "category",
       "entitySetName": "Categories",
       "key": [
         "CategoryId"
       ],
       "properties": {
         "CategoryId": {
-          "fieldName": "category_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Name": {
-          "fieldName": "name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 25
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -226,36 +204,31 @@
       }
     },
     "City": {
-      "tableName": "city",
       "entitySetName": "Cities",
       "key": [
         "CityId"
       ],
       "properties": {
         "CityId": {
-          "fieldName": "city_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Name": {
-          "fieldName": "city",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 50
         },
         "CountryId": {
-          "fieldName": "country_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -288,29 +261,25 @@
       }
     },
     "Country": {
-      "tableName": "country",
       "entitySetName": "Countries",
       "key": [
         "CountryId"
       ],
       "properties": {
         "CountryId": {
-          "fieldName": "country_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Name": {
-          "fieldName": "country",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 50
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -333,71 +302,61 @@
       }
     },
     "Customer": {
-      "tableName": "customer",
       "entitySetName": "Customers",
       "key": [
         "CustomerId"
       ],
       "properties": {
         "CustomerId": {
-          "fieldName": "customer_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "StoreId": {
-          "fieldName": "store_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "FirstName": {
-          "fieldName": "first_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "LastName": {
-          "fieldName": "last_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "Email": {
-          "fieldName": "email",
-          "type": "varchar",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 50
         },
         "AddressId": {
-          "fieldName": "address_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Active": {
-          "fieldName": "active",
-          "type": "bit",
+          "type": "boolean",
           "nullable": false,
           "default": false,
           "maxLength": null
         },
         "CreateDate": {
-          "fieldName": "create_date",
-          "type": "datetime",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -450,99 +409,85 @@
       }
     },
     "Film": {
-      "tableName": "film",
       "entitySetName": "Films",
       "key": [
         "FilmId"
       ],
       "properties": {
         "FilmId": {
-          "fieldName": "film_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Title": {
-          "fieldName": "title",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 255
         },
         "Description": {
-          "fieldName": "description",
-          "type": "text",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 65535
         },
         "ReleaseYear": {
-          "fieldName": "release_year",
-          "type": "year",
+          "type": "number",
           "nullable": true,
           "default": null,
           "maxLength": null
         },
         "LanguageId": {
-          "fieldName": "language_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "OriginalLanguageId": {
-          "fieldName": "original_language_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": true,
           "default": null,
           "maxLength": null
         },
         "RentalDuration": {
-          "fieldName": "rental_duration",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "RentalRate": {
-          "fieldName": "rental_rate",
-          "type": "decimal",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Length": {
-          "fieldName": "length",
-          "type": "smallint",
+          "type": "number",
           "nullable": true,
           "default": null,
           "maxLength": null
         },
         "ReplacementCost": {
-          "fieldName": "replacement_cost",
-          "type": "decimal",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Rating": {
-          "fieldName": "rating",
-          "type": "enum",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 5
         },
         "SpecialFeatures": {
-          "fieldName": "special_features",
-          "type": "set",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 54
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -605,7 +550,6 @@
       }
     },
     "FilmActor": {
-      "tableName": "film_actor",
       "entitySetName": "FilmActors",
       "key": [
         "ActorId",
@@ -613,22 +557,19 @@
       ],
       "properties": {
         "ActorId": {
-          "fieldName": "actor_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "FilmId": {
-          "fieldName": "film_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -659,7 +600,6 @@
       }
     },
     "FilmCategory": {
-      "tableName": "film_category",
       "entitySetName": "FilmCategories",
       "key": [
         "FilmId",
@@ -667,22 +607,19 @@
       ],
       "properties": {
         "FilmId": {
-          "fieldName": "film_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "CategoryId": {
-          "fieldName": "category_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -713,29 +650,25 @@
       }
     },
     "FilmText": {
-      "tableName": "film_text",
       "entitySetName": "FilmTexts",
       "key": [
         "FilmId"
       ],
       "properties": {
         "FilmId": {
-          "fieldName": "film_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Title": {
-          "fieldName": "title",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 255
         },
         "Description": {
-          "fieldName": "description",
-          "type": "text",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 65535
@@ -745,36 +678,31 @@
       "navigationProperties": {}
     },
     "Inventory": {
-      "tableName": "inventory",
       "entitySetName": "Inventories",
       "key": [
         "InventoryId"
       ],
       "properties": {
         "InventoryId": {
-          "fieldName": "inventory_id",
-          "type": "mediumint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "FilmId": {
-          "fieldName": "film_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "StoreId": {
-          "fieldName": "store_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -817,29 +745,25 @@
       }
     },
     "Language": {
-      "tableName": "language",
       "entitySetName": "Languages",
       "key": [
         "LanguageId"
       ],
       "properties": {
         "LanguageId": {
-          "fieldName": "language_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Name": {
-          "fieldName": "name",
-          "type": "char",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 20
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -872,57 +796,49 @@
       }
     },
     "Payment": {
-      "tableName": "payment",
       "entitySetName": "Payments",
       "key": [
         "PaymentId"
       ],
       "properties": {
         "PaymentId": {
-          "fieldName": "payment_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "CustomerId": {
-          "fieldName": "customer_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "StaffId": {
-          "fieldName": "staff_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "RentalId": {
-          "fieldName": "rental_id",
-          "type": "int",
+          "type": "number",
           "nullable": true,
           "default": null,
           "maxLength": null
         },
         "Amount": {
-          "fieldName": "amount",
-          "type": "decimal",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "PaymentDate": {
-          "fieldName": "payment_date",
-          "type": "datetime",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -965,57 +881,49 @@
       }
     },
     "Rental": {
-      "tableName": "rental",
       "entitySetName": "Rentals",
       "key": [
         "RentalId"
       ],
       "properties": {
         "RentalId": {
-          "fieldName": "rental_id",
-          "type": "int",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "RentalDate": {
-          "fieldName": "rental_date",
-          "type": "datetime",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
         },
         "InventoryId": {
-          "fieldName": "inventory_id",
-          "type": "mediumint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "CustomerId": {
-          "fieldName": "customer_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "ReturnDate": {
-          "fieldName": "return_date",
-          "type": "datetime",
+          "type": "Date",
           "nullable": true,
           "default": null,
           "maxLength": null
         },
         "StaffId": {
-          "fieldName": "staff_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -1068,85 +976,73 @@
       }
     },
     "Staff": {
-      "tableName": "staff",
       "entitySetName": "Staffs",
       "key": [
         "StaffId"
       ],
       "properties": {
         "StaffId": {
-          "fieldName": "staff_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "FirstName": {
-          "fieldName": "first_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "LastName": {
-          "fieldName": "last_name",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 45
         },
         "AddressId": {
-          "fieldName": "address_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Picture": {
-          "fieldName": "picture",
-          "type": "blob",
+          "type": "any",
           "nullable": true,
           "default": null,
           "maxLength": 65535
         },
         "Email": {
-          "fieldName": "email",
-          "type": "varchar",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 50
         },
         "StoreId": {
-          "fieldName": "store_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "Active": {
-          "fieldName": "active",
-          "type": "bit",
+          "type": "boolean",
           "nullable": false,
           "default": false,
           "maxLength": null
         },
         "Username": {
-          "fieldName": "username",
-          "type": "varchar",
+          "type": "string",
           "nullable": false,
           "default": "",
           "maxLength": 16
         },
         "Password": {
-          "fieldName": "password",
-          "type": "varchar",
+          "type": "string",
           "nullable": true,
           "default": null,
           "maxLength": 40
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -1209,36 +1105,31 @@
       }
     },
     "Store": {
-      "tableName": "store",
       "entitySetName": "Stores",
       "key": [
         "StoreId"
       ],
       "properties": {
         "StoreId": {
-          "fieldName": "store_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "ManagerStaffId": {
-          "fieldName": "manager_staff_id",
-          "type": "tinyint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "AddressId": {
-          "fieldName": "address_id",
-          "type": "smallint",
+          "type": "number",
           "nullable": false,
           "default": 0,
           "maxLength": null
         },
         "LastUpdate": {
-          "fieldName": "last_update",
-          "type": "timestamp",
+          "type": "Date",
           "nullable": false,
           "default": "CURRENT_TIMESTAMP",
           "maxLength": null
@@ -1301,6 +1192,35 @@
       }
     }
   },
-  "functions": null,
-  "actions": null
+  "functions": [
+    {
+      "name": "GetFilmsWithActors",
+      "parameters": [
+        {
+          "name": "releaseYear",
+          "type": "number",
+          "nullable": false
+        }
+      ],
+      "returnType": {
+        "type": "Film",
+        "isEntity": true,
+        "isCollection": true,
+        "nullable": false
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "TestAction",
+      "parameters": [
+        {
+          "name": "param1",
+          "type": "number",
+          "nullable": false
+        }
+      ],
+      "returnType": null
+    }
+  ]
 }

@@ -1,3 +1,3 @@
-﻿# Metadata generator client
+﻿# Data provider generator client
 
 

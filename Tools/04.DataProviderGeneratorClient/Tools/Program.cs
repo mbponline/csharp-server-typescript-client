@@ -1,9 +1,8 @@
-﻿using System;
-using Tools.Modules;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
-using Newtonsoft.Json;
-using System.Diagnostics;
-using CodeGenerator.Modules.Common;
+using Tools.Modules;
+using Tools.Modules.Common;
 
 namespace Tools
 {
@@ -11,48 +10,79 @@ namespace Tools
     {
         static void Main(string[] args)
         {
+            var pathToAppData = ProgramUtils.GetPathToAppData();
+            var metadataCli = pathToAppData.GetJsonFromAppDataAs<Metadata>("metadata_cli.json");
+
+            // generate code
+            var generatedCode = Generator.Generate(metadataCli);
+
+            // save generated code on file to disk
+            var pathToGenerated = ProgramUtils.GetPathToGenerated();
+            generatedCode.WriteToFile(pathToGenerated, "dataProvider.ts");
+
+            Console.WriteLine();
+            Console.WriteLine("Done! Press a key to exit...");
+            Console.ReadLine();
+        }
+    }
+
+    public static class ProgramUtils
+    {
+        public static string GetPathToAppData()
+        {
             var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase; //.Location
             path = path.Substring(8);
             for (int i = 0; i < 3; i++)
             {
                 path = Path.GetDirectoryName(path);
             }
+            path = Path.Combine(path, "App_Data");
+            return path;
+        }
 
-            // read json files
-            Metadata metadata;
-            var pathMetadata = Path.Combine(path, "App_Data", "metadata_srv.json");
-            using (StreamReader r = new StreamReader(pathMetadata))
-            {
-                var jsonText = r.ReadToEnd();
-                metadata = JsonConvert.DeserializeObject<Metadata>(jsonText);
-            }
-
-            var pathOperationsDefinition = Path.Combine(path, "App_Data", "metadata_cli_operations.json");
-            OperationsDefinition operationsDefinition;
-            using (StreamReader r = new StreamReader(pathOperationsDefinition))
-            {
-                var jsonText = r.ReadToEnd();
-                operationsDefinition = JsonConvert.DeserializeObject<OperationsDefinition>(jsonText);
-            }
-
-            // generate code
-            var generatedCode = Generator.Generate(metadata, operationsDefinition);
-
-            // save metadata file on disk
-            for (int i = 0; i < 2; i++)
+        public static string GetPathToGenerated()
+        {
+            //var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase; //.Location
+            var path = AppContext.BaseDirectory;
+            //path = path.Substring(8);
+            // Info credit: https://social.msdn.microsoft.com/Forums/vstudio/en-US/decc53b0-2f53-4aae-b86b-6e786c5f8d90/navigate-up-4-levels-in-directoryfolder-path-to-create-string-reference-to-a-specific-folder?forum=csharpgeneral
+            for (int i = 0; i < 4; i++)
             {
                 path = Path.GetDirectoryName(path);
             }
+
             path = Path.Combine(path, "_generated");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            path = Path.Combine(path, "dataProvider.ts");
-            File.WriteAllText(path, generatedCode);
-            Console.WriteLine("Done. Press a key to exit...");
-            Console.ReadLine();
-            Process.Start("notepad.exe", path);
+
+            return path;
         }
+
+        public static T GetJsonFromAppDataAs<T>(this string pathToAppData, string fileName)
+        {
+            var pathFileName = Path.Combine(pathToAppData, fileName);
+            T metadataSrv;
+            using (StreamReader r = new StreamReader(pathFileName))
+            {
+                var jsonText = r.ReadToEnd();
+                metadataSrv = JsonConvert.DeserializeObject<T>(jsonText);
+            }
+            return metadataSrv;
+        }
+
+        public static void WriteToFile(this string source, params string[] paths)
+        {
+            var path = Path.Combine(paths);
+            var folder = Path.GetDirectoryName(path);
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            File.WriteAllText(path, source);
+        }
+
     }
+
 }

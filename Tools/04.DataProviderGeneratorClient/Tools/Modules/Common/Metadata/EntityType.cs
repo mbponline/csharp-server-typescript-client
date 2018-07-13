@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace CodeGenerator.Modules.Common
+namespace Tools.Modules.Common
 {
 
     public class EntityType
     {
-        [JsonProperty(PropertyName = "tableName")]
-        public string TableName { get; set; }
-
         [JsonProperty(PropertyName = "entitySetName")]
         public string EntitySetName { get; set; }
 

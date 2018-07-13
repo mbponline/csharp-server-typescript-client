@@ -1,16 +1,19 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace CodeGenerator.Modules.Common
+namespace Tools.Modules.Common
 {
 
     public class Metadata
     {
-        [JsonProperty(PropertyName = "database")]
-        public Database Database { get; set; }
+        [JsonProperty(PropertyName = "dialect")]
+        public string Dialect { get; set; }
 
-        [JsonProperty(PropertyName = "namespace")]
-        public string Namespace { get; set; }
+        [JsonProperty(PropertyName = "version")]
+        public string Version { get; set; }
+
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         [JsonProperty(PropertyName = "max")]
         public int Max { get; set; }

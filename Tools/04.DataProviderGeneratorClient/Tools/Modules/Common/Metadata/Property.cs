@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace CodeGenerator.Modules.Common
+namespace Tools.Modules.Common
 {
 
     public class Property
     {
-        [JsonProperty(PropertyName = "fieldName")]
-        public string FieldName { get; set; }
-
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
