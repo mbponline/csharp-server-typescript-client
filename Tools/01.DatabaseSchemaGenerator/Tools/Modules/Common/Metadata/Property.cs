@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CodeGenerator.Modules.Common
+namespace Tools.Modules.Common
 {
 
     public class Property

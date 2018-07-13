@@ -1,7 +1,7 @@
-﻿using CodeGenerator.Modules.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tools.Modules.Common;
 
 namespace Tools.Modules
 {
@@ -37,11 +37,20 @@ namespace Tools.Modules
 
         public static string Pluralize(this string tableName)
         {
-            if (tableName.Substring(tableName.Length - 1) == "y")
+            var lastCharacter = tableName.Substring(tableName.Length - 1);
+            if (lastCharacter == "y")
             {
                 return tableName.Substring(0, tableName.Length - 1) + "ies";
             }
-            else if (tableName.Substring(tableName.Length - 2) == "ss")
+            else if (lastCharacter == "s")
+            {
+                if (tableName.Substring(tableName.Length - 2) == "ss")
+                {
+                    return tableName + "es";
+                }
+                return tableName;
+            }
+            else if (lastCharacter == "o")
             {
                 return tableName + "es";
             }
@@ -98,24 +107,27 @@ namespace Tools.Modules
             return defaultValue;
         }
 
-        public static string GetNavigationPropertyName(string proposedName, Dictionary<string, NavigationProperty> navigation)
+        public static string GetNavigationPropertyName(this Dictionary<string, NavigationProperty> navigationProperties, string proposedName)
         {
-            if (navigation.ContainsKey(proposedName))
+            var result = proposedName;
+
+            if (navigationProperties.ContainsKey(proposedName))
             {
                 var last = proposedName.Substring(proposedName.Length - 1);
                 int n;
                 var isNumeric = int.TryParse(last, out n);
                 if (isNumeric)
                 {
-                    return proposedName.Substring(0, proposedName.Length - 1) + (n + 1).ToString();
+                    result = proposedName.Substring(0, proposedName.Length - 1) + (n + 1).ToString();
                 }
                 else
                 {
-                    return proposedName + "1";
+                    result = proposedName + "1";
                 }
+                result = navigationProperties.GetNavigationPropertyName(result);
             }
 
-            return proposedName;
+            return result;
         }
     }
 

@@ -1,9 +1,6 @@
-﻿using CodeGenerator.Modules.Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using WebMatrix.Data;
-using WebMatrix.Data.StronglyTyped;
+using Tools.Modules.Common;
 
 namespace Tools.Modules
 {
@@ -11,7 +8,7 @@ namespace Tools.Modules
     {
         public static Metadata Generate()
         {
-            var db = WebMatrix.Data.Database.OpenConnectionString(@"Server=localhost;Database=sakila;Uid=root;Pwd=Pass@word1;", "MySql.Data.MySqlClient");
+            var db = new DatabaseOperations("MYSQL", @"Server=localhost;Database=sakila;Uid=root;Pwd=Pass@word1;");
 
             var tableSchema = "sakila";
 
@@ -107,7 +104,7 @@ namespace Tools.Modules
 
                 foreach (var relation in relations)
                 {
-                    proposedName = GeneratorUtils.GetNavigationPropertyName(relation.referencedTable, et.Value.NavigationProperties);
+                    proposedName = et.Value.NavigationProperties.GetNavigationPropertyName(relation.referencedTable);
                     et.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
                     {
                         EntityTypeName = relation.referencedTable,
@@ -117,7 +114,7 @@ namespace Tools.Modules
                     });
 
                     var ret = (from t in entityTypes where t.Key == relation.referencedTable select t).FirstOrDefault();
-                    proposedName = GeneratorUtils.GetNavigationPropertyName(relation.parentTable.Pluralize(), ret.Value.NavigationProperties);
+                    proposedName = ret.Value.NavigationProperties.GetNavigationPropertyName(relation.parentTable.Pluralize());
                     ret.Value.NavigationProperties.Add(proposedName, new NavigationProperty()
                     {
                         EntityTypeName = relation.parentTable,
@@ -128,29 +125,24 @@ namespace Tools.Modules
                 }
             }
 
-            var description = databaseDescription.FirstOrDefault().Description;
-            var version = Convert.ToInt32(description.Split(new char[] { '.' }).FirstOrDefault().Trim());
+            var description = databaseDescription.FirstOrDefault().Description.Split(new char[] { '(', '-' }).FirstOrDefault().Trim();
+            //var version = Convert.ToInt32(description.Split(new char[] { '.' }).FirstOrDefault().Trim());
 
-            var metadata = new Metadata
+            var metadataSrv = new Metadata
             {
-                Database = new CodeGenerator.Modules.Common.Database()
-                {
-                    Dialect = "MYSQL",
-                    Version = version,
-                    Description = description
-                },
-                Namespace = "Server.Modules.Utils.DAL",
-                Max = 256,
+                Dialect = "MYSQL",
+                Version = "v0.0.1",
+                Description = description,
+                Namespace = "Server.Models.Utils.DAL",
                 Multiplicity = new Multiplicity()
                 {
                     Multi = "multi",
                     Single = "single"
                 },
-                EntityTypes = entityTypes,
-                Functions = null,
-                Actions = null
+                EntityTypes = entityTypes
             };
-            return metadata;
+
+            return metadataSrv;
         }
     }
 }
