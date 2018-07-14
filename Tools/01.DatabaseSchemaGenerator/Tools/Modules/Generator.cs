@@ -128,9 +128,9 @@ namespace Tools.Modules
                         KeyRemote = keyRemote
                     });
 
-                    var ret = (from t in entityTypes where t.Key == relation.referencedTable select t).FirstOrDefault();
-                    proposedName = ret.Value.NavigationProperties.GetNavigationPropertyName(relation.parentTable.Pluralize());
-                    ret.Value.NavigationProperties.Add(proposedName, new MetadataSrv.NavigationProperty()
+                    var entityTypeReferenced = entityTypes[relation.referencedTable];
+                    proposedName = entityTypeReferenced.NavigationProperties.GetNavigationPropertyName(relation.parentTable.Pluralize());
+                    entityTypeReferenced.NavigationProperties.Add(proposedName, new MetadataSrv.NavigationProperty()
                     {
                         EntityTypeName = relation.parentTable,
                         Multiplicity = "multi",
