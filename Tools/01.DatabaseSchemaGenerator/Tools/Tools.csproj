@@ -71,7 +71,7 @@
     <Compile Include="Modules\Generator.cs" />
     <Compile Include="Modules\GeneratorUtils.cs" />
     <Compile Include="Modules\Common\Database\Types\Column.cs" />
-    <Compile Include="Modules\Common\Database\Types\DatabaseDescription.cs" />
+    <Compile Include="Modules\Common\Database\Types\Description.cs" />
     <Compile Include="Modules\Common\Database\Types\Relation.cs" />
     <Compile Include="Modules\Common\Database\Types\Table.cs" />
     <Compile Include="Program.cs" />
