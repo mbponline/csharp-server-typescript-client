@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DatabaseTypes = Tools.Modules.Common.Database.Types;
 using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
 namespace Tools.Modules
@@ -65,7 +66,7 @@ namespace Tools.Modules
             return val == 0 ? false : true;
         }
 
-        public static object GetDefaultValue(Column column)
+        public static object GetDefaultValue(DatabaseTypes.Column column)
         {
             object defaultValue = null;
             switch (column.Type)

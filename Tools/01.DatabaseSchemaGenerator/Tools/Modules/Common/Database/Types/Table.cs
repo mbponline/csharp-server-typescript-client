@@ -1,4 +1,4 @@
-﻿namespace Tools.Modules
+﻿namespace Tools.Modules.Common.Database.Types
 {
     public class Table
     {
