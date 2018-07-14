@@ -62,7 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\Common\DatabaseOperations.cs" />
+    <Compile Include="Modules\Common\Database\DatabaseOperations.cs" />
     <Compile Include="Modules\Common\MetadataSrv\EntityType.cs" />
     <Compile Include="Modules\Common\MetadataSrv\Metadata.cs" />
     <Compile Include="Modules\Common\MetadataSrv\Multiplicity.cs" />
@@ -70,10 +70,10 @@
     <Compile Include="Modules\Common\MetadataSrv\Property.cs" />
     <Compile Include="Modules\Generator.cs" />
     <Compile Include="Modules\GeneratorUtils.cs" />
-    <Compile Include="Modules\Types\Column.cs" />
-    <Compile Include="Modules\Types\DatabaseDescription.cs" />
-    <Compile Include="Modules\Types\Relation.cs" />
-    <Compile Include="Modules\Types\Table.cs" />
+    <Compile Include="Modules\Common\Database\Types\Column.cs" />
+    <Compile Include="Modules\Common\Database\Types\DatabaseDescription.cs" />
+    <Compile Include="Modules\Common\Database\Types\Relation.cs" />
+    <Compile Include="Modules\Common\Database\Types\Table.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
