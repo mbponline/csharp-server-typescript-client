@@ -7,26 +7,26 @@ namespace Server.Models.Utils.DAL.Common
 {
     public static class ApiProviderUtils
     {
-        public static string FixEntitySetNameCase(string entitySetName, Metadata metadata)
+        public static string FixEntitySetNameCase(string entitySetName, MetadataSrv.Metadata metadataSrv)
         {
-            foreach (var prop in metadata.EntityTypes)
+            foreach (var prop in metadataSrv.EntityTypes)
             {
-                if (metadata.EntityTypes[prop.Key].EntitySetName.ToLower() == entitySetName.ToLower())
+                if (metadataSrv.EntityTypes[prop.Key].EntitySetName.ToLower() == entitySetName.ToLower())
                 {
-                    return metadata.EntityTypes[prop.Key].EntitySetName;
+                    return metadataSrv.EntityTypes[prop.Key].EntitySetName;
                 }
             }
             throw new Exception("Invalid entitySetName");
         }
 
-        public static string GetEntityTypeName(string entitySetName, Metadata metadata)
+        public static string GetEntityTypeName(string entitySetName, MetadataSrv.Metadata metadataSrv)
         {
-            //var entityType = (from t in metadata.entityTypes where t.Value.entitySetName == entitySetName select t).FirstOrDefault();
+            //var entityType = (from t in metadataSrv.entityTypes where t.Value.entitySetName == entitySetName select t).FirstOrDefault();
             //return entityType.Key;
             var result = string.Empty;
-            foreach (var prop in metadata.EntityTypes)
+            foreach (var prop in metadataSrv.EntityTypes)
             {
-                if (metadata.EntityTypes[prop.Key].EntitySetName == entitySetName)
+                if (metadataSrv.EntityTypes[prop.Key].EntitySetName == entitySetName)
                 {
                     result = prop.Key;
                 }
@@ -34,16 +34,16 @@ namespace Server.Models.Utils.DAL.Common
             return result;
         }
 
-        public static bool ValidKeys(string entityTypeName, IEnumerable<Dto> dtos, Metadata metadata)
+        public static bool ValidKeys(string entityTypeName, IEnumerable<Dto> dtos, MetadataSrv.Metadata metadataSrv)
         {
-			if (dtos == null || dtos.Count() == 0)
+            if (dtos == null || dtos.Count() == 0)
             {
                 return false;
             }
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             foreach (var dto in dtos)
             {
-                if (!ValidDtoKey(entityTypeName, dto, metadata))
+                if (!ValidDtoKey(entityTypeName, dto, metadataSrv))
                 {
                     return false;
                 }
@@ -51,9 +51,9 @@ namespace Server.Models.Utils.DAL.Common
             return true;
         }
 
-        public static bool ValidDtoKey(string entityTypeName, Dto dto, Metadata metadata)
+        public static bool ValidDtoKey(string entityTypeName, Dto dto, MetadataSrv.Metadata metadataSrv)
         {
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             foreach (var name in keyNames)
             {
                 if (!(dto.ContainsKey(name) || Regex.IsMatch(dto[name].ToString(), @"^\d+$")))
@@ -64,9 +64,9 @@ namespace Server.Models.Utils.DAL.Common
             return true;
         }
 
-        public static bool ValidDto(string entityTypeName, Dto key, Dto dto, Metadata metadata)
+        public static bool ValidDto(string entityTypeName, Dto key, Dto dto, MetadataSrv.Metadata metadataSrv)
         {
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             // if dto has key fields, their values should match the key values from query string
             foreach (var name in keyNames)
             {

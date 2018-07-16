@@ -7,14 +7,14 @@ namespace Server.Models.Utils.DAL.Common
 {
     public class DataAdapter
     {
-        public DataAdapter(Metadata metadata, string connectionString)
+        public DataAdapter(MetadataSrv.Metadata metadataSrv, string connectionString)
         {
-            this.metadata = metadata;
-            this.dialect = metadata.Dialect();
+            this.metadataSrv = metadataSrv;
+            this.dialect = metadataSrv.Dialect();
             this.connectionString = connectionString;
         }
 
-        private readonly Metadata metadata;
+        private readonly MetadataSrv.Metadata metadataSrv;
         private readonly Dialect dialect;
         private readonly string connectionString;
 
@@ -29,7 +29,7 @@ namespace Server.Models.Utils.DAL.Common
                 FilterExpand = queryObject.FilterExpand,
                 CustomQueryTable = queryObject.CustomQueryTable
             };
-            return ReadUtils.Count(entityTypeName, queryObjectLocal, this.metadata, this.dialect, this.connectionString);
+            return ReadUtils.Count(entityTypeName, queryObjectLocal, this.metadataSrv, this.dialect, this.connectionString);
         }
 
         /**
@@ -37,7 +37,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSerialData QueryAll(string entityTypeName, QueryObject queryObject)
         {
-            return ReadUtils.Fetch(entityTypeName, queryObject, this.metadata, this.dialect, this.connectionString);
+            return ReadUtils.Fetch(entityTypeName, queryObject, this.metadataSrv, this.dialect, this.connectionString);
         }
 
         /**
@@ -45,7 +45,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData LoadOne(string entityTypeName, Dto dto, string[] expand)
         {
-            var resultSerialData = ReadUtils.FetchOne(entityTypeName, dto, expand, this.metadata, this.dialect, this.connectionString);
+            var resultSerialData = ReadUtils.FetchOne(entityTypeName, dto, expand, this.metadataSrv, this.dialect, this.connectionString);
             if (resultSerialData.Items.Count() > 0)
             {
                 return resultSerialData.ToSingle();
@@ -61,7 +61,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSerialData LoadMany(string entityTypeName, IEnumerable<Dto> dtos, string[] expand)
         {
-            return ReadUtils.FetchMany(entityTypeName, dtos, expand, this.metadata, this.dialect, this.connectionString);
+            return ReadUtils.FetchMany(entityTypeName, dtos, expand, this.metadataSrv, this.dialect, this.connectionString);
         }
 
         /**
@@ -70,9 +70,9 @@ namespace Server.Models.Utils.DAL.Common
         public ResultSingleSerialData PostItem(string entityTypeName, Dto dto)
         {
             ResultSerialData resultSerialDataOriginal = null;
-            if (CudUtils.KeyPresent(entityTypeName, dto, this.metadata))
+            if (CudUtils.KeyPresent(entityTypeName, dto, this.metadataSrv))
             {
-                resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+                resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadataSrv, this.dialect, this.connectionString);
             }
             if (resultSerialDataOriginal != null && resultSerialDataOriginal.Items.Count() > 0)
             {
@@ -80,7 +80,7 @@ namespace Server.Models.Utils.DAL.Common
             }
             else
             {
-                var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadataSrv, this.dialect, this.connectionString);
                 return resultSerialData.ToSingle();
             }
         }
@@ -91,9 +91,9 @@ namespace Server.Models.Utils.DAL.Common
         public List<ResultSingleSerialData> PostItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
             ResultSerialData resultSerialDataOriginal = null;
-            if (CudUtils.KeysPresent(entityTypeName, dtos, this.metadata))
+            if (CudUtils.KeysPresent(entityTypeName, dtos, this.metadataSrv))
             {
-                resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+                resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadataSrv, this.dialect, this.connectionString);
             }
             if (resultSerialDataOriginal != null && resultSerialDataOriginal.Items.Count() > 0)
             {
@@ -104,7 +104,7 @@ namespace Server.Models.Utils.DAL.Common
                 var entityInserts = new List<ResultSingleSerialData>();
                 foreach (var dto in dtos)
                 {
-                    var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                    var resultSerialData = CudUtils.InsertEntity(entityTypeName, dto, this.metadataSrv, this.dialect, this.connectionString);
                     entityInserts.Add(resultSerialData.ToSingle());
                 }
                 return entityInserts;
@@ -116,7 +116,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData PutItem(string entityTypeName, Dto dto)
         {
-            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadataSrv, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
@@ -124,7 +124,7 @@ namespace Server.Models.Utils.DAL.Common
             else
             {
                 const bool returnUpdated = false;
-                var resultSerialData = CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(resultSerialDataOriginal.Items.FirstOrDefault()), dto, this.metadata, this.dialect, this.connectionString, returnUpdated);
+                var resultSerialData = CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(resultSerialDataOriginal.Items.FirstOrDefault()), dto, this.metadataSrv, this.dialect, this.connectionString, returnUpdated);
                 if (returnUpdated)
                 {
                     if (resultSerialData.Items.Count() > 0)
@@ -148,7 +148,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public List<ResultSingleSerialData> PutItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
-            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadataSrv, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
@@ -159,10 +159,10 @@ namespace Server.Models.Utils.DAL.Common
             }
             else
             {
-                var keyNames = this.metadata.EntityTypes[entityTypeName].Key;
+                var keyNames = this.metadataSrv.EntityTypes[entityTypeName].Key;
                 var resultSerialDataList = DalUtils.LeftJoin(resultSerialDataOriginal.Items, dtos,
                     (ent, dto) => CudUtils.CompareByKey(JObject.FromObject(ent).ToObject<Dto>(), dto, keyNames),
-                    (ent, dto) => CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(ent), dto, this.metadata, this.dialect, this.connectionString)
+                    (ent, dto) => CudUtils.UpdateEntity(entityTypeName, JObject.FromObject(ent), dto, this.metadataSrv, this.dialect, this.connectionString)
                 );
                 var resultSingleSerialDataList = new List<ResultSingleSerialData>();
                 foreach (var resultSerialData in resultSerialDataList)
@@ -201,14 +201,14 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSingleSerialData DeleteItem(string entityTypeName, Dto dto)
         {
-            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadata, this.dialect, this.connectionString);
+            var resultSerialDataOriginal = ReadUtils.FetchOne(entityTypeName, dto, null, this.metadataSrv, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
             }
             else
             {
-                CudUtils.DeleteEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                CudUtils.DeleteEntity(entityTypeName, dto, this.metadataSrv, this.dialect, this.connectionString);
                 return resultSerialDataOriginal.ToSingle();
             }
         }
@@ -218,7 +218,7 @@ namespace Server.Models.Utils.DAL.Common
          */
         public ResultSerialData DeleteItems(string entityTypeName, IEnumerable<Dto> dtos)
         {
-            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadata, this.dialect, this.connectionString);
+            var resultSerialDataOriginal = ReadUtils.FetchMany(entityTypeName, dtos, null, this.metadataSrv, this.dialect, this.connectionString);
             if (resultSerialDataOriginal.Items.Count() == 0)
             {
                 throw new HttpException(httpCode: 404, message: "Not Found");
@@ -227,7 +227,7 @@ namespace Server.Models.Utils.DAL.Common
             {
                 foreach (var dto in dtos)
                 {
-                    CudUtils.DeleteEntity(entityTypeName, dto, this.metadata, this.dialect, this.connectionString);
+                    CudUtils.DeleteEntity(entityTypeName, dto, this.metadataSrv, this.dialect, this.connectionString);
                 }
                 return resultSerialDataOriginal;
             }

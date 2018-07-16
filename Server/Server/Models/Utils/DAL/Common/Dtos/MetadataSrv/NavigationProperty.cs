@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 
-namespace Server.Models.Utils.DAL.Common
+namespace Server.Models.Utils.DAL.Common.MetadataSrv
 {
+
     public class NavigationProperty
     {
         [JsonProperty(PropertyName = "entityTypeName")]

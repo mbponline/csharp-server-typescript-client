@@ -7,12 +7,12 @@ namespace Server.Models.Utils.DAL.Common
 
     internal static class CudUtils
     {
-        public static ResultSerialData UpdateEntity(string entityTypeName, JObject entity, Dto dto, Metadata metadata, Dialect dialect, string connectionString, bool returnUpdated = false)
+        public static ResultSerialData UpdateEntity(string entityTypeName, JObject entity, Dto dto, MetadataSrv.Metadata metadataSrv, Dialect dialect, string connectionString, bool returnUpdated = false)
         {
             var qryKeyValues = new List<string>();
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
 
-            var fields = metadata.EntityTypes[entityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
+            var fields = metadataSrv.EntityTypes[entityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
 
             foreach (var prop in dto)
             {
@@ -23,8 +23,8 @@ namespace Server.Models.Utils.DAL.Common
             }
             var qryKey = string.Join(" AND ", qryKeyValues);
 
-            var tableName = metadata.EntityTypes[entityTypeName].TableName;
-            var calculatedProperties = metadata.EntityTypes[entityTypeName].CalculatedProperties;
+            var tableName = metadataSrv.EntityTypes[entityTypeName].TableName;
+            var calculatedProperties = metadataSrv.EntityTypes[entityTypeName].CalculatedProperties;
 
             var qrySetValues = new List<string>();
 
@@ -58,7 +58,7 @@ namespace Server.Models.Utils.DAL.Common
                         break;
                 }
                 DatabaseOperations.CudQuery(qryUpdate, dialect, connectionString);
-                return returnUpdated ? ReadUtils.FetchOne(entityTypeName, dto, null, metadata, dialect, connectionString) : null;
+                return returnUpdated ? ReadUtils.FetchOne(entityTypeName, dto, null, metadataSrv, dialect, connectionString) : null;
             }
             else
             {
@@ -66,15 +66,15 @@ namespace Server.Models.Utils.DAL.Common
             }
         }
 
-        public static ResultSerialData InsertEntity(string entityTypeName, Dto dto, Metadata metadata, Dialect dialect, string connectionString)
+        public static ResultSerialData InsertEntity(string entityTypeName, Dto dto, MetadataSrv.Metadata metadataSrv, Dialect dialect, string connectionString)
         {
             var qryFieldsNames = new List<string>();
             var qryFieldsValues = new List<string>();
 
-            var tableName = metadata.EntityTypes[entityTypeName].TableName;
-            var calculatedProperties = metadata.EntityTypes[entityTypeName].CalculatedProperties;
+            var tableName = metadataSrv.EntityTypes[entityTypeName].TableName;
+            var calculatedProperties = metadataSrv.EntityTypes[entityTypeName].CalculatedProperties;
 
-            var fields = metadata.EntityTypes[entityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
+            var fields = metadataSrv.EntityTypes[entityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
 
             foreach (var prop in dto)
             {
@@ -89,15 +89,15 @@ namespace Server.Models.Utils.DAL.Common
             {
                 var qryInsert = string.Format("INSERT INTO {0} ({1}) VALUES ({2})", tableName, string.Join(",", qryFieldsNames), string.Join(",", qryFieldsValues));
                 var result = DatabaseOperations.CudQuery(qryInsert, dialect, connectionString);
-                var identityPropertyName = GetIdentityPropertyName(calculatedProperties, metadata.EntityTypes[entityTypeName].Key);
+                var identityPropertyName = GetIdentityPropertyName(calculatedProperties, metadataSrv.EntityTypes[entityTypeName].Key);
                 if (!string.IsNullOrEmpty(identityPropertyName))
                 {
                     var dtonew = new Dto() { { identityPropertyName, (int)result } };
-                    return ReadUtils.FetchOne(entityTypeName, dtonew, null, metadata, dialect, connectionString);
+                    return ReadUtils.FetchOne(entityTypeName, dtonew, null, metadataSrv, dialect, connectionString);
                 }
                 else
                 {
-                    return ReadUtils.FetchOne(entityTypeName, dto, null, metadata, dialect, connectionString);
+                    return ReadUtils.FetchOne(entityTypeName, dto, null, metadataSrv, dialect, connectionString);
                 }
             }
             else
@@ -106,16 +106,16 @@ namespace Server.Models.Utils.DAL.Common
             }
         }
 
-        public static void DeleteEntity(string entityTypeName, Dto dto, Metadata metadata, Dialect dialect, string connectionString)
+        public static void DeleteEntity(string entityTypeName, Dto dto, MetadataSrv.Metadata metadataSrv, Dialect dialect, string connectionString)
         {
             var qryKeyValues = new List<string>();
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             for (int i = 0; i < keyNames.Length; i++)
             {
                 qryKeyValues.Add(string.Format("{0} = {1}", keyNames[i], dto[keyNames[i]]));
             }
             var qryKey = string.Join(" AND ", qryKeyValues);
-            var tableName = metadata.EntityTypes[entityTypeName].TableName;
+            var tableName = metadataSrv.EntityTypes[entityTypeName].TableName;
             var qryDelete = string.Empty;
             switch (dialect)
             {
@@ -161,9 +161,9 @@ namespace Server.Models.Utils.DAL.Common
 
 
 
-        public static bool KeyPresent(string entityTypeName, Dto dto, Metadata metadata)
+        public static bool KeyPresent(string entityTypeName, Dto dto, MetadataSrv.Metadata metadataSrv)
         {
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             foreach (var keyName in keyNames)
             {
                 if (!dto.ContainsKey(keyName))
@@ -174,11 +174,11 @@ namespace Server.Models.Utils.DAL.Common
             return true;
         }
 
-        public static bool KeysPresent(string entityTypeName, IEnumerable<Dto> dtos, Metadata metadata)
+        public static bool KeysPresent(string entityTypeName, IEnumerable<Dto> dtos, MetadataSrv.Metadata metadataSrv)
         {
             foreach (var dto in dtos)
             {
-                if (!KeyPresent(entityTypeName, dto, metadata))
+                if (!KeyPresent(entityTypeName, dto, metadataSrv))
                 {
                     return false;
                 }

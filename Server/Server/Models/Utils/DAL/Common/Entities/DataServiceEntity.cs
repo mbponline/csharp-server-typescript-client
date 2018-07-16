@@ -9,7 +9,7 @@
         protected DataServiceEntity(string metadataFileName = "", string connectionString = "")
             : base(metadataFileName, connectionString)
         {
-            this.DataContext = new DataContext(this.Metadata);
+            this.DataContext = new DataContext(this.MetadataSrv);
         }
 
         public DataContext DataContext { get; private set; }

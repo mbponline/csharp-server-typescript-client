@@ -5,7 +5,7 @@ declare var baseUrl: string;
 module dataServiceProvider {
 
     export function getMetadata(callback: (metadata: metadataTypes.Metadata) => void): void {
-        var url = baseUrl + 'api/datasource/crud/metadata';
+        var url = baseUrl + 'api/datasource/metadata';
         $.getJSON(url, callback);
     }
 

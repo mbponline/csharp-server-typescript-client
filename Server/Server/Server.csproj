@@ -88,6 +88,7 @@
     <Content Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Api\MetadataApiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -110,17 +111,11 @@
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\Types\QueryResult.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\DataUtils.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\NavigationInclude.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Database.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\EntityType.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Metadata.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\MetadataUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Multiplicity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\NavigationProperty.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Property.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\Operation.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\OperationsDefinition.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\Parameter.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Metadata\Operations\ReturnType.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\EntityType.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Metadata.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Multiplicity.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\NavigationProperty.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Property.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialData.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialExtensions.cs" />
     <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialResponse.cs" />
@@ -154,8 +149,13 @@
     <Compile Include="Models\Utils\DAL\Common\Entities\Types\IEntitySet.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\metadata_mysql.json" />
-    <None Include="App_Data\operationsDefinition.json" />
+    <Content Include="App_Data\metadata_cli.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\metadata_cli_full.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\metadata_srv.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

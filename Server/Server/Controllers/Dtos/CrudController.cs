@@ -3,6 +3,7 @@ using Server.Models.Utils.DAL.Common;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Controllers.Dtos
 {
@@ -16,14 +17,6 @@ namespace Server.Controllers.Dtos
         }
 
         private readonly DataServiceDto dataService;
-
-        // GET: api/datasource/crud/metadata
-        [Route("metadata")]
-        [HttpGet]
-        public Metadata GetMetadata()
-        {
-            return this.dataService.MetadataClient;
-        }
 
         // GET: api/datasource/crud/{entitySetName}?skip=20&top=10
         [Route("{entitySetName}")]

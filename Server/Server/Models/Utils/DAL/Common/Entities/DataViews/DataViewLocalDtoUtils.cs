@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Server.Models.Utils.DAL.Common
 {
 
-	internal static class DataViewLocalDtoUtils
+    internal static class DataViewLocalDtoUtils
 	{
-		public static void FillResultSingleRelatedItems(string entityTypeName, ResultSingleSerialData resultSingleSerialData, string[] expand, DataContext dataContext, Metadata metadata)
+		public static void FillResultSingleRelatedItems(string entityTypeName, ResultSingleSerialData resultSingleSerialData, string[] expand, DataContext dataContext, MetadataSrv.Metadata metadataSrv)
 		{
 			if (resultSingleSerialData.Item != null)
 			{
@@ -18,19 +17,19 @@ namespace Server.Models.Utils.DAL.Common
 					TotalCount = 0,
 					RelatedItems = { }
 				};
-				FillResultRelatedItems(entityTypeName, resultSerialData, expand, dataContext, metadata);
+				FillResultRelatedItems(entityTypeName, resultSerialData, expand, dataContext, metadataSrv);
 				resultSingleSerialData.RelatedItems = resultSerialData.RelatedItems;
 			}
 		}
 
-		public static void FillResultRelatedItems(string entityTypeName, ResultSerialData resultSerialData, string[] expand, DataContext dataContext, Metadata metadata)
+		public static void FillResultRelatedItems(string entityTypeName, ResultSerialData resultSerialData, string[] expand, DataContext dataContext, MetadataSrv.Metadata metadataSrv)
 		{
 			if (expand != null && expand.Length > 0 && resultSerialData.Items != null && resultSerialData.Items.Count() > 0)
 			{
 				var splitExpand = DataUtils.SplitExpand(expand, (el) => el);
 				DataUtils.ForEachNavigation(splitExpand, (branch) =>
 				{
-					var navs = DataUtils.BranchToNavigation(entityTypeName, branch, metadata);
+					var navs = DataUtils.BranchToNavigation(entityTypeName, branch, metadataSrv);
 					var lastNav = navs[navs.Count - 1];
 					var rootEntityTypeName = string.Empty;
 					IEnumerable<Dto> rootItems;

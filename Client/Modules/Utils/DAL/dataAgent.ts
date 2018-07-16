@@ -16,7 +16,7 @@ class DataAgent {
 
     initialize() {
         var apiUrl = baseUrl + "api/datasource/";
-        return $.getJSON(apiUrl + "crud/metadata").then((metadata: metadataTypes.Metadata) => {
+        return $.getJSON(apiUrl + "metadata").then((metadata: metadataTypes.Metadata) => {
             this._dataService = new DataService(metadata, apiUrl);
         }).then(() => this.loadCacheData());
     }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Server.Models.Utils.DAL.Common
+namespace Server.Models.Utils.DAL.Common.MetadataSrv
 {
 
     public class Property

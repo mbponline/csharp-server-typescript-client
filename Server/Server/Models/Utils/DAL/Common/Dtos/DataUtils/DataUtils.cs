@@ -6,15 +6,15 @@ namespace Server.Models.Utils.DAL.Common
 {
     public static class DataUtils
     {
-        public static void ForEachNavigationFilter(string parentEntityTypeName, List<NavigationInclude> arr, Action<string, NavigationProperty, string> process, Metadata metadata)
+        public static void ForEachNavigationFilter(string parentEntityTypeName, List<NavigationInclude> arr, Action<string, MetadataSrv.NavigationProperty, string> process, MetadataSrv.Metadata metadataSrv)
         {
             foreach (var item in arr)
             {
-                var childNavigationProperty = metadata.EntityTypes[parentEntityTypeName].NavigationProperties[item.NavigationProperty];
+                var childNavigationProperty = metadataSrv.EntityTypes[parentEntityTypeName].NavigationProperties[item.NavigationProperty];
                 process(parentEntityTypeName, childNavigationProperty, item.Filter);
                 if (item.Include.Count > 0)
                 {
-                    ForEachNavigationFilter(childNavigationProperty.EntityTypeName, item.Include, process, metadata);
+                    ForEachNavigationFilter(childNavigationProperty.EntityTypeName, item.Include, process, metadataSrv);
                 }
             }
         }
@@ -132,13 +132,13 @@ namespace Server.Models.Utils.DAL.Common
             }
         }
 
-        public static List<NavigationProperty> BranchToNavigation(string entityTypeName, List<string> branch, Metadata metadata)
+        public static List<MetadataSrv.NavigationProperty> BranchToNavigation(string entityTypeName, List<string> branch, MetadataSrv.Metadata metadataSrv)
         {
-            var navigationPropertyList = new List<NavigationProperty>();
+            var navigationPropertyList = new List<MetadataSrv.NavigationProperty>();
             var entityTypeNameLocal = entityTypeName;
             foreach (var navigationPropertyName in branch)
             {
-                var navigationProperties = metadata.EntityTypes[entityTypeNameLocal].NavigationProperties;
+                var navigationProperties = metadataSrv.EntityTypes[entityTypeNameLocal].NavigationProperties;
                 if (navigationProperties.ContainsKey(navigationPropertyName))
                 {
                     navigationPropertyList.Add(navigationProperties[navigationPropertyName]);

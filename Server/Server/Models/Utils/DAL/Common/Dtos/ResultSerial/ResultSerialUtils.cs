@@ -16,9 +16,9 @@ namespace Server.Models.Utils.DAL.Common
             var top = Math.Min(topNext, maxTop);
             var skipNext = skip + top;
             var nextLinkQueryString = GetNextLinkQueryString(queryObject, skipNext, topNext);
-            var entitySetName = dataService.Metadata.EntityTypes[entityTypeName].EntitySetName;
+            var entitySetName = dataService.MetadataSrv.EntityTypes[entityTypeName].EntitySetName;
             var nextLink = skipNext < Math.Min(topNext, count) ? string.Format("api/datasource/{0}/{1}?{2}", apiRouteRoot, entitySetName, nextLinkQueryString) : null;
-            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, dataService.Metadata);
+            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, dataService.MetadataSrv);
             var resultSerial = dataView.GetItems(entityTypeName, queryObjectLocal);
             if (resultSerial.TotalCount == 0)
             {
@@ -36,16 +36,16 @@ namespace Server.Models.Utils.DAL.Common
             return queryString;
         }
 
-        private static string[] GetOrderBy(string entityTypeName, Metadata metadata)
+        private static string[] GetOrderBy(string entityTypeName, MetadataSrv.Metadata metadataSrv)
         {
-            var keyNames = metadata.EntityTypes[entityTypeName].Key;
+            var keyNames = metadataSrv.EntityTypes[entityTypeName].Key;
             return keyNames.Select((name) => string.Format("{0} DESC", name)).ToArray();
         }
 
-        private static QueryObject GetQueryObject(string entityTypeName, QueryObject queryObject, int skip, int top, Metadata metadata)
+        private static QueryObject GetQueryObject(string entityTypeName, QueryObject queryObject, int skip, int top, MetadataSrv.Metadata metadataSrv)
         {
             var queryObjectLocal = JObject.FromObject(queryObject).ToObject<QueryObject>();
-            queryObjectLocal.OrderBy = GetOrderBy(entityTypeName, metadata);
+            queryObjectLocal.OrderBy = GetOrderBy(entityTypeName, metadataSrv);
             queryObjectLocal.Count = false;
             queryObjectLocal.Skip = skip;
             queryObjectLocal.Top = top;

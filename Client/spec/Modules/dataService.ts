@@ -1,6 +1,6 @@
 import dataServiceProvider = require("./dataServiceProvider");
 
-describe('api/datasource/crud/metadata', function () {
+describe('api/datasource/metadata', function () {
 
     var metadata: metadataTypes.Metadata;
     beforeAll(function (done) {

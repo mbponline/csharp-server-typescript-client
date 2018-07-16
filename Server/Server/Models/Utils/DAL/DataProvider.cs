@@ -9,9 +9,9 @@
 
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Server.Models.Utils.DAL.Common;
+using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Models.Utils.DAL
 {
@@ -21,7 +21,7 @@ namespace Server.Models.Utils.DAL
         {
             this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()
             {
-                Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.Metadata) },
+                Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },
                 Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataAdapter, this.DataContext), DtoView = new RemoteDtoViews(this.DataAdapter) }
             };
         }
@@ -109,24 +109,24 @@ namespace Server.Models.Utils.DAL
 
     public class LocalDtoViews : LocalDtoViewsBase
     {
-        public LocalDtoViews(DataContext dataContext, Metadata metadata) : base(dataContext, metadata)
+        public LocalDtoViews(DataContext dataContext, MetadataSrv.Metadata metadataSrv) : base(dataContext, metadataSrv)
         {
-            //this.["Actors"] = new DataViewLocalDto<Actor>(dataContext, metadata);
-            //this.["Addresses"] = new DataViewLocalDto<Address>(dataContext, metadata);
-            //this.["Categories"] = new DataViewLocalDto<Category>(dataContext, metadata);
-            //this.["Cities"] = new DataViewLocalDto<City>(dataContext, metadata);
-            //this.["Countries"] = new DataViewLocalDto<Country>(dataContext, metadata);
-            //this.["Customers"] = new DataViewLocalDto<Customer>(dataContext, metadata);
-            //this.["Films"] = new DataViewLocalDto<Film>(dataContext, metadata);
-            //this.["FilmActors"] = new DataViewLocalDto<FilmActor>(dataContext, metadata);
-            //this.["FilmCategories"] = new DataViewLocalDto<FilmCategory>(dataContext, metadata);
-            //this.["FilmTexts"] = new DataViewLocalDto<FilmText>(dataContext, metadata);
-            //this.["Inventories"] = new DataViewLocalDto<Inventory>(dataContext, metadata);
-            //this.["Languages"] = new DataViewLocalDto<Language>(dataContext, metadata);
-            //this.["Payments"] = new DataViewLocalDto<Payment>(dataContext, metadata);
-            //this.["Rentals"] = new DataViewLocalDto<Rental>(dataContext, metadata);
-            //this.["Staffs"] = new DataViewLocalDto<Staff>(dataContext, metadata);
-            //this.["Stores"] = new DataViewLocalDto<Store>(dataContext, metadata);
+            //this.["Actors"] = new DataViewLocalDto<Actor>(dataContext, metadataSrv);
+            //this.["Addresses"] = new DataViewLocalDto<Address>(dataContext, metadataSrv);
+            //this.["Categories"] = new DataViewLocalDto<Category>(dataContext, metadataSrv);
+            //this.["Cities"] = new DataViewLocalDto<City>(dataContext, metadataSrv);
+            //this.["Countries"] = new DataViewLocalDto<Country>(dataContext, metadataSrv);
+            //this.["Customers"] = new DataViewLocalDto<Customer>(dataContext, metadataSrv);
+            //this.["Films"] = new DataViewLocalDto<Film>(dataContext, metadataSrv);
+            //this.["FilmActors"] = new DataViewLocalDto<FilmActor>(dataContext, metadataSrv);
+            //this.["FilmCategories"] = new DataViewLocalDto<FilmCategory>(dataContext, metadataSrv);
+            //this.["FilmTexts"] = new DataViewLocalDto<FilmText>(dataContext, metadataSrv);
+            //this.["Inventories"] = new DataViewLocalDto<Inventory>(dataContext, metadataSrv);
+            //this.["Languages"] = new DataViewLocalDto<Language>(dataContext, metadataSrv);
+            //this.["Payments"] = new DataViewLocalDto<Payment>(dataContext, metadataSrv);
+            //this.["Rentals"] = new DataViewLocalDto<Rental>(dataContext, metadataSrv);
+            //this.["Staffs"] = new DataViewLocalDto<Staff>(dataContext, metadataSrv);
+            //this.["Stores"] = new DataViewLocalDto<Store>(dataContext, metadataSrv);
         }
 
         public DataViewLocalDto<Actor> Actors { get { return this.GetPropertyValue<Actor>(); } }
