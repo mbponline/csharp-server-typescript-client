@@ -70,9 +70,9 @@ namespace Tools.Modules
 
             br.WriteLine("using Newtonsoft.Json;");
             br.WriteLine("using System;");
-            br.WriteLine("using System.Linq;");
             br.WriteLine("using System.Collections.Generic;");
             br.WriteLine("using Server.Models.Utils.DAL.Common;");
+            br.WriteLine("using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;");
             br.WriteLine();
 
             br.WriteLine("namespace " + metadataSrv.Namespace);
@@ -87,8 +87,8 @@ namespace Tools.Modules
             br.BeginBlock("{");
             br.WriteLine("this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()");
             br.BeginBlock("{")
-                .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.Metadata) },")
-                .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataAdapter, this.DataContext), DtoView = new RemoteDtoViews(this.DataAdapter) }");
+                .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },")
+                .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }");
             br.EndBlock("};", false);
             br.EndBlock("}", false);
             br.EndBlock("}");
@@ -112,11 +112,11 @@ namespace Tools.Modules
             // RemoteEntityViews
             br.WriteLine("public class RemoteEntityViews : RemoteEntityViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public RemoteEntityViews(DataAdapter dataAdapter, DataContext dataContext) : base(dataAdapter, dataContext)");
+            br.WriteLine("public RemoteEntityViews(DataViewDto dataViewDto, DataContext dataContext) : base(dataViewDto, dataContext)");
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteEntity<{1}>(dataAdapter, dataContext);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteEntity<{1}>(dataViewDto, dataContext);", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
@@ -128,11 +128,11 @@ namespace Tools.Modules
             // LocalDtoViews
             br.WriteLine("public class LocalDtoViews : LocalDtoViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public LocalDtoViews(DataContext dataContext, Metadata metadata) : base(dataContext, metadata)");
+            br.WriteLine("public LocalDtoViews(DataContext dataContext, MetadataSrv.Metadata metadataSrv) : base(dataContext, metadataSrv)");
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalDto<{1}>(dataContext, metadata);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalDto<{1}>(dataContext, metadataSrv);", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
@@ -144,11 +144,11 @@ namespace Tools.Modules
             // RemoteDtoViews
             br.WriteLine("public class RemoteDtoViews : RemoteDtoViewsBase");
             br.BeginBlock("{");
-            br.WriteLine("public RemoteDtoViews(DataAdapter dataAdapter) : base(dataAdapter)");
+            br.WriteLine("public RemoteDtoViews(DataViewDto dataViewDto) : base(dataViewDto)");
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteDto<{1}>(dataAdapter);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteDto<{1}>(dataViewDto);", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
