@@ -7,6 +7,13 @@ namespace Server.Models.Utils.DAL.Common
     public class EntitySet<T> : IEntitySet<T>
         where T : class, IDerivedEntity
     {
+        private readonly string entityTypeName;
+        private readonly Type derivedEntityType;
+        private Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
+        private MetadataSrv.Metadata metadataSrv;
+        private readonly string[] key;
+        public List<IDerivedEntity> Items { get; private set; }
+
         public EntitySet(Type derivedEntityType, Dictionary<string, IEntitySet<IDerivedEntity>> entitySets, MetadataSrv.Metadata metadataSrv)
         {
             this.derivedEntityType = derivedEntityType;
@@ -17,17 +24,6 @@ namespace Server.Models.Utils.DAL.Common
             this.Items = new List<IDerivedEntity>();
         }
 
-        private readonly string entityTypeName;
-        private readonly Type derivedEntityType;
-        private Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
-        private MetadataSrv.Metadata metadataSrv;
-
-        private readonly string[] key;
-
-        public List<IDerivedEntity> Items { get; private set; }
-
-        /*
-		*/
         public static IEntitySet<IDerivedEntity> CreateEntitySet(string entityTypeName, Dictionary<string, IEntitySet<IDerivedEntity>> entitySets, MetadataSrv.Metadata metadataSrv)
         {
             var derivedEntityType = Type.GetType(metadataSrv.Namespace + "." + entityTypeName);

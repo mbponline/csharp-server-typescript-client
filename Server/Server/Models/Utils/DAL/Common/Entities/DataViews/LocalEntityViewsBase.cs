@@ -4,12 +4,12 @@ namespace Server.Models.Utils.DAL.Common
 {
 	public class LocalEntityViewsBase : Dictionary<string, object>
 	{
+		private readonly DataContext dataContext;
+
 		public LocalEntityViewsBase(DataContext dataContext)
 		{
 			this.dataContext = dataContext;
 		}
-
-		private readonly DataContext dataContext;
 
 		protected DataViewLocalEntity<T> GetPropertyValue<T>(/*string entityTypeName*/)
 			where T : class, IDerivedEntity

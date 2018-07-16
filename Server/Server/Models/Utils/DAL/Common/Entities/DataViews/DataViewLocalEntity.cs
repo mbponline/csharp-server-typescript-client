@@ -7,14 +7,14 @@ namespace Server.Models.Utils.DAL.Common
 	public class DataViewLocalEntity<T>
 		where T : class, IDerivedEntity
 	{
+		private readonly string entityTypeName;
+		private readonly DataContext dataContext;
+
 		public DataViewLocalEntity(string entityTypeName, DataContext dataContext)
 		{
 			this.entityTypeName = entityTypeName;
 			this.dataContext = dataContext;
 		}
-
-		private readonly string entityTypeName;
-		private readonly DataContext dataContext;
 
 		public IEnumerable<T> GetItems(Func<T, bool> predicate)
 		{

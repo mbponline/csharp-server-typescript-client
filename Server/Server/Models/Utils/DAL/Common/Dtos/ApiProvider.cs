@@ -21,11 +21,11 @@ namespace Server.Models.Utils.DAL.Common
             entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
             var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
-			if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataService.MetadataSrv))
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataService.MetadataSrv))
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-			var resultSingleSerialData = dataService.DataViewDto.GetSingleItem(entityTypeName, queryObject.Keys.FirstOrDefault(), queryObject.Expand);
+            var resultSingleSerialData = dataService.DataViewDto.GetSingleItem(entityTypeName, queryObject.Keys.FirstOrDefault(), queryObject.Expand);
             return resultSingleSerialData;
         }
 
@@ -40,35 +40,6 @@ namespace Server.Models.Utils.DAL.Common
             }
             var resultSerialData = dataService.DataViewDto.GetMultipleItems(entityTypeName, queryObject.Keys, queryObject.Expand);
             return resultSerialData;
-        }
-
-        public static ResultSingleSerialData HandleUpdateEntity(string entitySetName, QueryParams queryParams, Dto dto, DataServiceDto dataService)
-        {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
-            var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataService.MetadataSrv))
-            {
-                throw new HttpException(httpCode: 400, message: "Bad Request");
-            }
-			if (!ApiProviderUtils.ValidDto(entityTypeName, queryObject.Keys.FirstOrDefault(), dto, dataService.MetadataSrv))
-            {
-                throw new HttpException(httpCode: 400, message: "Bad Request");
-            }
-			var resultSingleSerialData = dataService.DataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys.FirstOrDefault()));
-            return resultSingleSerialData;
-        }
-
-        public static List<ResultSingleSerialData> HandleUpdateEntityBatch(string entitySetName, IEnumerable<Dto> dtos, DataServiceDto dataService)
-        {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
-            if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, dataService.MetadataSrv))
-            {
-                throw new HttpException(httpCode: 400, message: "Bad Request");
-            }
-            var resultSingleSerialDataList = dataService.DataViewDto.UpdateItems(entityTypeName, dtos);
-            return resultSingleSerialDataList;
         }
 
         public static ResultSingleSerialData HandleInsertEntity(string entitySetName, Dto dto, DataServiceDto dataService)
@@ -95,16 +66,45 @@ namespace Server.Models.Utils.DAL.Common
             return resultSingleSerialDataList;
         }
 
+        public static ResultSingleSerialData HandleUpdateEntity(string entitySetName, QueryParams queryParams, Dto dto, DataServiceDto dataService)
+        {
+            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
+            var queryObject = QueryUtils.RenderQueryObject(queryParams);
+            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataService.MetadataSrv))
+            {
+                throw new HttpException(httpCode: 400, message: "Bad Request");
+            }
+            if (!ApiProviderUtils.ValidDto(entityTypeName, queryObject.Keys.FirstOrDefault(), dto, dataService.MetadataSrv))
+            {
+                throw new HttpException(httpCode: 400, message: "Bad Request");
+            }
+            var resultSingleSerialData = dataService.DataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys.FirstOrDefault()));
+            return resultSingleSerialData;
+        }
+
+        public static List<ResultSingleSerialData> HandleUpdateEntityBatch(string entitySetName, IEnumerable<Dto> dtos, DataServiceDto dataService)
+        {
+            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
+            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
+            if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, dataService.MetadataSrv))
+            {
+                throw new HttpException(httpCode: 400, message: "Bad Request");
+            }
+            var resultSingleSerialDataList = dataService.DataViewDto.UpdateItems(entityTypeName, dtos);
+            return resultSingleSerialDataList;
+        }
+
         public static ResultSingleSerialData HandleDeleteEntity(string entitySetName, QueryParams queryParams, DataServiceDto dataService)
         {
             entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataService.MetadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
             var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataService.MetadataSrv);
-			if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidDtoKey(entityTypeName, queryObject.Keys.FirstOrDefault(), dataService.MetadataSrv))
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidDtoKey(entityTypeName, queryObject.Keys.FirstOrDefault(), dataService.MetadataSrv))
             {
                 throw new HttpException(httpCode: 400, message: "Bad Request");
             }
-			var resultSingleSerialData = dataService.DataViewDto.DeleteItem(entityTypeName, queryObject.Keys.FirstOrDefault());
+            var resultSingleSerialData = dataService.DataViewDto.DeleteItem(entityTypeName, queryObject.Keys.FirstOrDefault());
             return resultSingleSerialData;
         }
 

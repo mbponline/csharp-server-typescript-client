@@ -6,16 +6,14 @@ namespace Server.Models.Utils.DAL.Common
 {
     public class DataContext
     {
+        private MetadataSrv.Metadata metadataSrv;
+        public Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
+
         public DataContext(MetadataSrv.Metadata metadataSrv)
         {
             this.metadataSrv = metadataSrv;
             this.entitySets = new Dictionary<string, IEntitySet<IDerivedEntity>>();
         }
-
-        private MetadataSrv.Metadata metadataSrv;
-
-        public Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
-
 
         public Dictionary<string, List<IDerivedEntity>> GetEntitySets()
         {

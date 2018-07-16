@@ -5,19 +5,16 @@ namespace Server.Models.Utils.DAL.Common
 {
     public sealed class Entity
     {
+        private Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
+        private MetadataSrv.Metadata metadataSrv;
+        public string entityTypeName { get; private set; }
+        public Dto dto { get; set; }
+
         public Entity(string entityTypeName, Dto dto)
         {
             this.entityTypeName = entityTypeName;
             this.dto = dto;
         }
-
-        private Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
-
-        private MetadataSrv.Metadata metadataSrv;
-
-        public string entityTypeName { get; private set; }
-
-        public Dto dto { get; set; }
 
         public void Attach(Dictionary<string, IEntitySet<IDerivedEntity>> entitySets, MetadataSrv.Metadata metadataSrv)
         {

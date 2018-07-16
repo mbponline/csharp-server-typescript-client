@@ -7,16 +7,16 @@ namespace Server.Models.Utils.DAL.Common
     public class DataViewLocalDto<T>
         where T : class, IDerivedEntity
     {
+        private readonly string entityTypeName;
+        private readonly DataContext dataContext;
+        private readonly MetadataSrv.Metadata metadataSrv;
+
         public DataViewLocalDto(string entityTypeName, DataContext dataContext, MetadataSrv.Metadata metadataSrv)
         {
             this.entityTypeName = entityTypeName;
             this.dataContext = dataContext;
             this.metadataSrv = metadataSrv;
         }
-
-        private readonly string entityTypeName;
-        private readonly DataContext dataContext;
-        private readonly MetadataSrv.Metadata metadataSrv;
 
         public ResultSerialData GetItems(Func<T, bool> predicate, string[] expand)
         {

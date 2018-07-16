@@ -2,28 +2,28 @@
 
 namespace Server.Models.Utils.DAL.Common
 {
-	public class RemoteDtoViewsBase : Dictionary<string, DataViewRemoteDto>
-	{
-		public RemoteDtoViewsBase(DataAdapter dataAdapter)
-		{
-			this.dataAdapter = dataAdapter;
-		}
+    public class RemoteDtoViewsBase : Dictionary<string, DataViewRemoteDto>
+    {
+        private readonly DataViewDto dataViewDto;
 
-		private readonly DataAdapter dataAdapter;
+        public RemoteDtoViewsBase(DataViewDto dataViewDto)
+        {
+            this.dataViewDto = dataViewDto;
+        }
 
-		protected DataViewRemoteDto GetPropertyValue(string entityTypeName)
-		{
-			DataViewRemoteDto instance;
-			if (this.ContainsKey(entityTypeName))
-			{
-				instance = this[entityTypeName];
-			}
-			else
-			{
-				instance = new DataViewRemoteDto(entityTypeName, this.dataAdapter);
-				this[entityTypeName] = instance;
-			}
-			return instance;
-		}
-	}
+        protected DataViewRemoteDto GetPropertyValue(string entityTypeName)
+        {
+            DataViewRemoteDto instance;
+            if (this.ContainsKey(entityTypeName))
+            {
+                instance = this[entityTypeName];
+            }
+            else
+            {
+                instance = new DataViewRemoteDto(entityTypeName, this.dataViewDto);
+                this[entityTypeName] = instance;
+            }
+            return instance;
+        }
+    }
 }

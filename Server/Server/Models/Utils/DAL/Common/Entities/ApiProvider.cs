@@ -30,22 +30,6 @@ namespace Server.Models.Utils.DAL.Common
             return resultSerialData;
         }
 
-        public static ResultSingleSerialData HandleUpdateEntity<T>(QueryParams queryParams, Dto dto, DataServiceDto dataService)
-            where T : class
-        {
-            var entityTypeName = typeof(T).Name;
-            var resultSingleSerialData = ApiProvider.HandleUpdateEntity(entityTypeName, queryParams, dto, dataService);
-            return resultSingleSerialData;
-        }
-
-        public static List<ResultSingleSerialData> HandleUpdateEntityBatch<T>(IEnumerable<Dto> dtos, DataServiceDto dataService)
-            where T : class
-        {
-            var entityTypeName = typeof(T).Name;
-            var resultSingleSerialDataList = ApiProvider.HandleUpdateEntityBatch(entityTypeName, dtos, dataService);
-            return resultSingleSerialDataList;
-        }
-
         public static ResultSingleSerialData HandleInsertEntity<T>(Dto dto, DataServiceDto dataService)
             where T : class
         {
@@ -59,6 +43,22 @@ namespace Server.Models.Utils.DAL.Common
         {
             var entityTypeName = typeof(T).Name;
             var resultSingleSerialDataList = ApiProvider.HandleInsertEntityBatch(entityTypeName, dtos, dataService);
+            return resultSingleSerialDataList;
+        }
+
+        public static ResultSingleSerialData HandleUpdateEntity<T>(QueryParams queryParams, Dto dto, DataServiceDto dataService)
+            where T : class
+        {
+            var entityTypeName = typeof(T).Name;
+            var resultSingleSerialData = ApiProvider.HandleUpdateEntity(entityTypeName, queryParams, dto, dataService);
+            return resultSingleSerialData;
+        }
+
+        public static List<ResultSingleSerialData> HandleUpdateEntityBatch<T>(IEnumerable<Dto> dtos, DataServiceDto dataService)
+            where T : class
+        {
+            var entityTypeName = typeof(T).Name;
+            var resultSingleSerialDataList = ApiProvider.HandleUpdateEntityBatch(entityTypeName, dtos, dataService);
             return resultSingleSerialDataList;
         }
 

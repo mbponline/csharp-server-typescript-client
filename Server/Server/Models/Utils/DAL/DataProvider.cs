@@ -22,7 +22,7 @@ namespace Server.Models.Utils.DAL
             this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()
             {
                 Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },
-                Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataAdapter, this.DataContext), DtoView = new RemoteDtoViews(this.DataAdapter) }
+                Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }
             };
         }
     }
@@ -69,24 +69,24 @@ namespace Server.Models.Utils.DAL
 
     public class RemoteEntityViews : RemoteEntityViewsBase
     {
-        public RemoteEntityViews(DataAdapter dataAdapter, DataContext dataContext) : base(dataAdapter, dataContext)
+        public RemoteEntityViews(DataViewDto dataViewDto, DataContext dataContext) : base(dataViewDto, dataContext)
         {
-            //this.["Actors"] = new DataViewRemoteEntity<Actor>(dataAdapter, dataContext);
-            //this.["Addresses"] = new DataViewRemoteEntity<Address>(dataAdapter, dataContext);
-            //this.["Categories"] = new DataViewRemoteEntity<Category>(dataAdapter, dataContext);
-            //this.["Cities"] = new DataViewRemoteEntity<City>(dataAdapter, dataContext);
-            //this.["Countries"] = new DataViewRemoteEntity<Country>(dataAdapter, dataContext);
-            //this.["Customers"] = new DataViewRemoteEntity<Customer>(dataAdapter, dataContext);
-            //this.["Films"] = new DataViewRemoteEntity<Film>(dataAdapter, dataContext);
-            //this.["FilmActors"] = new DataViewRemoteEntity<FilmActor>(dataAdapter, dataContext);
-            //this.["FilmCategories"] = new DataViewRemoteEntity<FilmCategory>(dataAdapter, dataContext);
-            //this.["FilmTexts"] = new DataViewRemoteEntity<FilmText>(dataAdapter, dataContext);
-            //this.["Inventories"] = new DataViewRemoteEntity<Inventory>(dataAdapter, dataContext);
-            //this.["Languages"] = new DataViewRemoteEntity<Language>(dataAdapter, dataContext);
-            //this.["Payments"] = new DataViewRemoteEntity<Payment>(dataAdapter, dataContext);
-            //this.["Rentals"] = new DataViewRemoteEntity<Rental>(dataAdapter, dataContext);
-            //this.["Staffs"] = new DataViewRemoteEntity<Staff>(dataAdapter, dataContext);
-            //this.["Stores"] = new DataViewRemoteEntity<Store>(dataAdapter, dataContext);
+            //this.["Actors"] = new DataViewRemoteEntity<Actor>(dataViewDto, dataContext);
+            //this.["Addresses"] = new DataViewRemoteEntity<Address>(dataViewDto, dataContext);
+            //this.["Categories"] = new DataViewRemoteEntity<Category>(dataViewDto, dataContext);
+            //this.["Cities"] = new DataViewRemoteEntity<City>(dataViewDto, dataContext);
+            //this.["Countries"] = new DataViewRemoteEntity<Country>(dataViewDto, dataContext);
+            //this.["Customers"] = new DataViewRemoteEntity<Customer>(dataViewDto, dataContext);
+            //this.["Films"] = new DataViewRemoteEntity<Film>(dataViewDto, dataContext);
+            //this.["FilmActors"] = new DataViewRemoteEntity<FilmActor>(dataViewDto, dataContext);
+            //this.["FilmCategories"] = new DataViewRemoteEntity<FilmCategory>(dataViewDto, dataContext);
+            //this.["FilmTexts"] = new DataViewRemoteEntity<FilmText>(dataViewDto, dataContext);
+            //this.["Inventories"] = new DataViewRemoteEntity<Inventory>(dataViewDto, dataContext);
+            //this.["Languages"] = new DataViewRemoteEntity<Language>(dataViewDto, dataContext);
+            //this.["Payments"] = new DataViewRemoteEntity<Payment>(dataViewDto, dataContext);
+            //this.["Rentals"] = new DataViewRemoteEntity<Rental>(dataViewDto, dataContext);
+            //this.["Staffs"] = new DataViewRemoteEntity<Staff>(dataViewDto, dataContext);
+            //this.["Stores"] = new DataViewRemoteEntity<Store>(dataViewDto, dataContext);
         }
 
         public DataViewRemoteEntity<Actor> Actors { get { return this.GetPropertyValue<Actor>(); } }
@@ -149,24 +149,24 @@ namespace Server.Models.Utils.DAL
 
     public class RemoteDtoViews : RemoteDtoViewsBase
     {
-        public RemoteDtoViews(DataAdapter dataAdapter) : base(dataAdapter)
+        public RemoteDtoViews(DataViewDto dataViewDto) : base(dataViewDto)
         {
-            //this.["Actors"] = new DataViewRemoteDto<Actor>(dataAdapter);
-            //this.["Addresses"] = new DataViewRemoteDto<Address>(dataAdapter);
-            //this.["Categories"] = new DataViewRemoteDto<Category>(dataAdapter);
-            //this.["Cities"] = new DataViewRemoteDto<City>(dataAdapter);
-            //this.["Countries"] = new DataViewRemoteDto<Country>(dataAdapter);
-            //this.["Customers"] = new DataViewRemoteDto<Customer>(dataAdapter);
-            //this.["Films"] = new DataViewRemoteDto<Film>(dataAdapter);
-            //this.["FilmActors"] = new DataViewRemoteDto<FilmActor>(dataAdapter);
-            //this.["FilmCategories"] = new DataViewRemoteDto<FilmCategory>(dataAdapter);
-            //this.["FilmTexts"] = new DataViewRemoteDto<FilmText>(dataAdapter);
-            //this.["Inventories"] = new DataViewRemoteDto<Inventory>(dataAdapter);
-            //this.["Languages"] = new DataViewRemoteDto<Language>(dataAdapter);
-            //this.["Payments"] = new DataViewRemoteDto<Payment>(dataAdapter);
-            //this.["Rentals"] = new DataViewRemoteDto<Rental>(dataAdapter);
-            //this.["Staffs"] = new DataViewRemoteDto<Staff>(dataAdapter);
-            //this.["Stores"] = new DataViewRemoteDto<Store>(dataAdapter);
+            //this.["Actors"] = new DataViewRemoteDto<Actor>(dataViewDto);
+            //this.["Addresses"] = new DataViewRemoteDto<Address>(dataViewDto);
+            //this.["Categories"] = new DataViewRemoteDto<Category>(dataViewDto);
+            //this.["Cities"] = new DataViewRemoteDto<City>(dataViewDto);
+            //this.["Countries"] = new DataViewRemoteDto<Country>(dataViewDto);
+            //this.["Customers"] = new DataViewRemoteDto<Customer>(dataViewDto);
+            //this.["Films"] = new DataViewRemoteDto<Film>(dataViewDto);
+            //this.["FilmActors"] = new DataViewRemoteDto<FilmActor>(dataViewDto);
+            //this.["FilmCategories"] = new DataViewRemoteDto<FilmCategory>(dataViewDto);
+            //this.["FilmTexts"] = new DataViewRemoteDto<FilmText>(dataViewDto);
+            //this.["Inventories"] = new DataViewRemoteDto<Inventory>(dataViewDto);
+            //this.["Languages"] = new DataViewRemoteDto<Language>(dataViewDto);
+            //this.["Payments"] = new DataViewRemoteDto<Payment>(dataViewDto);
+            //this.["Rentals"] = new DataViewRemoteDto<Rental>(dataViewDto);
+            //this.["Staffs"] = new DataViewRemoteDto<Staff>(dataViewDto);
+            //this.["Stores"] = new DataViewRemoteDto<Store>(dataViewDto);
         }
 
         public DataViewRemoteDto Actors { get { return this.GetPropertyValue("Actor"); } }

@@ -4,14 +4,14 @@ namespace Server.Models.Utils.DAL.Common
 {
     public class LocalDtoViewsBase : Dictionary<string, object>
     {
+        private readonly DataContext dataContext;
+        private readonly MetadataSrv.Metadata metadataSrv;
+
         public LocalDtoViewsBase(DataContext dataContext, MetadataSrv.Metadata metadataSrv)
         {
             this.dataContext = dataContext;
             this.metadataSrv = metadataSrv;
         }
-
-        private readonly DataContext dataContext;
-        private readonly MetadataSrv.Metadata metadataSrv;
 
         protected DataViewLocalDto<T> GetPropertyValue<T>(/*string entityTypeName*/)
             where T : class, IDerivedEntity
