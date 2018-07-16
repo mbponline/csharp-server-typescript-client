@@ -112,7 +112,8 @@ namespace Server.Models.Utils.DAL.Common
                 if (queryObject.Expand != null && queryObject.Expand.Length > 0)
                 {
                     var splitExpand = DataUtils.SplitExpand(queryObject.Expand, (el) => el);
-                    DataUtils.ForEachNavigation(splitExpand, (branch) =>
+
+                    foreach (var branch in DataUtils.NavigationBranch(splitExpand))
                     {
                         var navs = DataUtils.BranchToNavigation(entityTypeName, branch, metadataSrv);
                         var entityTypeNameLocal = navs[navs.Count - 1].EntityTypeName;
@@ -129,7 +130,7 @@ namespace Server.Models.Utils.DAL.Common
                         {
                             foundEntityType.QueryText += " UNION " + NavigationBranchToQueryText(entityTypeName, queryRoot, navs, metadataSrv, dialect);
                         }
-                    });
+                    }
                 }
 
                 return result;
@@ -171,8 +172,27 @@ namespace Server.Models.Utils.DAL.Common
                         }
                     });
 
-                    DataUtils.ForEachNavigationFilter(entityTypeName, splitExpand, (parentEntityTypeName, nav, filterExp) =>
+                    //DataUtils.ForEachNavigationFilter(entityTypeName, splitExpand, (parentEntityTypeName, nav, filterExp) =>
+                    //{
+                    //    var tableNameLocal = metadataSrv.EntityTypes[entityTypeName].TableName;
+                    //    var join = GetJoinCondition(parentEntityTypeName, entityTypeName == parentEntityTypeName, nav, false, metadataSrv);
+                    //    tableNameLocal = metadataSrv.EntityTypes[nav.EntityTypeName].TableName;
+
+                    //    entityTypeQuery.Append(string.Format(" INNER JOIN {0} ON {1}", tableNameLocal, join));
+
+                    //    if (!string.IsNullOrEmpty(filterExp))
+                    //    {
+                    //        var childElementFields = metadataSrv.EntityTypes[nav.EntityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
+                    //        filterExpand.Add(string.Format("( {0} )", ReplaceFieldNames(tableNameLocal, filterExp, childElementFields, dialect)));
+                    //    }
+                    //}, metadataSrv);
+
+                    foreach (var navigationResult in DataUtils.NavigationFilter(entityTypeName, splitExpand, metadataSrv))
                     {
+                        var parentEntityTypeName = navigationResult.EntityTypeName;
+                        var nav = navigationResult.NavigationProperty;
+                        var filterExp = navigationResult.Filter;
+
                         var tableNameLocal = metadataSrv.EntityTypes[entityTypeName].TableName;
                         var join = GetJoinCondition(parentEntityTypeName, entityTypeName == parentEntityTypeName, nav, false, metadataSrv);
                         tableNameLocal = metadataSrv.EntityTypes[nav.EntityTypeName].TableName;
@@ -184,7 +204,7 @@ namespace Server.Models.Utils.DAL.Common
                             var childElementFields = metadataSrv.EntityTypes[nav.EntityTypeName].Properties.ToDictionary((it) => it.Key, (it) => it.Value.FieldName);
                             filterExpand.Add(string.Format("( {0} )", ReplaceFieldNames(tableNameLocal, filterExp, childElementFields, dialect)));
                         }
-                    }, metadataSrv);
+                    }
                 }
 
                 var arrFilter = new List<string>();

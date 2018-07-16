@@ -93,6 +93,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\NavigationResult .cs" />
     <Compile Include="Models\Utils\DAL\DataProvider.cs" />
     <Compile Include="Models\Utils\DAL\DataProviderDto.cs" />
     <Compile Include="Models\Utils\DAL\Common\DalUtils.cs" />

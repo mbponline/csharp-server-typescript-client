@@ -6,15 +6,31 @@ namespace Server.Models.Utils.DAL.Common
 {
     public static class DataUtils
     {
-        public static void ForEachNavigationFilter(string parentEntityTypeName, List<NavigationInclude> arr, Action<string, MetadataSrv.NavigationProperty, string> process, MetadataSrv.Metadata metadataSrv)
+        //public static void ForEachNavigationFilter(string parentEntityTypeName, List<NavigationInclude> arr, Action<string, MetadataSrv.NavigationProperty, string> process, MetadataSrv.Metadata metadataSrv)
+        //{
+        //    foreach (var item in arr)
+        //    {
+        //        var childNavigationProperty = metadataSrv.EntityTypes[parentEntityTypeName].NavigationProperties[item.NavigationProperty];
+        //        process(parentEntityTypeName, childNavigationProperty, item.Filter);
+        //        if (item.Include.Count > 0)
+        //        {
+        //            ForEachNavigationFilter(childNavigationProperty.EntityTypeName, item.Include, process, metadataSrv);
+        //        }
+        //    }
+        //}
+
+        public static IEnumerable<NavigationResult> NavigationFilter(string parentEntityTypeName, List<NavigationInclude> arr, MetadataSrv.Metadata metadataSrv)
         {
             foreach (var item in arr)
             {
                 var childNavigationProperty = metadataSrv.EntityTypes[parentEntityTypeName].NavigationProperties[item.NavigationProperty];
-                process(parentEntityTypeName, childNavigationProperty, item.Filter);
+                yield return new NavigationResult() { EntityTypeName = parentEntityTypeName, NavigationProperty = childNavigationProperty, Filter = item.Filter };
                 if (item.Include.Count > 0)
                 {
-                    ForEachNavigationFilter(childNavigationProperty.EntityTypeName, item.Include, process, metadataSrv);
+                    foreach (var navigationResult in NavigationFilter(childNavigationProperty.EntityTypeName, item.Include, metadataSrv))
+                    {
+                        yield return navigationResult;
+                    }
                 }
             }
         }
@@ -113,26 +129,46 @@ namespace Server.Models.Utils.DAL.Common
             return found;
         }
 
-        public static void ForEachNavigation(List<NavigationInclude> arr, Action<List<string>> process, List<string> branch = null)
-        {
-            foreach (var item in arr)
-            {
-                var branchLocal = new List<string>();
-                if (branch != null)
-                {
-                    branchLocal.AddRange(branch);
-                }
-                branchLocal.Add(item.NavigationProperty);
+        //public static void ForEachNavigation(List<NavigationInclude> arr, Action<List<string>> process, List<string> branch = null)
+        //{
+        //    foreach (var item in arr)
+        //    {
+        //        var branchLocal = new List<string>();
+        //        if (branch != null)
+        //        {
+        //            branchLocal.AddRange(branch);
+        //        }
+        //        branchLocal.Add(item.NavigationProperty);
 
-                process(branchLocal);
+        //        process(branchLocal);
+        //        if (item.Include.Count > 0)
+        //        {
+        //            ForEachNavigation(item.Include, process, branchLocal);
+        //        }
+        //    }
+        //}
+
+        public static IEnumerable<string[]> NavigationBranch(List<NavigationInclude> splitExpand, string[] branch = null)
+        {
+            branch = branch ?? (new string[] { });
+            foreach (var item in splitExpand)
+            {
+                var branchLocal = new List<string>(branch)
+                {
+                    item.NavigationProperty
+                }.ToArray();
+                yield return branchLocal;
                 if (item.Include.Count > 0)
                 {
-                    ForEachNavigation(item.Include, process, branchLocal);
+                    foreach (var branchChild in NavigationBranch(item.Include, branchLocal))
+                    {
+                        yield return branchChild;
+                    }
                 }
             }
         }
 
-        public static List<MetadataSrv.NavigationProperty> BranchToNavigation(string entityTypeName, List<string> branch, MetadataSrv.Metadata metadataSrv)
+        public static List<MetadataSrv.NavigationProperty> BranchToNavigation(string entityTypeName, string[] branch, MetadataSrv.Metadata metadataSrv)
         {
             var navigationPropertyList = new List<MetadataSrv.NavigationProperty>();
             var entityTypeNameLocal = entityTypeName;
