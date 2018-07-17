@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Server.Models.Utils.DAL.Common
 {
@@ -285,9 +286,10 @@ namespace Server.Models.Utils.DAL.Common
                 }
                 var result = source;
                 var resultFields = fields.Where((it) => source.Contains(it.Key)).OrderByDescending((it) => it.Key.Length);
-                foreach (var item in resultFields)
+                foreach (var propertyName in resultFields)
                 {
-                    result = result.Replace(item.Key, string.Format(fieldTemplate, tableName, item.Value));
+                    var rgx = new Regex("\\b" + propertyName.Key + "\\b");
+                    result = rgx.Replace(result, string.Format(fieldTemplate, tableName, propertyName.Value));
                 }
                 return result;
             }

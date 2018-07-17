@@ -62,14 +62,10 @@ declare module metadataTypes {
         single: string;
     }
 
-    export interface Database {
-        dialect: string;
-        version: number;
-        description: string;
-    }
-
     export interface Metadata {
-        database: Database;
+        dialect: string;
+        version: string;
+        description: string;
         namespace: string;
         max: number;
         multiplicity: Multiplicity;

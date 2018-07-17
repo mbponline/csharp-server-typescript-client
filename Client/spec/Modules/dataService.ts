@@ -10,12 +10,20 @@ describe('api/datasource/metadata', function () {
         });
     });
 
-    it("should have property 'namespace'", function () {
-        expect(metadata.hasOwnProperty('namespace')).toBe(true);
+    it("should have property 'dialect'", function () {
+        expect(metadata.hasOwnProperty('dialect')).toBe(true);
+    });
+
+    it("should have a specific value for 'dialect'", function () {
+        expect(metadata.dialect).toBe('TS');
     });
 
     it("should have property 'entityTypes'", function () {
         expect(metadata.hasOwnProperty('entityTypes')).toBe(true);
+    });
+
+    it("should have 16 fields on 'entityTypes'", function () {
+        expect(Object.keys(metadata.entityTypes).length).toBe(16);
     });
 
 });

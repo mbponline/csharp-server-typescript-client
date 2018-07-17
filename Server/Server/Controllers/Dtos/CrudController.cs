@@ -3,7 +3,6 @@ using Server.Models.Utils.DAL.Common;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Controllers.Dtos
 {

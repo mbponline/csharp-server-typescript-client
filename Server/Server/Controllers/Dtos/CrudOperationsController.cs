@@ -18,7 +18,7 @@ namespace Server.Controllers.Dtos
         // GET: api/datasource/operations/GetFilmsWithActors?releaseYear=2006
         [Route("GetFilmsWithActors")]
         [HttpGet]
-        public ResultSerialResponse Get([FromUri] int releaseYear)
+        public ResultSerialData Get([FromUri] int releaseYear)
         {
             //var expand = NavigationHelper<Film>.Get()
             //    .Include((it) => it.FilmActors.Select().Actor)
@@ -30,8 +30,10 @@ namespace Server.Controllers.Dtos
                 Expand = new string[] { "FilmActors.Actor", "FilmCategories.Category" }
             };
 
-            var films = this.dataServiceDto.DataViewDto.GetItems("Film", queryObject);
-            return ResultSerialUtils.FetchResponseData("Film", queryObject, "operations", this.dataServiceDto);
+            var resultSerialData = this.dataServiceDto.DataViewDto.GetItems("Film", queryObject);
+            return resultSerialData;
+            //var resultSerialResponse = ResultSerialUtils.FetchResponseData("Film", queryObject, "crud", this.dataServiceDto);
+            //return resultSerialResponse;
         }
 
         // POST: api/datasource/operations/TestAction
