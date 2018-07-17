@@ -4,8 +4,8 @@
     {
         public static DataServiceDto CreateDataServiceInstance()
         {
-            var dataService = new DataServiceDto();
-            return dataService;
+            var dataServiceDto = new DataServiceDto();
+            return dataServiceDto;
         }
     }
 }

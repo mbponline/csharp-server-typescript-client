@@ -6,9 +6,9 @@ namespace Server.Models.Utils.DAL.Common
 {
     public static partial class ResultSerialUtils
     {
-        public static ResultSerialResponse FetchResponseData(string entityTypeName, QueryObject queryObject, string apiRouteRoot, DataServiceDto dataService)
+        public static ResultSerialResponse FetchResponseData(string entityTypeName, QueryObject queryObject, string apiRouteRoot, DataServiceDto dataServiceDto)
         {
-            var dataView = dataService.DataViewDto;
+            var dataView = dataServiceDto.DataViewDto;
             var count = dataView.Count(entityTypeName, queryObject);
             const int maxTop = 40;
             var skip = queryObject.Skip != null ? (int)queryObject.Skip : 0;
@@ -16,9 +16,9 @@ namespace Server.Models.Utils.DAL.Common
             var top = Math.Min(topNext, maxTop);
             var skipNext = skip + top;
             var nextLinkQueryString = GetNextLinkQueryString(queryObject, skipNext, topNext);
-            var entitySetName = dataService.MetadataSrv.EntityTypes[entityTypeName].EntitySetName;
+            var entitySetName = dataServiceDto.MetadataSrv.EntityTypes[entityTypeName].EntitySetName;
             var nextLink = skipNext < Math.Min(topNext, count) ? string.Format("api/datasource/{0}/{1}?{2}", apiRouteRoot, entitySetName, nextLinkQueryString) : null;
-            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, dataService.MetadataSrv);
+            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, dataServiceDto.MetadataSrv);
             var resultSerial = dataView.GetItems(entityTypeName, queryObjectLocal);
             if (resultSerial.TotalCount == 0)
             {
