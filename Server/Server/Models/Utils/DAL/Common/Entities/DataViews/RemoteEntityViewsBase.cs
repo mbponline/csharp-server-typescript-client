@@ -13,18 +13,16 @@ namespace Server.Models.Utils.DAL.Common
             this.dataContext = dataContext;
         }
 
-        protected DataViewRemoteEntity<T> GetPropertyValue<T>(/*string entityTypeName*/)
-            where T : class, IDerivedEntity
+        protected DataViewRemoteEntity GetPropertyValue(string entityTypeName)
         {
-            var entityTypeName = typeof(T).Name;
-            DataViewRemoteEntity<T> instance;
+            DataViewRemoteEntity instance;
             if (this.ContainsKey(entityTypeName))
             {
-                instance = (DataViewRemoteEntity<T>)this[entityTypeName];
+                instance = (DataViewRemoteEntity)this[entityTypeName];
             }
             else
             {
-                instance = new DataViewRemoteEntity<T>(entityTypeName, this.dataViewDto, this.dataContext);
+                instance = new DataViewRemoteEntity(entityTypeName, this.dataViewDto, this.dataContext);
                 this[entityTypeName] = instance;
             }
             return instance;

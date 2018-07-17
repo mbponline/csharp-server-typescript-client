@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Server.Models.Utils.DAL.Common
 {
-    public class DataViewLocalDto<T>
-        where T : class, IDerivedEntity
+    public class DataViewLocalDto
     {
         private readonly string entityTypeName;
         private readonly DataContext dataContext;
@@ -18,7 +17,7 @@ namespace Server.Models.Utils.DAL.Common
             this.metadataSrv = metadataSrv;
         }
 
-        public ResultSerialData GetItems(Func<T, bool> predicate, string[] expand)
+        public ResultSerialData GetItems(Func<Entity, bool> predicate, string[] expand)
         {
             var resultSerialData = new ResultSerialData()
             {
@@ -29,9 +28,9 @@ namespace Server.Models.Utils.DAL.Common
             };
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
-                var derivedEntityList = entitySet.Filter(predicate);
-                resultSerialData.Items = derivedEntityList.Select((it) => it.entity.dto).ToList();
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
+                var entities = entitySet.Filter(predicate);
+                resultSerialData.Items = entities.Select((it) => it.dto).ToList();
                 DataViewLocalDtoUtils.FillResultRelatedItems(this.entityTypeName, resultSerialData, expand, this.dataContext, this.metadataSrv);
             }
             return resultSerialData;
@@ -46,17 +45,17 @@ namespace Server.Models.Utils.DAL.Common
                 TotalCount = 0,
                 RelatedItems = { }
             };
-            var derivedEntity = default(T);
+            var entity = default(Entity);
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
                 var dtos = new List<Dto>();
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
                 foreach (var partialDto in partialDtos)
                 {
-                    derivedEntity = entitySet.FindByKey(partialDto);
-                    if (derivedEntity != null)
+                    entity = entitySet.FindByKey(partialDto);
+                    if (entity != null)
                     {
-                        dtos.Add(derivedEntity.entity.dto);
+                        dtos.Add(entity.dto);
                     }
                 }
                 resultSerialData.Items = dtos;
@@ -65,7 +64,7 @@ namespace Server.Models.Utils.DAL.Common
             return resultSerialData;
         }
 
-        public ResultSingleSerialData GetSingleItem(Func<T, bool> predicate, string[] expand)
+        public ResultSingleSerialData GetSingleItem(Func<Entity, bool> predicate, string[] expand)
         {
             var resultSingleSerialData = new ResultSingleSerialData()
             {
@@ -75,9 +74,9 @@ namespace Server.Models.Utils.DAL.Common
             };
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
-                var derivedEntity = entitySet.Find(predicate);
-                resultSingleSerialData.Item = derivedEntity.entity.dto;
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
+                var entity = entitySet.Find(predicate);
+                resultSingleSerialData.Item = entity.dto;
                 DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, resultSingleSerialData, expand, this.dataContext, this.metadataSrv);
             }
             return resultSingleSerialData;
@@ -93,9 +92,9 @@ namespace Server.Models.Utils.DAL.Common
             };
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
-                var derivedEntity = entitySet.FindByKey(partialDto /*partialEntity*/);
-                resultSingleSerialData.Item = derivedEntity.entity.dto;
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
+                var entity = entitySet.FindByKey(partialDto /*partialEntity*/);
+                resultSingleSerialData.Item = entity.dto;
                 DataViewLocalDtoUtils.FillResultSingleRelatedItems(this.entityTypeName, resultSingleSerialData, expand, this.dataContext, this.metadataSrv);
             }
             return resultSingleSerialData;

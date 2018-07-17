@@ -11,18 +11,16 @@ namespace Server.Models.Utils.DAL.Common
 			this.dataContext = dataContext;
 		}
 
-		protected DataViewLocalEntity<T> GetPropertyValue<T>(/*string entityTypeName*/)
-			where T : class, IDerivedEntity
+		protected DataViewLocalEntity GetPropertyValue(string entityTypeName)
 		{
-			var entityTypeName = typeof(T).Name;
-			DataViewLocalEntity<T> instance;
+			DataViewLocalEntity instance;
 			if (this.ContainsKey(entityTypeName))
 			{
-				instance = (DataViewLocalEntity<T>)this[entityTypeName];
+				instance = (DataViewLocalEntity)this[entityTypeName];
 			}
 			else
 			{
-				instance = new DataViewLocalEntity<T>(entityTypeName, this.dataContext);
+				instance = new DataViewLocalEntity(entityTypeName, this.dataContext);
 				this[entityTypeName] = instance;
 			}
 			return instance;

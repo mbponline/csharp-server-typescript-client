@@ -33,11 +33,11 @@ namespace Tools.Modules
                 br.WriteLine("[JsonIgnore]");
                 if (multi)
                 {
-                    br.WriteLine(string.Format("public {0} {1} {{ get {{ return this.entity.Navigate{2}<{3}>(\"{4}\", \"{1}\"); }} }}", returnType, navigationProperty.Key, navigationType, anp.EntityTypeName, entityTypeName));
+                    br.WriteLine(string.Format("public {0} {1} {{ get {{ return this.entity.Navigate{2}(\"{4}\", \"{1}\").Select( it => new {3}(it) ); }} }}", returnType, navigationProperty.Key, navigationType, anp.EntityTypeName, entityTypeName));
                 }
                 else
                 {
-                    br.WriteLine(string.Format("public {0} {1} {{ get {{ return this.entity.Navigate{2}<{0}>(\"{4}\", \"{1}\"); }} }}", returnType, navigationProperty.Key, navigationType, anp.EntityTypeName, entityTypeName));
+                    br.WriteLine(string.Format("public {0} {1} {{ get {{ var it = this.entity.Navigate{2}(\"{4}\", \"{1}\"); if (it != null) {{ return new {0}(it); }} else {{ return null; }} }} }}", returnType, navigationProperty.Key, navigationType, anp.EntityTypeName, entityTypeName));
                 }
             }
             br.WriteLine();

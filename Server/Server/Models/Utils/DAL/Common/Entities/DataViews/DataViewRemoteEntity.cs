@@ -4,8 +4,7 @@ using System.Linq;
 namespace Server.Models.Utils.DAL.Common
 {
 
-    public class DataViewRemoteEntity<T>
-        where T : class, IDerivedEntity
+    public class DataViewRemoteEntity
     {
         private readonly string entityTypeName;
         private readonly DataViewDto dataViewDto;
@@ -23,100 +22,100 @@ namespace Server.Models.Utils.DAL.Common
             return this.dataViewDto.Count(this.entityTypeName, queryObject);
         }
 
-        public IEnumerable<T> GetItems(QueryObject queryObject)
+        public IEnumerable<Entity> GetItems(QueryObject queryObject)
         {
             var resultSerialData = this.dataViewDto.GetItems(this.entityTypeName, queryObject);
-            var derivedEntityList = this.dataContext.AttachEntities(resultSerialData); // as List<T>;
-            return derivedEntityList.Cast<T>().ToList();
+            var entities = this.dataContext.AttachEntities(resultSerialData);
+            return entities;
         }
 
-        public T GetSingleItem(Dto partialDto, string[] expand = null)
+        public Entity GetSingleItem(Dto partialDto, string[] expand = null)
         {
             var resultSingleSerialData = this.dataViewDto.GetSingleItem(this.entityTypeName, partialDto, expand);
-            var derivedEntity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
-            return (T)derivedEntity;
+            var entity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
+            return entity;
         }
 
-        public IEnumerable<T> GetMultipleItems(IEnumerable<Dto> partialDtos, string[] expand = null)
+        public IEnumerable<Entity> GetMultipleItems(IEnumerable<Dto> partialDtos, string[] expand = null)
         {
             var resultSerialData = this.dataViewDto.GetMultipleItems(this.entityTypeName, partialDtos, expand);
-            var derivedEntityList = this.dataContext.AttachEntities(resultSerialData); // as List<T>;
-            return derivedEntityList.Cast<T>().ToList();
+            var entities = this.dataContext.AttachEntities(resultSerialData);
+            return entities;
         }
 
-        public T InsertItem(Dto dto)
+        public Entity InsertItem(Dto dto)
         {
             var resultSingleSerialData = this.dataViewDto.InsertItem(this.entityTypeName, dto);
-            var derivedEntity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
-            return (T)derivedEntity;
+            var entity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
+            return entity;
         }
 
-        public IEnumerable<T> InsertItems(IEnumerable<Dto> dtos)
+        public IEnumerable<Entity> InsertItems(IEnumerable<Dto> dtos)
         {
-            var derivedEntityList = new List<T>();
+            var entities = new List<Entity>();
             var resultSingleSerialDataList = this.dataViewDto.InsertItems(this.entityTypeName, dtos);
             foreach (var resultSingleSerialData in resultSingleSerialDataList)
             {
-                var derivedEntity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
-                derivedEntityList.Add((T)derivedEntity);
+                var entity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
+                entities.Add(entity);
             }
-            return derivedEntityList;
+            return entities;
         }
 
-        public T UpdateItem(Dto partialDto)
+        public Entity UpdateItem(Dto partialDto)
         {
             var resultSingleSerialData = this.dataViewDto.UpdateItem(this.entityTypeName, partialDto);
-            var derivedEntity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
-            return (T)derivedEntity;
+            var entity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
+            return entity;
         }
 
-        public IEnumerable<T> UpdateItems(IEnumerable<Dto> partialDtos)
+        public IEnumerable<Entity> UpdateItems(IEnumerable<Dto> partialDtos)
         {
-            var derivedEntityList = new List<T>();
+            var entities = new List<Entity>();
             var resultSingleSerialDataList = this.dataViewDto.UpdateItems(this.entityTypeName, partialDtos);
             foreach (var resultSingleSerialData in resultSingleSerialDataList)
             {
-                var derivedEntity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
-                derivedEntityList.Add((T)derivedEntity);
+                var entity = this.dataContext.AttachSingleEntitiy(resultSingleSerialData);
+                entities.Add(entity);
             }
-            return derivedEntityList;
+            return entities;
         }
 
-        public T DeleteItem(Dto partialDto)
+        public Entity DeleteItem(Dto partialDto)
         {
             var resultSingleSerialData = this.dataViewDto.DeleteItem(this.entityTypeName, partialDto);
-            var derivedEntity = default(T);
+            var entity = default(Entity);
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
-                derivedEntity = entitySet.FindByKey(partialDto);
-                if (derivedEntity != null)
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
+                entity = entitySet.FindByKey(partialDto);
+                if (entity != null)
                 {
-                    entitySet.DeleteEntity(derivedEntity);
+                    entitySet.DeleteEntity(entity);
                 }
             }
-            return derivedEntity;
+            return entity;
         }
 
-        public IEnumerable<T> DeleteItems(IEnumerable<Dto> partialDtos)
+        public IEnumerable<Entity> DeleteItems(IEnumerable<Dto> partialDtos)
         {
             var resultSerialData = this.dataViewDto.DeleteItems(this.entityTypeName, partialDtos);
-            var derivedEntityList = new List<T>();
-            var derivedEntity = default(T);
+            var entities = new List<Entity>();
+            var entity = default(Entity);
             if (this.dataContext.entitySets.ContainsKey(this.entityTypeName))
             {
-                var entitySet = (EntitySet<T>)this.dataContext.entitySets[this.entityTypeName];
+                var entitySet = this.dataContext.entitySets[this.entityTypeName];
                 foreach (var partialDto in partialDtos)
                 {
-                    derivedEntity = entitySet.FindByKey(partialDto);
-                    if (derivedEntity != null)
+                    entity = entitySet.FindByKey(partialDto);
+                    if (entity != null)
                     {
-                        derivedEntityList.Add(derivedEntity);
-                        entitySet.DeleteEntity(derivedEntity);
+                        entities.Add(entity);
+                        entitySet.DeleteEntity(entity);
                     }
                 }
             }
-            return derivedEntityList;
+            return entities;
         }
     }
 

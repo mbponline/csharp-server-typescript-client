@@ -1,96 +1,93 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Server.Models.Utils.DAL.Common
 {
-    public class EntitySet<T> : IEntitySet<T>
-        where T : class, IDerivedEntity
+    public class EntitySet
     {
         private readonly string entityTypeName;
-        private readonly Type derivedEntityType;
-        private Dictionary<string, IEntitySet<IDerivedEntity>> entitySets;
+        private Dictionary<string, EntitySet> entitySets;
         private MetadataSrv.Metadata metadataSrv;
         private readonly string[] key;
-        public List<IDerivedEntity> Items { get; private set; }
+        public List<Entity> Items { get; private set; }
 
-        public EntitySet(Type derivedEntityType, Dictionary<string, IEntitySet<IDerivedEntity>> entitySets, MetadataSrv.Metadata metadataSrv)
+        public EntitySet(string entityTypeName, Dictionary<string, EntitySet> entitySets, MetadataSrv.Metadata metadataSrv)
         {
-            this.derivedEntityType = derivedEntityType;
-            this.entityTypeName = derivedEntityType.Name;
+            this.entityTypeName = entityTypeName;
             this.entitySets = entitySets;
             this.metadataSrv = metadataSrv;
             this.key = metadataSrv.EntityTypes[this.entityTypeName].Key;
-            this.Items = new List<IDerivedEntity>();
+            this.Items = new List<Entity>();
         }
 
-        public static IEntitySet<IDerivedEntity> CreateEntitySet(string entityTypeName, Dictionary<string, IEntitySet<IDerivedEntity>> entitySets, MetadataSrv.Metadata metadataSrv)
+        //public static EntitySet CreateEntitySet(string entityTypeName, Dictionary<string, EntitySet> entitySets, MetadataSrv.Metadata metadataSrv)
+        //{
+        //    var derivedEntityType = Type.GetType(metadataSrv.Namespace + "." + entityTypeName);
+        //    var d1 = typeof(EntitySet);
+        //    var typeArgs = new Type[] { derivedEntityType };
+        //    var constructed = d1.MakeGenericType(typeArgs);
+        //    var entitySet = Activator.CreateInstance(constructed, new object[] { derivedEntityType, entitySets, metadataSrv });
+        //    return (EntitySet)entitySet;
+        //}
+
+        public Entity NavigateSingle(Entity remoteEntity, string[] remoteEntityKey, string[] navigationKey)
         {
-            var derivedEntityType = Type.GetType(metadataSrv.Namespace + "." + entityTypeName);
-            var d1 = typeof(EntitySet<>);
-            var typeArgs = new Type[] { derivedEntityType };
-            var constructed = d1.MakeGenericType(typeArgs);
-            var entitySet = Activator.CreateInstance(constructed, new object[] { derivedEntityType, entitySets, metadataSrv });
-            return (IEntitySet<IDerivedEntity>)entitySet;
+            var entity = this.Items.FirstOrDefault((it) => this.HaveSameKeysNavigation(it.dto, navigationKey, remoteEntity.dto, remoteEntityKey));
+            return entity;
         }
 
-        public T NavigateSingle(Entity remoteEntity, string[] remoteEntityKey, string[] navigationKey)
+        public IEnumerable<Entity> NavigateMulti(Entity remoteEntity, string[] remoteEntityKey, string[] navigationKey)
         {
-            var derivedEntity = this.Items.FirstOrDefault((it) => this.HaveSameKeysNavigation(it.entity.dto, navigationKey, remoteEntity.dto, remoteEntityKey));
-            return (T)derivedEntity;
+            var entities = this.Items.Where((entity) => this.HaveSameKeysNavigation(entity.dto, navigationKey, remoteEntity.dto, remoteEntityKey));
+            return entities;
         }
 
-        public IEnumerable<T> NavigateMulti(Entity remoteEntity, string[] remoteEntityKey, string[] navigationKey)
+        public IEnumerable<Entity> NavigateAllRelated(IEnumerable<Dto> remoteDtos, string[] remoteEntityKey, string[] navigationKey)
         {
-            var derivedEntityList = this.Items.Where((it) => this.HaveSameKeysNavigation(it.entity.dto, navigationKey, remoteEntity.dto, remoteEntityKey));
-            return derivedEntityList.Cast<T>().ToList();
-        }
-
-        public IEnumerable<T> NavigateAllRelated(IEnumerable<Dto> remoteDtos, string[] remoteEntityKey, string[] navigationKey)
-        {
-            var derivedEntityList = this.Items.Where((it) =>
+            var entities = this.Items.Where((entity) =>
             {
                 foreach (var remoteDto in remoteDtos)
                 {
-                    if (this.HaveSameKeysNavigation(it.entity.dto, navigationKey, remoteDto, remoteEntityKey))
+                    if (this.HaveSameKeysNavigation(entity.dto, navigationKey, remoteDto, remoteEntityKey))
                     {
                         return true;
                     }
                 }
                 return false;
             });
-            return derivedEntityList.Cast<T>().ToList();
+            return entities;
         }
 
-        public T FindByKey(Dto partialDto)
+        public Entity FindByKey(Dto partialDto)
         {
-            var derivedEntity = this.Items.FirstOrDefault((it) => this.HaveSameKeysLocal(it.entity.dto, partialDto));
-            return (T)derivedEntity;
+            var entity = this.Items.FirstOrDefault((it) => this.HaveSameKeysLocal(it.dto, partialDto));
+            return entity;
         }
 
-        public T Find(Func<T, bool> predicate)
+        public Entity Find(Func<Entity, bool> predicate)
         {
-            var derivedEntity = this.Items.FirstOrDefault(it => predicate((T)it));
-            return (T)derivedEntity;
+            var entity = this.Items.FirstOrDefault(predicate);
+            return entity;
         }
 
-        public IEnumerable<T> Filter(Func<T, bool> predicate)
+        public IEnumerable<Entity> Filter(Func<Entity, bool> predicate)
         {
-            var derivedEntityList = this.Items.Where((it => predicate((T)it)));
-            return derivedEntityList.Cast<T>().ToList();
+            var entities = this.Items.Where(predicate);
+            return entities;
         }
 
-        public void DeleteEntity(IDerivedEntity derivedEntity)
+        public void DeleteEntity(Entity entity)
         {
-            derivedEntity.entity.Detach();
-            this.Items.Remove(derivedEntity);
+            entity.Detach();
+            this.Items.Remove(entity);
         }
 
         public void DeleteAll()
         {
-            foreach (var derivedEntity in this.Items)
+            foreach (var entity in this.Items)
             {
-                derivedEntity.entity.Detach();
+                entity.Detach();
             }
             this.Items.RemoveAll((it) => true);
         }
@@ -102,9 +99,9 @@ namespace Server.Models.Utils.DAL.Common
             this.metadataSrv = null;
         }
 
-        public T UpdateEntity(Dto dto)
+        public Entity UpdateEntity(Dto dto)
         {
-            T newItem;
+            Entity newItem;
             // se cauta elementul in colectia existenta
             var found = this.FindByKey(dto);
             if (found == null)
@@ -126,23 +123,22 @@ namespace Server.Models.Utils.DAL.Common
 
         public void AttachEntitySet(List<Dto> dtos)
         {
-            var derivedEntityList = new List<IDerivedEntity>();
+            var entities = new List<Entity>();
             foreach (var dto in dtos)
             {
-                derivedEntityList.Add(this.CreateNewItem(dto));
+                entities.Add(this.CreateNewItem(dto));
             }
-            this.Items = derivedEntityList;
+            this.Items = entities;
         }
 
-        private T CreateNewItem(Dto dto)
+        private Entity CreateNewItem(Dto dto)
         {
             var entity = new Entity(this.entityTypeName, dto);
             entity.Attach(this.entitySets, this.metadataSrv);
-            var derivedEntity = (T)Activator.CreateInstance(this.derivedEntityType, new object[] { entity });
-            return derivedEntity;
+            return entity;
         }
 
-        private T Initialize(Dto dto, T derivedEntity)
+        private Entity Initialize(Dto dto, Entity entity)
         {
             //foreach (var prop in dto)
             //{
@@ -153,8 +149,8 @@ namespace Server.Models.Utils.DAL.Common
             // Toate referintele externe se fac la Entity asadar se poate
             // inlocui referinta la Dto fara a afecta integritatea referentiala
 
-            derivedEntity.entity.dto = dto;
-            return derivedEntity;
+            entity.dto = dto;
+            return entity;
         }
 
         private bool HaveSameKeysLocal(Dto localDto, Dto remoteDto)

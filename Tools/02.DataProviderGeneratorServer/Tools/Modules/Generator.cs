@@ -69,9 +69,10 @@ namespace Tools.Modules
                 .WriteLine();
 
             br.WriteLine("using Newtonsoft.Json;");
+            br.WriteLine("using Server.Models.Utils.DAL.Common;");
             br.WriteLine("using System;");
             br.WriteLine("using System.Collections.Generic;");
-            br.WriteLine("using Server.Models.Utils.DAL.Common;");
+            br.WriteLine("using System.Linq;");
             br.WriteLine("using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;");
             br.WriteLine();
 
@@ -90,7 +91,13 @@ namespace Tools.Modules
                 .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },")
                 .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }");
             br.EndBlock("};", false);
+            br.EndBlock("}");
+
+            br.WriteLine("public static DataService CreateDataServiceInstance()");
+            br.BeginBlock("{")
+                .WriteLine("return new DataService();");
             br.EndBlock("}", false);
+
             br.EndBlock("}");
 
             // LocalEntityViews
@@ -100,12 +107,12 @@ namespace Tools.Modules
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalEntity<{1}>(dataContext);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalEntity(dataContext);", es.name));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewLocalEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("public DataViewLocalEntity {0} {{ get {{ return this.GetPropertyValue(\"{1}\"); }} }}", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
 
@@ -116,12 +123,12 @@ namespace Tools.Modules
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteEntity<{1}>(dataViewDto, dataContext);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteEntity(dataViewDto, dataContext);", es.name));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewRemoteEntity<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("public DataViewRemoteEntity {0} {{ get {{ return this.GetPropertyValue(\"{1}\"); }} }}", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
 
@@ -132,12 +139,12 @@ namespace Tools.Modules
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalDto<{1}>(dataContext, metadataSrv);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewLocalDto(dataContext, metadataSrv);", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("public DataViewLocalDto<{1}> {0} {{ get {{ return this.GetPropertyValue<{1}>(); }} }}", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("public DataViewLocalDto {0} {{ get {{ return this.GetPropertyValue(\"{1}\"); }} }}", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
 
@@ -148,7 +155,7 @@ namespace Tools.Modules
             br.BeginBlock("{");
             foreach (var es in entitySets)
             {
-                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteDto<{1}>(dataViewDto);", es.name, es.entityTypeName));
+                br.WriteLine(string.Format("//this.[\"{0}\"] = new DataViewRemoteDto(dataViewDto);", es.name, es.entityTypeName));
             }
             br.EndBlock("}");
             foreach (var es in entitySets)
@@ -165,7 +172,7 @@ namespace Tools.Modules
                 var navigationProperties = et.Value.NavigationProperties ?? new Dictionary<string, MetadataSrv.NavigationProperty>();
 
                 // with constructor generator
-                br.WriteLine(string.Format("public sealed class {0} : IDerivedEntity", entityTypeName));
+                br.WriteLine(string.Format("public sealed class {0}", entityTypeName));
                 br.BeginBlock("{");
                 br.WriteLine(string.Format("public {0}(Entity entity)", entityTypeName));
                 br.BeginBlock("{")

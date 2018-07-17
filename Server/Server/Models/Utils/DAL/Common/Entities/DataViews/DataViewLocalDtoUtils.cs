@@ -52,7 +52,7 @@ namespace Server.Models.Utils.DAL.Common
                     }
                     if (!resultSerialData.RelatedItems.ContainsKey(entityTypeNameLocal))
                     {
-                        resultSerialData.RelatedItems[entityTypeNameLocal] = relatedEntityItems.Select(it => it.entity.dto);
+                        resultSerialData.RelatedItems[entityTypeNameLocal] = relatedEntityItems.Select(entity => entity.dto);
                     }
                     else
                     {
@@ -64,13 +64,13 @@ namespace Server.Models.Utils.DAL.Common
             }
         }
 
-        public static void PushMultiIfNotThere(IEnumerable<IDerivedEntity> sourceList, List<Dto> destinationList)
+        public static void PushMultiIfNotThere(IEnumerable<Entity> sourceList, List<Dto> destinationList)
         {
             foreach (var item in sourceList)
             {
-                if (!destinationList.Contains(item.entity.dto))
+                if (!destinationList.Contains(item.dto))
                 {
-                    destinationList.Add(item.entity.dto);
+                    destinationList.Add(item.dto);
                 }
             }
         }

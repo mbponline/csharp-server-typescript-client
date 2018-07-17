@@ -140,12 +140,10 @@
     <Compile Include="Models\Utils\DAL\Common\Entities\Types\ViewType.cs" />
     <Compile Include="Controllers\Dtos\CrudController.cs" />
     <Compile Include="Controllers\Dtos\CrudOperationsController.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\IDerivedEntity.cs" />
     <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\LocalDtoViewsBase.cs" />
     <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\LocalEntityViewsBase.cs" />
     <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\RemoteDtoViewsBase.cs" />
     <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\RemoteEntityViewsBase.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\IEntitySet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\metadata_cli.json" />

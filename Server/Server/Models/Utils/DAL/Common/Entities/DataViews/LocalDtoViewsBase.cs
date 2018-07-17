@@ -13,18 +13,16 @@ namespace Server.Models.Utils.DAL.Common
             this.metadataSrv = metadataSrv;
         }
 
-        protected DataViewLocalDto<T> GetPropertyValue<T>(/*string entityTypeName*/)
-            where T : class, IDerivedEntity
+        protected DataViewLocalDto GetPropertyValue(string entityTypeName)
         {
-            var entityTypeName = typeof(T).Name;
-            DataViewLocalDto<T> instance;
+            DataViewLocalDto instance;
             if (this.ContainsKey(entityTypeName))
             {
-                instance = (DataViewLocalDto<T>)this[entityTypeName];
+                instance = (DataViewLocalDto)this[entityTypeName];
             }
             else
             {
-                instance = new DataViewLocalDto<T>(entityTypeName, this.dataContext, this.metadataSrv);
+                instance = new DataViewLocalDto(entityTypeName, this.dataContext, this.metadataSrv);
                 this[entityTypeName] = instance;
             }
             return instance;

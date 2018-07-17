@@ -8,9 +8,10 @@
 //------------------------------------------------------------------------------
 
 using Newtonsoft.Json;
+using Server.Models.Utils.DAL.Common;
 using System;
 using System.Collections.Generic;
-using Server.Models.Utils.DAL.Common;
+using System.Linq;
 using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Models.Utils.DAL
@@ -25,148 +26,153 @@ namespace Server.Models.Utils.DAL
                 Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }
             };
         }
+
+        public static DataService CreateDataServiceInstance()
+        {
+            return new DataService();
+        }
     }
 
     public class LocalEntityViews : LocalEntityViewsBase
     {
         public LocalEntityViews(DataContext dataContext) : base(dataContext)
         {
-            //this.["Actors"] = new DataViewLocalEntity<Actor>(dataContext);
-            //this.["Addresses"] = new DataViewLocalEntity<Address>(dataContext);
-            //this.["Categories"] = new DataViewLocalEntity<Category>(dataContext);
-            //this.["Cities"] = new DataViewLocalEntity<City>(dataContext);
-            //this.["Countries"] = new DataViewLocalEntity<Country>(dataContext);
-            //this.["Customers"] = new DataViewLocalEntity<Customer>(dataContext);
-            //this.["Films"] = new DataViewLocalEntity<Film>(dataContext);
-            //this.["FilmActors"] = new DataViewLocalEntity<FilmActor>(dataContext);
-            //this.["FilmCategories"] = new DataViewLocalEntity<FilmCategory>(dataContext);
-            //this.["FilmTexts"] = new DataViewLocalEntity<FilmText>(dataContext);
-            //this.["Inventories"] = new DataViewLocalEntity<Inventory>(dataContext);
-            //this.["Languages"] = new DataViewLocalEntity<Language>(dataContext);
-            //this.["Payments"] = new DataViewLocalEntity<Payment>(dataContext);
-            //this.["Rentals"] = new DataViewLocalEntity<Rental>(dataContext);
-            //this.["Staffs"] = new DataViewLocalEntity<Staff>(dataContext);
-            //this.["Stores"] = new DataViewLocalEntity<Store>(dataContext);
+            //this.["Actors"] = new DataViewLocalEntity(dataContext);
+            //this.["Addresses"] = new DataViewLocalEntity(dataContext);
+            //this.["Categories"] = new DataViewLocalEntity(dataContext);
+            //this.["Cities"] = new DataViewLocalEntity(dataContext);
+            //this.["Countries"] = new DataViewLocalEntity(dataContext);
+            //this.["Customers"] = new DataViewLocalEntity(dataContext);
+            //this.["Films"] = new DataViewLocalEntity(dataContext);
+            //this.["FilmActors"] = new DataViewLocalEntity(dataContext);
+            //this.["FilmCategories"] = new DataViewLocalEntity(dataContext);
+            //this.["FilmTexts"] = new DataViewLocalEntity(dataContext);
+            //this.["Inventories"] = new DataViewLocalEntity(dataContext);
+            //this.["Languages"] = new DataViewLocalEntity(dataContext);
+            //this.["Payments"] = new DataViewLocalEntity(dataContext);
+            //this.["Rentals"] = new DataViewLocalEntity(dataContext);
+            //this.["Staffs"] = new DataViewLocalEntity(dataContext);
+            //this.["Stores"] = new DataViewLocalEntity(dataContext);
         }
 
-        public DataViewLocalEntity<Actor> Actors { get { return this.GetPropertyValue<Actor>(); } }
-        public DataViewLocalEntity<Address> Addresses { get { return this.GetPropertyValue<Address>(); } }
-        public DataViewLocalEntity<Category> Categories { get { return this.GetPropertyValue<Category>(); } }
-        public DataViewLocalEntity<City> Cities { get { return this.GetPropertyValue<City>(); } }
-        public DataViewLocalEntity<Country> Countries { get { return this.GetPropertyValue<Country>(); } }
-        public DataViewLocalEntity<Customer> Customers { get { return this.GetPropertyValue<Customer>(); } }
-        public DataViewLocalEntity<Film> Films { get { return this.GetPropertyValue<Film>(); } }
-        public DataViewLocalEntity<FilmActor> FilmActors { get { return this.GetPropertyValue<FilmActor>(); } }
-        public DataViewLocalEntity<FilmCategory> FilmCategories { get { return this.GetPropertyValue<FilmCategory>(); } }
-        public DataViewLocalEntity<FilmText> FilmTexts { get { return this.GetPropertyValue<FilmText>(); } }
-        public DataViewLocalEntity<Inventory> Inventories { get { return this.GetPropertyValue<Inventory>(); } }
-        public DataViewLocalEntity<Language> Languages { get { return this.GetPropertyValue<Language>(); } }
-        public DataViewLocalEntity<Payment> Payments { get { return this.GetPropertyValue<Payment>(); } }
-        public DataViewLocalEntity<Rental> Rentals { get { return this.GetPropertyValue<Rental>(); } }
-        public DataViewLocalEntity<Staff> Staffs { get { return this.GetPropertyValue<Staff>(); } }
-        public DataViewLocalEntity<Store> Stores { get { return this.GetPropertyValue<Store>(); } }
+        public DataViewLocalEntity Actors { get { return this.GetPropertyValue("Actor"); } }
+        public DataViewLocalEntity Addresses { get { return this.GetPropertyValue("Address"); } }
+        public DataViewLocalEntity Categories { get { return this.GetPropertyValue("Category"); } }
+        public DataViewLocalEntity Cities { get { return this.GetPropertyValue("City"); } }
+        public DataViewLocalEntity Countries { get { return this.GetPropertyValue("Country"); } }
+        public DataViewLocalEntity Customers { get { return this.GetPropertyValue("Customer"); } }
+        public DataViewLocalEntity Films { get { return this.GetPropertyValue("Film"); } }
+        public DataViewLocalEntity FilmActors { get { return this.GetPropertyValue("FilmActor"); } }
+        public DataViewLocalEntity FilmCategories { get { return this.GetPropertyValue("FilmCategory"); } }
+        public DataViewLocalEntity FilmTexts { get { return this.GetPropertyValue("FilmText"); } }
+        public DataViewLocalEntity Inventories { get { return this.GetPropertyValue("Inventory"); } }
+        public DataViewLocalEntity Languages { get { return this.GetPropertyValue("Language"); } }
+        public DataViewLocalEntity Payments { get { return this.GetPropertyValue("Payment"); } }
+        public DataViewLocalEntity Rentals { get { return this.GetPropertyValue("Rental"); } }
+        public DataViewLocalEntity Staffs { get { return this.GetPropertyValue("Staff"); } }
+        public DataViewLocalEntity Stores { get { return this.GetPropertyValue("Store"); } }
     }
 
     public class RemoteEntityViews : RemoteEntityViewsBase
     {
         public RemoteEntityViews(DataViewDto dataViewDto, DataContext dataContext) : base(dataViewDto, dataContext)
         {
-            //this.["Actors"] = new DataViewRemoteEntity<Actor>(dataViewDto, dataContext);
-            //this.["Addresses"] = new DataViewRemoteEntity<Address>(dataViewDto, dataContext);
-            //this.["Categories"] = new DataViewRemoteEntity<Category>(dataViewDto, dataContext);
-            //this.["Cities"] = new DataViewRemoteEntity<City>(dataViewDto, dataContext);
-            //this.["Countries"] = new DataViewRemoteEntity<Country>(dataViewDto, dataContext);
-            //this.["Customers"] = new DataViewRemoteEntity<Customer>(dataViewDto, dataContext);
-            //this.["Films"] = new DataViewRemoteEntity<Film>(dataViewDto, dataContext);
-            //this.["FilmActors"] = new DataViewRemoteEntity<FilmActor>(dataViewDto, dataContext);
-            //this.["FilmCategories"] = new DataViewRemoteEntity<FilmCategory>(dataViewDto, dataContext);
-            //this.["FilmTexts"] = new DataViewRemoteEntity<FilmText>(dataViewDto, dataContext);
-            //this.["Inventories"] = new DataViewRemoteEntity<Inventory>(dataViewDto, dataContext);
-            //this.["Languages"] = new DataViewRemoteEntity<Language>(dataViewDto, dataContext);
-            //this.["Payments"] = new DataViewRemoteEntity<Payment>(dataViewDto, dataContext);
-            //this.["Rentals"] = new DataViewRemoteEntity<Rental>(dataViewDto, dataContext);
-            //this.["Staffs"] = new DataViewRemoteEntity<Staff>(dataViewDto, dataContext);
-            //this.["Stores"] = new DataViewRemoteEntity<Store>(dataViewDto, dataContext);
+            //this.["Actors"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Addresses"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Categories"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Cities"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Countries"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Customers"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Films"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["FilmActors"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["FilmCategories"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["FilmTexts"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Inventories"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Languages"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Payments"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Rentals"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Staffs"] = new DataViewRemoteEntity(dataViewDto, dataContext);
+            //this.["Stores"] = new DataViewRemoteEntity(dataViewDto, dataContext);
         }
 
-        public DataViewRemoteEntity<Actor> Actors { get { return this.GetPropertyValue<Actor>(); } }
-        public DataViewRemoteEntity<Address> Addresses { get { return this.GetPropertyValue<Address>(); } }
-        public DataViewRemoteEntity<Category> Categories { get { return this.GetPropertyValue<Category>(); } }
-        public DataViewRemoteEntity<City> Cities { get { return this.GetPropertyValue<City>(); } }
-        public DataViewRemoteEntity<Country> Countries { get { return this.GetPropertyValue<Country>(); } }
-        public DataViewRemoteEntity<Customer> Customers { get { return this.GetPropertyValue<Customer>(); } }
-        public DataViewRemoteEntity<Film> Films { get { return this.GetPropertyValue<Film>(); } }
-        public DataViewRemoteEntity<FilmActor> FilmActors { get { return this.GetPropertyValue<FilmActor>(); } }
-        public DataViewRemoteEntity<FilmCategory> FilmCategories { get { return this.GetPropertyValue<FilmCategory>(); } }
-        public DataViewRemoteEntity<FilmText> FilmTexts { get { return this.GetPropertyValue<FilmText>(); } }
-        public DataViewRemoteEntity<Inventory> Inventories { get { return this.GetPropertyValue<Inventory>(); } }
-        public DataViewRemoteEntity<Language> Languages { get { return this.GetPropertyValue<Language>(); } }
-        public DataViewRemoteEntity<Payment> Payments { get { return this.GetPropertyValue<Payment>(); } }
-        public DataViewRemoteEntity<Rental> Rentals { get { return this.GetPropertyValue<Rental>(); } }
-        public DataViewRemoteEntity<Staff> Staffs { get { return this.GetPropertyValue<Staff>(); } }
-        public DataViewRemoteEntity<Store> Stores { get { return this.GetPropertyValue<Store>(); } }
+        public DataViewRemoteEntity Actors { get { return this.GetPropertyValue("Actor"); } }
+        public DataViewRemoteEntity Addresses { get { return this.GetPropertyValue("Address"); } }
+        public DataViewRemoteEntity Categories { get { return this.GetPropertyValue("Category"); } }
+        public DataViewRemoteEntity Cities { get { return this.GetPropertyValue("City"); } }
+        public DataViewRemoteEntity Countries { get { return this.GetPropertyValue("Country"); } }
+        public DataViewRemoteEntity Customers { get { return this.GetPropertyValue("Customer"); } }
+        public DataViewRemoteEntity Films { get { return this.GetPropertyValue("Film"); } }
+        public DataViewRemoteEntity FilmActors { get { return this.GetPropertyValue("FilmActor"); } }
+        public DataViewRemoteEntity FilmCategories { get { return this.GetPropertyValue("FilmCategory"); } }
+        public DataViewRemoteEntity FilmTexts { get { return this.GetPropertyValue("FilmText"); } }
+        public DataViewRemoteEntity Inventories { get { return this.GetPropertyValue("Inventory"); } }
+        public DataViewRemoteEntity Languages { get { return this.GetPropertyValue("Language"); } }
+        public DataViewRemoteEntity Payments { get { return this.GetPropertyValue("Payment"); } }
+        public DataViewRemoteEntity Rentals { get { return this.GetPropertyValue("Rental"); } }
+        public DataViewRemoteEntity Staffs { get { return this.GetPropertyValue("Staff"); } }
+        public DataViewRemoteEntity Stores { get { return this.GetPropertyValue("Store"); } }
     }
 
     public class LocalDtoViews : LocalDtoViewsBase
     {
         public LocalDtoViews(DataContext dataContext, MetadataSrv.Metadata metadataSrv) : base(dataContext, metadataSrv)
         {
-            //this.["Actors"] = new DataViewLocalDto<Actor>(dataContext, metadataSrv);
-            //this.["Addresses"] = new DataViewLocalDto<Address>(dataContext, metadataSrv);
-            //this.["Categories"] = new DataViewLocalDto<Category>(dataContext, metadataSrv);
-            //this.["Cities"] = new DataViewLocalDto<City>(dataContext, metadataSrv);
-            //this.["Countries"] = new DataViewLocalDto<Country>(dataContext, metadataSrv);
-            //this.["Customers"] = new DataViewLocalDto<Customer>(dataContext, metadataSrv);
-            //this.["Films"] = new DataViewLocalDto<Film>(dataContext, metadataSrv);
-            //this.["FilmActors"] = new DataViewLocalDto<FilmActor>(dataContext, metadataSrv);
-            //this.["FilmCategories"] = new DataViewLocalDto<FilmCategory>(dataContext, metadataSrv);
-            //this.["FilmTexts"] = new DataViewLocalDto<FilmText>(dataContext, metadataSrv);
-            //this.["Inventories"] = new DataViewLocalDto<Inventory>(dataContext, metadataSrv);
-            //this.["Languages"] = new DataViewLocalDto<Language>(dataContext, metadataSrv);
-            //this.["Payments"] = new DataViewLocalDto<Payment>(dataContext, metadataSrv);
-            //this.["Rentals"] = new DataViewLocalDto<Rental>(dataContext, metadataSrv);
-            //this.["Staffs"] = new DataViewLocalDto<Staff>(dataContext, metadataSrv);
-            //this.["Stores"] = new DataViewLocalDto<Store>(dataContext, metadataSrv);
+            //this.["Actors"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Addresses"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Categories"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Cities"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Countries"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Customers"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Films"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["FilmActors"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["FilmCategories"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["FilmTexts"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Inventories"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Languages"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Payments"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Rentals"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Staffs"] = new DataViewLocalDto(dataContext, metadataSrv);
+            //this.["Stores"] = new DataViewLocalDto(dataContext, metadataSrv);
         }
 
-        public DataViewLocalDto<Actor> Actors { get { return this.GetPropertyValue<Actor>(); } }
-        public DataViewLocalDto<Address> Addresses { get { return this.GetPropertyValue<Address>(); } }
-        public DataViewLocalDto<Category> Categories { get { return this.GetPropertyValue<Category>(); } }
-        public DataViewLocalDto<City> Cities { get { return this.GetPropertyValue<City>(); } }
-        public DataViewLocalDto<Country> Countries { get { return this.GetPropertyValue<Country>(); } }
-        public DataViewLocalDto<Customer> Customers { get { return this.GetPropertyValue<Customer>(); } }
-        public DataViewLocalDto<Film> Films { get { return this.GetPropertyValue<Film>(); } }
-        public DataViewLocalDto<FilmActor> FilmActors { get { return this.GetPropertyValue<FilmActor>(); } }
-        public DataViewLocalDto<FilmCategory> FilmCategories { get { return this.GetPropertyValue<FilmCategory>(); } }
-        public DataViewLocalDto<FilmText> FilmTexts { get { return this.GetPropertyValue<FilmText>(); } }
-        public DataViewLocalDto<Inventory> Inventories { get { return this.GetPropertyValue<Inventory>(); } }
-        public DataViewLocalDto<Language> Languages { get { return this.GetPropertyValue<Language>(); } }
-        public DataViewLocalDto<Payment> Payments { get { return this.GetPropertyValue<Payment>(); } }
-        public DataViewLocalDto<Rental> Rentals { get { return this.GetPropertyValue<Rental>(); } }
-        public DataViewLocalDto<Staff> Staffs { get { return this.GetPropertyValue<Staff>(); } }
-        public DataViewLocalDto<Store> Stores { get { return this.GetPropertyValue<Store>(); } }
+        public DataViewLocalDto Actors { get { return this.GetPropertyValue("Actor"); } }
+        public DataViewLocalDto Addresses { get { return this.GetPropertyValue("Address"); } }
+        public DataViewLocalDto Categories { get { return this.GetPropertyValue("Category"); } }
+        public DataViewLocalDto Cities { get { return this.GetPropertyValue("City"); } }
+        public DataViewLocalDto Countries { get { return this.GetPropertyValue("Country"); } }
+        public DataViewLocalDto Customers { get { return this.GetPropertyValue("Customer"); } }
+        public DataViewLocalDto Films { get { return this.GetPropertyValue("Film"); } }
+        public DataViewLocalDto FilmActors { get { return this.GetPropertyValue("FilmActor"); } }
+        public DataViewLocalDto FilmCategories { get { return this.GetPropertyValue("FilmCategory"); } }
+        public DataViewLocalDto FilmTexts { get { return this.GetPropertyValue("FilmText"); } }
+        public DataViewLocalDto Inventories { get { return this.GetPropertyValue("Inventory"); } }
+        public DataViewLocalDto Languages { get { return this.GetPropertyValue("Language"); } }
+        public DataViewLocalDto Payments { get { return this.GetPropertyValue("Payment"); } }
+        public DataViewLocalDto Rentals { get { return this.GetPropertyValue("Rental"); } }
+        public DataViewLocalDto Staffs { get { return this.GetPropertyValue("Staff"); } }
+        public DataViewLocalDto Stores { get { return this.GetPropertyValue("Store"); } }
     }
 
     public class RemoteDtoViews : RemoteDtoViewsBase
     {
         public RemoteDtoViews(DataViewDto dataViewDto) : base(dataViewDto)
         {
-            //this.["Actors"] = new DataViewRemoteDto<Actor>(dataViewDto);
-            //this.["Addresses"] = new DataViewRemoteDto<Address>(dataViewDto);
-            //this.["Categories"] = new DataViewRemoteDto<Category>(dataViewDto);
-            //this.["Cities"] = new DataViewRemoteDto<City>(dataViewDto);
-            //this.["Countries"] = new DataViewRemoteDto<Country>(dataViewDto);
-            //this.["Customers"] = new DataViewRemoteDto<Customer>(dataViewDto);
-            //this.["Films"] = new DataViewRemoteDto<Film>(dataViewDto);
-            //this.["FilmActors"] = new DataViewRemoteDto<FilmActor>(dataViewDto);
-            //this.["FilmCategories"] = new DataViewRemoteDto<FilmCategory>(dataViewDto);
-            //this.["FilmTexts"] = new DataViewRemoteDto<FilmText>(dataViewDto);
-            //this.["Inventories"] = new DataViewRemoteDto<Inventory>(dataViewDto);
-            //this.["Languages"] = new DataViewRemoteDto<Language>(dataViewDto);
-            //this.["Payments"] = new DataViewRemoteDto<Payment>(dataViewDto);
-            //this.["Rentals"] = new DataViewRemoteDto<Rental>(dataViewDto);
-            //this.["Staffs"] = new DataViewRemoteDto<Staff>(dataViewDto);
-            //this.["Stores"] = new DataViewRemoteDto<Store>(dataViewDto);
+            //this.["Actors"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Addresses"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Categories"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Cities"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Countries"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Customers"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Films"] = new DataViewRemoteDto(dataViewDto);
+            //this.["FilmActors"] = new DataViewRemoteDto(dataViewDto);
+            //this.["FilmCategories"] = new DataViewRemoteDto(dataViewDto);
+            //this.["FilmTexts"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Inventories"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Languages"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Payments"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Rentals"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Staffs"] = new DataViewRemoteDto(dataViewDto);
+            //this.["Stores"] = new DataViewRemoteDto(dataViewDto);
         }
 
         public DataViewRemoteDto Actors { get { return this.GetPropertyValue("Actor"); } }
@@ -187,7 +193,7 @@ namespace Server.Models.Utils.DAL
         public DataViewRemoteDto Stores { get { return this.GetPropertyValue("Store"); } }
     }
 
-    public sealed class Actor : IDerivedEntity
+    public sealed class Actor
     {
         public Actor(Entity entity)
         {
@@ -203,11 +209,11 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<FilmActor> FilmActors { get { return this.entity.NavigateMulti<FilmActor>("Actor", "FilmActors"); } }
+        public IEnumerable<FilmActor> FilmActors { get { return this.entity.NavigateMulti("Actor", "FilmActors").Select( it => new FilmActor(it) ); } }
         
     }
 
-    public sealed class Address : IDerivedEntity
+    public sealed class Address
     {
         public Address(Entity entity)
         {
@@ -228,17 +234,17 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public City City { get { return this.entity.NavigateSingle<City>("Address", "City"); } }
+        public City City { get { var it = this.entity.NavigateSingle("Address", "City"); if (it != null) { return new City(it); } else { return null; } } }
         [JsonIgnore]
-        public IEnumerable<Customer> Customers { get { return this.entity.NavigateMulti<Customer>("Address", "Customers"); } }
+        public IEnumerable<Customer> Customers { get { return this.entity.NavigateMulti("Address", "Customers").Select( it => new Customer(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Staff> Staffs { get { return this.entity.NavigateMulti<Staff>("Address", "Staffs"); } }
+        public IEnumerable<Staff> Staffs { get { return this.entity.NavigateMulti("Address", "Staffs").Select( it => new Staff(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Store> Stores { get { return this.entity.NavigateMulti<Store>("Address", "Stores"); } }
+        public IEnumerable<Store> Stores { get { return this.entity.NavigateMulti("Address", "Stores").Select( it => new Store(it) ); } }
         
     }
 
-    public sealed class Category : IDerivedEntity
+    public sealed class Category
     {
         public Category(Entity entity)
         {
@@ -253,11 +259,11 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<FilmCategory> FilmCategories { get { return this.entity.NavigateMulti<FilmCategory>("Category", "FilmCategories"); } }
+        public IEnumerable<FilmCategory> FilmCategories { get { return this.entity.NavigateMulti("Category", "FilmCategories").Select( it => new FilmCategory(it) ); } }
         
     }
 
-    public sealed class City : IDerivedEntity
+    public sealed class City
     {
         public City(Entity entity)
         {
@@ -273,13 +279,13 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<Address> Addresses { get { return this.entity.NavigateMulti<Address>("City", "Addresses"); } }
+        public IEnumerable<Address> Addresses { get { return this.entity.NavigateMulti("City", "Addresses").Select( it => new Address(it) ); } }
         [JsonIgnore]
-        public Country Country { get { return this.entity.NavigateSingle<Country>("City", "Country"); } }
+        public Country Country { get { var it = this.entity.NavigateSingle("City", "Country"); if (it != null) { return new Country(it); } else { return null; } } }
         
     }
 
-    public sealed class Country : IDerivedEntity
+    public sealed class Country
     {
         public Country(Entity entity)
         {
@@ -294,11 +300,11 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<City> Cities { get { return this.entity.NavigateMulti<City>("Country", "Cities"); } }
+        public IEnumerable<City> Cities { get { return this.entity.NavigateMulti("Country", "Cities").Select( it => new City(it) ); } }
         
     }
 
-    public sealed class Customer : IDerivedEntity
+    public sealed class Customer
     {
         public Customer(Entity entity)
         {
@@ -319,17 +325,17 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Store Store { get { return this.entity.NavigateSingle<Store>("Customer", "Store"); } }
+        public Store Store { get { var it = this.entity.NavigateSingle("Customer", "Store"); if (it != null) { return new Store(it); } else { return null; } } }
         [JsonIgnore]
-        public Address Address { get { return this.entity.NavigateSingle<Address>("Customer", "Address"); } }
+        public Address Address { get { var it = this.entity.NavigateSingle("Customer", "Address"); if (it != null) { return new Address(it); } else { return null; } } }
         [JsonIgnore]
-        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti<Payment>("Customer", "Payments"); } }
+        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti("Customer", "Payments").Select( it => new Payment(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti<Rental>("Customer", "Rentals"); } }
+        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti("Customer", "Rentals").Select( it => new Rental(it) ); } }
         
     }
 
-    public sealed class Film : IDerivedEntity
+    public sealed class Film
     {
         public Film(Entity entity)
         {
@@ -354,19 +360,19 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Language Language { get { return this.entity.NavigateSingle<Language>("Film", "Language"); } }
+        public Language Language { get { var it = this.entity.NavigateSingle("Film", "Language"); if (it != null) { return new Language(it); } else { return null; } } }
         [JsonIgnore]
-        public Language Language1 { get { return this.entity.NavigateSingle<Language>("Film", "Language1"); } }
+        public Language Language1 { get { var it = this.entity.NavigateSingle("Film", "Language1"); if (it != null) { return new Language(it); } else { return null; } } }
         [JsonIgnore]
-        public IEnumerable<FilmActor> FilmActors { get { return this.entity.NavigateMulti<FilmActor>("Film", "FilmActors"); } }
+        public IEnumerable<FilmActor> FilmActors { get { return this.entity.NavigateMulti("Film", "FilmActors").Select( it => new FilmActor(it) ); } }
         [JsonIgnore]
-        public IEnumerable<FilmCategory> FilmCategories { get { return this.entity.NavigateMulti<FilmCategory>("Film", "FilmCategories"); } }
+        public IEnumerable<FilmCategory> FilmCategories { get { return this.entity.NavigateMulti("Film", "FilmCategories").Select( it => new FilmCategory(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Inventory> Inventories { get { return this.entity.NavigateMulti<Inventory>("Film", "Inventories"); } }
+        public IEnumerable<Inventory> Inventories { get { return this.entity.NavigateMulti("Film", "Inventories").Select( it => new Inventory(it) ); } }
         
     }
 
-    public sealed class FilmActor : IDerivedEntity
+    public sealed class FilmActor
     {
         public FilmActor(Entity entity)
         {
@@ -381,13 +387,13 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Actor Actor { get { return this.entity.NavigateSingle<Actor>("FilmActor", "Actor"); } }
+        public Actor Actor { get { var it = this.entity.NavigateSingle("FilmActor", "Actor"); if (it != null) { return new Actor(it); } else { return null; } } }
         [JsonIgnore]
-        public Film Film { get { return this.entity.NavigateSingle<Film>("FilmActor", "Film"); } }
+        public Film Film { get { var it = this.entity.NavigateSingle("FilmActor", "Film"); if (it != null) { return new Film(it); } else { return null; } } }
         
     }
 
-    public sealed class FilmCategory : IDerivedEntity
+    public sealed class FilmCategory
     {
         public FilmCategory(Entity entity)
         {
@@ -402,13 +408,13 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Film Film { get { return this.entity.NavigateSingle<Film>("FilmCategory", "Film"); } }
+        public Film Film { get { var it = this.entity.NavigateSingle("FilmCategory", "Film"); if (it != null) { return new Film(it); } else { return null; } } }
         [JsonIgnore]
-        public Category Category { get { return this.entity.NavigateSingle<Category>("FilmCategory", "Category"); } }
+        public Category Category { get { var it = this.entity.NavigateSingle("FilmCategory", "Category"); if (it != null) { return new Category(it); } else { return null; } } }
         
     }
 
-    public sealed class FilmText : IDerivedEntity
+    public sealed class FilmText
     {
         public FilmText(Entity entity)
         {
@@ -425,7 +431,7 @@ namespace Server.Models.Utils.DAL
         
     }
 
-    public sealed class Inventory : IDerivedEntity
+    public sealed class Inventory
     {
         public Inventory(Entity entity)
         {
@@ -441,15 +447,15 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Film Film { get { return this.entity.NavigateSingle<Film>("Inventory", "Film"); } }
+        public Film Film { get { var it = this.entity.NavigateSingle("Inventory", "Film"); if (it != null) { return new Film(it); } else { return null; } } }
         [JsonIgnore]
-        public Store Store { get { return this.entity.NavigateSingle<Store>("Inventory", "Store"); } }
+        public Store Store { get { var it = this.entity.NavigateSingle("Inventory", "Store"); if (it != null) { return new Store(it); } else { return null; } } }
         [JsonIgnore]
-        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti<Rental>("Inventory", "Rentals"); } }
+        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti("Inventory", "Rentals").Select( it => new Rental(it) ); } }
         
     }
 
-    public sealed class Language : IDerivedEntity
+    public sealed class Language
     {
         public Language(Entity entity)
         {
@@ -464,13 +470,13 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<Film> Films { get { return this.entity.NavigateMulti<Film>("Language", "Films"); } }
+        public IEnumerable<Film> Films { get { return this.entity.NavigateMulti("Language", "Films").Select( it => new Film(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Film> Films1 { get { return this.entity.NavigateMulti<Film>("Language", "Films1"); } }
+        public IEnumerable<Film> Films1 { get { return this.entity.NavigateMulti("Language", "Films1").Select( it => new Film(it) ); } }
         
     }
 
-    public sealed class Payment : IDerivedEntity
+    public sealed class Payment
     {
         public Payment(Entity entity)
         {
@@ -489,15 +495,15 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public Customer Customer { get { return this.entity.NavigateSingle<Customer>("Payment", "Customer"); } }
+        public Customer Customer { get { var it = this.entity.NavigateSingle("Payment", "Customer"); if (it != null) { return new Customer(it); } else { return null; } } }
         [JsonIgnore]
-        public Staff Staff { get { return this.entity.NavigateSingle<Staff>("Payment", "Staff"); } }
+        public Staff Staff { get { var it = this.entity.NavigateSingle("Payment", "Staff"); if (it != null) { return new Staff(it); } else { return null; } } }
         [JsonIgnore]
-        public Rental Rental { get { return this.entity.NavigateSingle<Rental>("Payment", "Rental"); } }
+        public Rental Rental { get { var it = this.entity.NavigateSingle("Payment", "Rental"); if (it != null) { return new Rental(it); } else { return null; } } }
         
     }
 
-    public sealed class Rental : IDerivedEntity
+    public sealed class Rental
     {
         public Rental(Entity entity)
         {
@@ -516,17 +522,17 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti<Payment>("Rental", "Payments"); } }
+        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti("Rental", "Payments").Select( it => new Payment(it) ); } }
         [JsonIgnore]
-        public Inventory Inventory { get { return this.entity.NavigateSingle<Inventory>("Rental", "Inventory"); } }
+        public Inventory Inventory { get { var it = this.entity.NavigateSingle("Rental", "Inventory"); if (it != null) { return new Inventory(it); } else { return null; } } }
         [JsonIgnore]
-        public Customer Customer { get { return this.entity.NavigateSingle<Customer>("Rental", "Customer"); } }
+        public Customer Customer { get { var it = this.entity.NavigateSingle("Rental", "Customer"); if (it != null) { return new Customer(it); } else { return null; } } }
         [JsonIgnore]
-        public Staff Staff { get { return this.entity.NavigateSingle<Staff>("Rental", "Staff"); } }
+        public Staff Staff { get { var it = this.entity.NavigateSingle("Rental", "Staff"); if (it != null) { return new Staff(it); } else { return null; } } }
         
     }
 
-    public sealed class Staff : IDerivedEntity
+    public sealed class Staff
     {
         public Staff(Entity entity)
         {
@@ -549,19 +555,19 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti<Payment>("Staff", "Payments"); } }
+        public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti("Staff", "Payments").Select( it => new Payment(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti<Rental>("Staff", "Rentals"); } }
+        public IEnumerable<Rental> Rentals { get { return this.entity.NavigateMulti("Staff", "Rentals").Select( it => new Rental(it) ); } }
         [JsonIgnore]
-        public Address Address { get { return this.entity.NavigateSingle<Address>("Staff", "Address"); } }
+        public Address Address { get { var it = this.entity.NavigateSingle("Staff", "Address"); if (it != null) { return new Address(it); } else { return null; } } }
         [JsonIgnore]
-        public Store Store { get { return this.entity.NavigateSingle<Store>("Staff", "Store"); } }
+        public Store Store { get { var it = this.entity.NavigateSingle("Staff", "Store"); if (it != null) { return new Store(it); } else { return null; } } }
         [JsonIgnore]
-        public IEnumerable<Store> Stores { get { return this.entity.NavigateMulti<Store>("Staff", "Stores"); } }
+        public IEnumerable<Store> Stores { get { return this.entity.NavigateMulti("Staff", "Stores").Select( it => new Store(it) ); } }
         
     }
 
-    public sealed class Store : IDerivedEntity
+    public sealed class Store
     {
         public Store(Entity entity)
         {
@@ -577,15 +583,15 @@ namespace Server.Models.Utils.DAL
         public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
         
         [JsonIgnore]
-        public IEnumerable<Customer> Customers { get { return this.entity.NavigateMulti<Customer>("Store", "Customers"); } }
+        public IEnumerable<Customer> Customers { get { return this.entity.NavigateMulti("Store", "Customers").Select( it => new Customer(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Inventory> Inventories { get { return this.entity.NavigateMulti<Inventory>("Store", "Inventories"); } }
+        public IEnumerable<Inventory> Inventories { get { return this.entity.NavigateMulti("Store", "Inventories").Select( it => new Inventory(it) ); } }
         [JsonIgnore]
-        public IEnumerable<Staff> Staffs { get { return this.entity.NavigateMulti<Staff>("Store", "Staffs"); } }
+        public IEnumerable<Staff> Staffs { get { return this.entity.NavigateMulti("Store", "Staffs").Select( it => new Staff(it) ); } }
         [JsonIgnore]
-        public Staff Staff { get { return this.entity.NavigateSingle<Staff>("Store", "Staff"); } }
+        public Staff Staff { get { var it = this.entity.NavigateSingle("Store", "Staff"); if (it != null) { return new Staff(it); } else { return null; } } }
         [JsonIgnore]
-        public Address Address { get { return this.entity.NavigateSingle<Address>("Store", "Address"); } }
+        public Address Address { get { var it = this.entity.NavigateSingle("Store", "Address"); if (it != null) { return new Address(it); } else { return null; } } }
         
     }
 
