@@ -60,8 +60,11 @@ namespace Server.Controllers.Dtos
             {
                 var test0 = it.FilmId;
                 var test1 = it.FilmActors;
-                var test2 = test1.FirstOrDefault();
-                var test3 = test2.Actor;
+                if (test1.Any())
+                {
+                    var test2 = test1.FirstOrDefault();
+                    var test3 = test2.Actor;
+                }
                 var test4 = it.FilmCategories;
             }
 
