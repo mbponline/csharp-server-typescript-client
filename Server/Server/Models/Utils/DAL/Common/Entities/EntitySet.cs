@@ -157,7 +157,7 @@ namespace Server.Models.Utils.DAL.Common
         {
             for (int i = 0; i < this.key.Length; i++)
             {
-                if ((int)localDto[this.key[i]] != (int)remoteDto[this.key[i]])
+                if (!localDto[this.key[i]].Equals(remoteDto[this.key[i]]))
                 {
                     return false;
                 }
@@ -169,7 +169,7 @@ namespace Server.Models.Utils.DAL.Common
         {
             for (int i = 0; i < keyLocal.Length; i++)
             {
-                if ((int)localDto[keyLocal[i]] != (int)remoteDto[keyRemote[i]])
+                if (!localDto[keyLocal[i]].Equals(remoteDto[keyRemote[i]]))
                 {
                     return false;
                 }
