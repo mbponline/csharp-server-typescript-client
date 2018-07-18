@@ -8,9 +8,11 @@
 //------------------------------------------------------------------------------
 
 using Newtonsoft.Json;
+using Server.Models.Utils.DAL.Common;
 using System;
 using System.Collections.Generic;
-using Server.Models.Utils.DAL.Common;
+using System.Configuration;
+using System.Web.Hosting;
 using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Models.Utils.DAL
@@ -24,6 +26,14 @@ namespace Server.Models.Utils.DAL
                 Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },
                 Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }
             };
+        }
+
+        public static DataService CreateDataServiceInstance()
+        {
+            var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var dataService = new DataService(pathMetadata, connectionString);
+            return dataService;
         }
     }
 

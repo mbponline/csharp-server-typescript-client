@@ -9,8 +9,8 @@
         public DataContext DataContext { get; private set; }
         public ServiceLocation<TLocalEntity, TLocalDto, TRemoteEntity, TRemoteDto> From { get; set; }
 
-        protected DataServiceEntity(string metadataFileName = "", string connectionString = "")
-            : base(metadataFileName, connectionString)
+        protected DataServiceEntity(string pathMetadata, string connectionString)
+            : base(pathMetadata, connectionString)
         {
             this.DataContext = new DataContext(this.MetadataSrv);
         }
