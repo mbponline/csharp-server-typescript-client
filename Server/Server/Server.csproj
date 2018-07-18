@@ -41,9 +41,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -77,9 +74,6 @@
     <Reference Include="System.Web.Http.WebHost">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -96,59 +90,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\NavigationResult .cs" />
-    <Compile Include="Models\Utils\DAL\DataProvider.cs" />
-    <Compile Include="Models\Utils\DAL\DataProviderDto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\DalUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ApiProvider.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ApiProviderUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataServiceDto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DialectUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\QueryUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\DataAdapterCud.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataViewDto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\DatabaseOperations.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\DataAdapterRead.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\Types\EntityTypeQueries.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataAdapter\Types\QueryResult.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\DataUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\DataUtils\NavigationInclude.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\EntityType.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Metadata.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Multiplicity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\NavigationProperty.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\MetadataSrv\Property.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialData.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialExtensions.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialResponse.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSerialUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\ResultSerial\ResultSingleSerialData.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Types\Dto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Types\FilterExpand.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Types\QueryObject.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Dtos\Types\QueryParams.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\ApiProvider.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataContext.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataServiceEntity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Entity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\EntitySet.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\DataViewLocalDto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\DataViewLocalDtoUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\DataViewLocalEntity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\DataViewRemoteDto.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\DataViewRemoteEntity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\NavigationHelper\NavigationHelper.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\NavigationHelper\NavigationHelperUtils.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\ServiceLocation.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\ViewType.cs" />
+    <Compile Include="Models\DataAccess\DataProvider.cs" />
+    <Compile Include="Models\DataAccess\DataProviderDto.cs" />
     <Compile Include="Controllers\Dtos\CrudController.cs" />
     <Compile Include="Controllers\Dtos\CrudOperationsController.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\IDerivedEntity.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\LocalDtoViewsBase.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\LocalEntityViewsBase.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\RemoteDtoViewsBase.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\DataViews\RemoteEntityViewsBase.cs" />
-    <Compile Include="Models\Utils\DAL\Common\Entities\Types\IEntitySet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\metadata_cli.json" />
@@ -158,6 +103,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\metadata_srv.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NavyBlueDtos\NavyBlueDtos.csproj">
+      <Project>{1520b817-52f2-425a-a008-389b58c0e6c6}</Project>
+      <Name>NavyBlueDtos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NavyBlueEntities\NavyBlueEntities.csproj">
+      <Project>{a6430c00-c28d-4fae-a66a-ea2d7d21b4d8}</Project>
+      <Name>NavyBlueEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

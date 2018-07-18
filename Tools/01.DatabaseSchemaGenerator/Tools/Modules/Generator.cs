@@ -147,7 +147,7 @@ namespace Tools.Modules
                 Dialect = "MYSQL",
                 Version = "v0.0.1",
                 Description = description,
-                Namespace = "Server.Models.Utils.DAL",
+                Namespace = "Server.Models.DataAccess",
                 Multiplicity = new MetadataSrv.Multiplicity()
                 {
                     Multi = "multi",
