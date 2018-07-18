@@ -11,7 +11,9 @@ using Newtonsoft.Json;
 using Server.Models.Utils.DAL.Common;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Web.Hosting;
 using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;
 
 namespace Server.Models.Utils.DAL
@@ -29,7 +31,10 @@ namespace Server.Models.Utils.DAL
 
         public static DataService CreateDataServiceInstance()
         {
-            return new DataService();
+            var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var dataService = new DataService(pathMetadata, connectionString);
+            return dataService;
         }
     }
 

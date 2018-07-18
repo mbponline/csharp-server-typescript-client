@@ -12,7 +12,7 @@ namespace Server.Controllers.Dtos
     {
         public CrudOperationsController()
         {
-            this.dataServiceDto = new DataServiceDto();
+            this.dataServiceDto = DataProviderDto.CreateDataServiceInstance();
         }
 
         private readonly DataServiceDto dataServiceDto;

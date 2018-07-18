@@ -72,7 +72,9 @@ namespace Tools.Modules
             br.WriteLine("using Server.Models.Utils.DAL.Common;");
             br.WriteLine("using System;");
             br.WriteLine("using System.Collections.Generic;");
+            br.WriteLine("using System.Configuration;");
             br.WriteLine("using System.Linq;");
+            br.WriteLine("using System.Web.Hosting;");
             br.WriteLine("using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;");
             br.WriteLine();
 
@@ -95,7 +97,10 @@ namespace Tools.Modules
 
             br.WriteLine("public static DataService CreateDataServiceInstance()");
             br.BeginBlock("{")
-                .WriteLine("return new DataService();");
+                .WriteLine("var pathMetadata = HostingEnvironment.MapPath(@\"~/App_Data\");")
+                .WriteLine("var connectionString = ConfigurationManager.ConnectionStrings[\"DefaultConnection\"].ConnectionString;")
+                .WriteLine("var dataService = new DataService(pathMetadata, connectionString);")
+                .WriteLine("return dataService;");
             br.EndBlock("}", false);
 
             br.EndBlock("}");
