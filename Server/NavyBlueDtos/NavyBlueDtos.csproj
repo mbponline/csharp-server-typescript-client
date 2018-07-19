@@ -49,8 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\ApiProvider.cs" />
-    <Compile Include="Modules\ApiProviderUtils.cs" />
+    <Compile Include="Modules\ApiProviderDto.cs" />
+    <Compile Include="Modules\ApiProviderDtoUtils.cs" />
     <Compile Include="Modules\DataAdapter\DataAdapterCud.cs" />
     <Compile Include="Modules\DataAdapter\DataAdapterRead.cs" />
     <Compile Include="Modules\DataAdapter\DatabaseOperations.cs" />

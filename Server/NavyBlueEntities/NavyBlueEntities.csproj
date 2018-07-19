@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\ApiProvider.cs" />
+    <Compile Include="Modules\ApiProviderEntity.cs" />
     <Compile Include="Modules\DataContext.cs" />
     <Compile Include="Modules\DataServiceEntity.cs" />
     <Compile Include="Modules\DataViews\DataViewLocalDto.cs" />
