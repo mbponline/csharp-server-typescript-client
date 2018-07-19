@@ -2,7 +2,7 @@
 
 namespace NavyBlueEntities
 {
-    public abstract class DataServiceEntity<TLocalEntity, TLocalDto, TRemoteEntity, TRemoteDto> : DataServiceDto
+    public abstract class DataServiceEntity<TLocalEntity, TLocalDto, TRemoteEntity, TRemoteDto>
         where TLocalEntity : LocalEntityViewsBase
         where TLocalDto : LocalDtoViewsBase
         where TRemoteEntity : RemoteEntityViewsBase
@@ -12,11 +12,13 @@ namespace NavyBlueEntities
         public ServiceLocation<TLocalEntity, TLocalDto, TRemoteEntity, TRemoteDto> From { get; set; }
         public ApiProviderEntity ApiProviderEntity { get; private set; }
 
-        protected DataServiceEntity(string pathMetadata, string connectionString)
-            : base(pathMetadata, connectionString)
+        private readonly DataServiceDto dataServiceDto;
+
+        protected DataServiceEntity(DataServiceDto dataServiceDto)
         {
-            this.DataContext = new DataContext(this.MetadataSrv);
-            this.ApiProviderEntity = new ApiProviderEntity(this.ApiProviderDto);
+            this.dataServiceDto = dataServiceDto;
+            this.DataContext = new DataContext(this.dataServiceDto.MetadataSrv);
+            this.ApiProviderEntity = new ApiProviderEntity(this.dataServiceDto.ApiProviderDto);
         }
 
     }

@@ -21,12 +21,12 @@ namespace Server.Models.DataAccess
 {
     public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>
     {
-        public DataService(string pathMetadata, string connectionString) : base(pathMetadata, connectionString)
+        public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)
         {
             this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()
             {
-                Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },
-                Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }
+                Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, dataServiceDto.MetadataSrv) },
+                Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(dataServiceDto.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(dataServiceDto.DataViewDto) }
             };
         }
 
@@ -34,7 +34,8 @@ namespace Server.Models.DataAccess
         {
             var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            var dataService = new DataService(pathMetadata, connectionString);
+            var dataServiceDto = new DataServiceDto(pathMetadata, connectionString);
+            var dataService = new DataService(dataServiceDto);
             return dataService;
         }
     }

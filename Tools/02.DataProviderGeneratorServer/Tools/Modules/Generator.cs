@@ -87,12 +87,12 @@ namespace Tools.Modules
             // DataService
             br.WriteLine("public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>");
             br.BeginBlock("{");
-            br.WriteLine("public DataService(string pathMetadata, string connectionString) : base(pathMetadata, connectionString)");
+            br.WriteLine("public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)");
             br.BeginBlock("{");
             br.WriteLine("this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()");
             br.BeginBlock("{")
-                .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, this.MetadataSrv) },")
-                .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(this.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(this.DataViewDto) }");
+                .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, dataServiceDto.MetadataSrv) },")
+                .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(dataServiceDto.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(dataServiceDto.DataViewDto) }");
             br.EndBlock("};", false);
             br.EndBlock("}");
 
@@ -100,7 +100,8 @@ namespace Tools.Modules
             br.BeginBlock("{")
                 .WriteLine("var pathMetadata = HostingEnvironment.MapPath(@\"~/App_Data\");")
                 .WriteLine("var connectionString = ConfigurationManager.ConnectionStrings[\"DefaultConnection\"].ConnectionString;")
-                .WriteLine("var dataService = new DataService(pathMetadata, connectionString);")
+                .WriteLine("var dataServiceDto = new DataServiceDto(pathMetadata, connectionString);")
+                .WriteLine("var dataService = new DataService(dataServiceDto);")
                 .WriteLine("return dataService;");
             br.EndBlock("}", false);
 
