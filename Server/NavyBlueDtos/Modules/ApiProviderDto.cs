@@ -7,11 +7,13 @@ namespace NavyBlueDtos
     {
         private readonly MetadataSrv.Metadata metadataSrv;
         private readonly DataViewDto dataViewDto;
+        private readonly ResultSerialUtils resultSerialUtils;
 
-        public ApiProviderDto(MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto)
+        public ApiProviderDto(MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto, ResultSerialUtils resultSerialUtils)
         {
             this.metadataSrv = metadataSrv;
             this.dataViewDto = dataViewDto;
+            this.resultSerialUtils = resultSerialUtils;
         }
 
         public ResultSerialResponse HandleGet(string entitySetName, QueryParams queryParams)
@@ -19,7 +21,7 @@ namespace NavyBlueDtos
             entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
             var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
-            var resultSerialResponse = ResultSerialUtils.FetchResponseData(entityTypeName, queryObject, "crud", this.metadataSrv, this.dataViewDto);
+            var resultSerialResponse = this.resultSerialUtils.FetchResponseData(entityTypeName, queryObject);
             return resultSerialResponse;
         }
 
