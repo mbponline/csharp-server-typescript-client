@@ -10,6 +10,7 @@
 using NavyBlueDtos;
 using NavyBlueEntities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -209,10 +210,10 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short ActorId { get { return (short)this.entity.dto["ActorId"]; } set { this.entity.dto["ActorId"] = value; } }
-        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = value; } }
-        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short ActorId { get { return (short)this.entity.dto["ActorId"]; } set { this.entity.dto["ActorId"] = new JValue(value); } }
+        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = new JValue(value); } }
+        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<FilmActor> FilmActors { get { return this.entity.NavigateMulti("Actor", "FilmActors").Select( it => new FilmActor(it) ); } }
@@ -229,15 +230,15 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = value; } }
-        public string Address1 { get { return (string)this.entity.dto["Address1"]; } set { this.entity.dto["Address1"] = value; } }
-        public string Address2 { get { return (string)this.entity.dto["Address2"]; } set { this.entity.dto["Address2"] = value; } }
-        public string District { get { return (string)this.entity.dto["District"]; } set { this.entity.dto["District"] = value; } }
-        public short CityId { get { return (short)this.entity.dto["CityId"]; } set { this.entity.dto["CityId"] = value; } }
-        public string PostalCode { get { return (string)this.entity.dto["PostalCode"]; } set { this.entity.dto["PostalCode"] = value; } }
-        public string Phone { get { return (string)this.entity.dto["Phone"]; } set { this.entity.dto["Phone"] = value; } }
-        public object Location { get { return (object)this.entity.dto["Location"]; } set { this.entity.dto["Location"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = new JValue(value); } }
+        public string Address1 { get { return (string)this.entity.dto["Address1"]; } set { this.entity.dto["Address1"] = new JValue(value); } }
+        public string Address2 { get { return (string)(this.entity.dto["Address2"].HasValues ? this.entity.dto["Address2"] : null); } set { this.entity.dto["Address2"] = new JValue(value); } }
+        public string District { get { return (string)this.entity.dto["District"]; } set { this.entity.dto["District"] = new JValue(value); } }
+        public short CityId { get { return (short)this.entity.dto["CityId"]; } set { this.entity.dto["CityId"] = new JValue(value); } }
+        public string PostalCode { get { return (string)(this.entity.dto["PostalCode"].HasValues ? this.entity.dto["PostalCode"] : null); } set { this.entity.dto["PostalCode"] = new JValue(value); } }
+        public string Phone { get { return (string)this.entity.dto["Phone"]; } set { this.entity.dto["Phone"] = new JValue(value); } }
+        public object Location { get { return (object)this.entity.dto["Location"]; } set { this.entity.dto["Location"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public City City { get { var it = this.entity.NavigateSingle("Address", "City"); if (it != null) { return new City(it); } else { return null; } } }
@@ -260,9 +261,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public sbyte CategoryId { get { return (sbyte)this.entity.dto["CategoryId"]; } set { this.entity.dto["CategoryId"] = value; } }
-        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public sbyte CategoryId { get { return (sbyte)this.entity.dto["CategoryId"]; } set { this.entity.dto["CategoryId"] = new JValue(value); } }
+        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<FilmCategory> FilmCategories { get { return this.entity.NavigateMulti("Category", "FilmCategories").Select( it => new FilmCategory(it) ); } }
@@ -279,10 +280,10 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short CityId { get { return (short)this.entity.dto["CityId"]; } set { this.entity.dto["CityId"] = value; } }
-        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = value; } }
-        public short CountryId { get { return (short)this.entity.dto["CountryId"]; } set { this.entity.dto["CountryId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short CityId { get { return (short)this.entity.dto["CityId"]; } set { this.entity.dto["CityId"] = new JValue(value); } }
+        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = new JValue(value); } }
+        public short CountryId { get { return (short)this.entity.dto["CountryId"]; } set { this.entity.dto["CountryId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<Address> Addresses { get { return this.entity.NavigateMulti("City", "Addresses").Select( it => new Address(it) ); } }
@@ -301,9 +302,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short CountryId { get { return (short)this.entity.dto["CountryId"]; } set { this.entity.dto["CountryId"] = value; } }
-        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short CountryId { get { return (short)this.entity.dto["CountryId"]; } set { this.entity.dto["CountryId"] = new JValue(value); } }
+        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<City> Cities { get { return this.entity.NavigateMulti("Country", "Cities").Select( it => new City(it) ); } }
@@ -320,15 +321,15 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = value; } }
-        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = value; } }
-        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = value; } }
-        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = value; } }
-        public string Email { get { return (string)this.entity.dto["Email"]; } set { this.entity.dto["Email"] = value; } }
-        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = value; } }
-        public bool Active { get { return (bool)this.entity.dto["Active"]; } set { this.entity.dto["Active"] = value; } }
-        public DateTime CreateDate { get { return (DateTime)this.entity.dto["CreateDate"]; } set { this.entity.dto["CreateDate"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = new JValue(value); } }
+        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = new JValue(value); } }
+        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = new JValue(value); } }
+        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = new JValue(value); } }
+        public string Email { get { return (string)(this.entity.dto["Email"].HasValues ? this.entity.dto["Email"] : null); } set { this.entity.dto["Email"] = new JValue(value); } }
+        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = new JValue(value); } }
+        public bool Active { get { return (bool)this.entity.dto["Active"]; } set { this.entity.dto["Active"] = new JValue(value); } }
+        public DateTime CreateDate { get { return (DateTime)this.entity.dto["CreateDate"]; } set { this.entity.dto["CreateDate"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Store Store { get { var it = this.entity.NavigateSingle("Customer", "Store"); if (it != null) { return new Store(it); } else { return null; } } }
@@ -351,19 +352,19 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = value; } }
-        public string Title { get { return (string)this.entity.dto["Title"]; } set { this.entity.dto["Title"] = value; } }
-        public string Description { get { return (string)this.entity.dto["Description"]; } set { this.entity.dto["Description"] = value; } }
-        public ushort? ReleaseYear { get { return (ushort?)this.entity.dto["ReleaseYear"]; } set { this.entity.dto["ReleaseYear"] = value; } }
-        public sbyte LanguageId { get { return (sbyte)this.entity.dto["LanguageId"]; } set { this.entity.dto["LanguageId"] = value; } }
-        public sbyte? OriginalLanguageId { get { return (sbyte?)this.entity.dto["OriginalLanguageId"]; } set { this.entity.dto["OriginalLanguageId"] = value; } }
-        public sbyte RentalDuration { get { return (sbyte)this.entity.dto["RentalDuration"]; } set { this.entity.dto["RentalDuration"] = value; } }
-        public float RentalRate { get { return (float)this.entity.dto["RentalRate"]; } set { this.entity.dto["RentalRate"] = value; } }
-        public short? Length { get { return (short?)this.entity.dto["Length"]; } set { this.entity.dto["Length"] = value; } }
-        public float ReplacementCost { get { return (float)this.entity.dto["ReplacementCost"]; } set { this.entity.dto["ReplacementCost"] = value; } }
-        public string Rating { get { return (string)this.entity.dto["Rating"]; } set { this.entity.dto["Rating"] = value; } }
-        public string SpecialFeatures { get { return (string)this.entity.dto["SpecialFeatures"]; } set { this.entity.dto["SpecialFeatures"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = new JValue(value); } }
+        public string Title { get { return (string)this.entity.dto["Title"]; } set { this.entity.dto["Title"] = new JValue(value); } }
+        public string Description { get { return (string)(this.entity.dto["Description"].HasValues ? this.entity.dto["Description"] : null); } set { this.entity.dto["Description"] = new JValue(value); } }
+        public ushort? ReleaseYear { get { return (ushort?)(this.entity.dto["ReleaseYear"].HasValues ? this.entity.dto["ReleaseYear"] : null); } set { this.entity.dto["ReleaseYear"] = new JValue(value); } }
+        public sbyte LanguageId { get { return (sbyte)this.entity.dto["LanguageId"]; } set { this.entity.dto["LanguageId"] = new JValue(value); } }
+        public sbyte? OriginalLanguageId { get { return (sbyte?)(this.entity.dto["OriginalLanguageId"].HasValues ? this.entity.dto["OriginalLanguageId"] : null); } set { this.entity.dto["OriginalLanguageId"] = new JValue(value); } }
+        public sbyte RentalDuration { get { return (sbyte)this.entity.dto["RentalDuration"]; } set { this.entity.dto["RentalDuration"] = new JValue(value); } }
+        public float RentalRate { get { return (float)this.entity.dto["RentalRate"]; } set { this.entity.dto["RentalRate"] = new JValue(value); } }
+        public short? Length { get { return (short?)(this.entity.dto["Length"].HasValues ? this.entity.dto["Length"] : null); } set { this.entity.dto["Length"] = new JValue(value); } }
+        public float ReplacementCost { get { return (float)this.entity.dto["ReplacementCost"]; } set { this.entity.dto["ReplacementCost"] = new JValue(value); } }
+        public string Rating { get { return (string)(this.entity.dto["Rating"].HasValues ? this.entity.dto["Rating"] : null); } set { this.entity.dto["Rating"] = new JValue(value); } }
+        public string SpecialFeatures { get { return (string)(this.entity.dto["SpecialFeatures"].HasValues ? this.entity.dto["SpecialFeatures"] : null); } set { this.entity.dto["SpecialFeatures"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Language Language { get { var it = this.entity.NavigateSingle("Film", "Language"); if (it != null) { return new Language(it); } else { return null; } } }
@@ -388,9 +389,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short ActorId { get { return (short)this.entity.dto["ActorId"]; } set { this.entity.dto["ActorId"] = value; } }
-        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short ActorId { get { return (short)this.entity.dto["ActorId"]; } set { this.entity.dto["ActorId"] = new JValue(value); } }
+        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Actor Actor { get { var it = this.entity.NavigateSingle("FilmActor", "Actor"); if (it != null) { return new Actor(it); } else { return null; } } }
@@ -409,9 +410,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = value; } }
-        public sbyte CategoryId { get { return (sbyte)this.entity.dto["CategoryId"]; } set { this.entity.dto["CategoryId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = new JValue(value); } }
+        public sbyte CategoryId { get { return (sbyte)this.entity.dto["CategoryId"]; } set { this.entity.dto["CategoryId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Film Film { get { var it = this.entity.NavigateSingle("FilmCategory", "Film"); if (it != null) { return new Film(it); } else { return null; } } }
@@ -430,9 +431,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = value; } }
-        public string Title { get { return (string)this.entity.dto["Title"]; } set { this.entity.dto["Title"] = value; } }
-        public string Description { get { return (string)this.entity.dto["Description"]; } set { this.entity.dto["Description"] = value; } }
+        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = new JValue(value); } }
+        public string Title { get { return (string)this.entity.dto["Title"]; } set { this.entity.dto["Title"] = new JValue(value); } }
+        public string Description { get { return (string)(this.entity.dto["Description"].HasValues ? this.entity.dto["Description"] : null); } set { this.entity.dto["Description"] = new JValue(value); } }
         
         
     }
@@ -447,10 +448,10 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public int InventoryId { get { return (int)this.entity.dto["InventoryId"]; } set { this.entity.dto["InventoryId"] = value; } }
-        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = value; } }
-        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public int InventoryId { get { return (int)this.entity.dto["InventoryId"]; } set { this.entity.dto["InventoryId"] = new JValue(value); } }
+        public short FilmId { get { return (short)this.entity.dto["FilmId"]; } set { this.entity.dto["FilmId"] = new JValue(value); } }
+        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Film Film { get { var it = this.entity.NavigateSingle("Inventory", "Film"); if (it != null) { return new Film(it); } else { return null; } } }
@@ -471,9 +472,9 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public sbyte LanguageId { get { return (sbyte)this.entity.dto["LanguageId"]; } set { this.entity.dto["LanguageId"] = value; } }
-        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public sbyte LanguageId { get { return (sbyte)this.entity.dto["LanguageId"]; } set { this.entity.dto["LanguageId"] = new JValue(value); } }
+        public string Name { get { return (string)this.entity.dto["Name"]; } set { this.entity.dto["Name"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<Film> Films { get { return this.entity.NavigateMulti("Language", "Films").Select( it => new Film(it) ); } }
@@ -492,13 +493,13 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public short PaymentId { get { return (short)this.entity.dto["PaymentId"]; } set { this.entity.dto["PaymentId"] = value; } }
-        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = value; } }
-        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = value; } }
-        public int? RentalId { get { return (int?)this.entity.dto["RentalId"]; } set { this.entity.dto["RentalId"] = value; } }
-        public float Amount { get { return (float)this.entity.dto["Amount"]; } set { this.entity.dto["Amount"] = value; } }
-        public DateTime PaymentDate { get { return (DateTime)this.entity.dto["PaymentDate"]; } set { this.entity.dto["PaymentDate"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public short PaymentId { get { return (short)this.entity.dto["PaymentId"]; } set { this.entity.dto["PaymentId"] = new JValue(value); } }
+        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = new JValue(value); } }
+        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = new JValue(value); } }
+        public int? RentalId { get { return (int?)(this.entity.dto["RentalId"].HasValues ? this.entity.dto["RentalId"] : null); } set { this.entity.dto["RentalId"] = new JValue(value); } }
+        public float Amount { get { return (float)this.entity.dto["Amount"]; } set { this.entity.dto["Amount"] = new JValue(value); } }
+        public DateTime PaymentDate { get { return (DateTime)this.entity.dto["PaymentDate"]; } set { this.entity.dto["PaymentDate"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public Customer Customer { get { var it = this.entity.NavigateSingle("Payment", "Customer"); if (it != null) { return new Customer(it); } else { return null; } } }
@@ -519,13 +520,13 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public int RentalId { get { return (int)this.entity.dto["RentalId"]; } set { this.entity.dto["RentalId"] = value; } }
-        public DateTime RentalDate { get { return (DateTime)this.entity.dto["RentalDate"]; } set { this.entity.dto["RentalDate"] = value; } }
-        public int InventoryId { get { return (int)this.entity.dto["InventoryId"]; } set { this.entity.dto["InventoryId"] = value; } }
-        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = value; } }
-        public DateTime? ReturnDate { get { return (DateTime?)this.entity.dto["ReturnDate"]; } set { this.entity.dto["ReturnDate"] = value; } }
-        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public int RentalId { get { return (int)this.entity.dto["RentalId"]; } set { this.entity.dto["RentalId"] = new JValue(value); } }
+        public DateTime RentalDate { get { return (DateTime)this.entity.dto["RentalDate"]; } set { this.entity.dto["RentalDate"] = new JValue(value); } }
+        public int InventoryId { get { return (int)this.entity.dto["InventoryId"]; } set { this.entity.dto["InventoryId"] = new JValue(value); } }
+        public short CustomerId { get { return (short)this.entity.dto["CustomerId"]; } set { this.entity.dto["CustomerId"] = new JValue(value); } }
+        public DateTime? ReturnDate { get { return (DateTime?)(this.entity.dto["ReturnDate"].HasValues ? this.entity.dto["ReturnDate"] : null); } set { this.entity.dto["ReturnDate"] = new JValue(value); } }
+        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti("Rental", "Payments").Select( it => new Payment(it) ); } }
@@ -548,17 +549,17 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = value; } }
-        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = value; } }
-        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = value; } }
-        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = value; } }
-        public byte[] Picture { get { return (byte[])this.entity.dto["Picture"]; } set { this.entity.dto["Picture"] = value; } }
-        public string Email { get { return (string)this.entity.dto["Email"]; } set { this.entity.dto["Email"] = value; } }
-        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = value; } }
-        public bool Active { get { return (bool)this.entity.dto["Active"]; } set { this.entity.dto["Active"] = value; } }
-        public string Username { get { return (string)this.entity.dto["Username"]; } set { this.entity.dto["Username"] = value; } }
-        public string Password { get { return (string)this.entity.dto["Password"]; } set { this.entity.dto["Password"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public sbyte StaffId { get { return (sbyte)this.entity.dto["StaffId"]; } set { this.entity.dto["StaffId"] = new JValue(value); } }
+        public string FirstName { get { return (string)this.entity.dto["FirstName"]; } set { this.entity.dto["FirstName"] = new JValue(value); } }
+        public string LastName { get { return (string)this.entity.dto["LastName"]; } set { this.entity.dto["LastName"] = new JValue(value); } }
+        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = new JValue(value); } }
+        public byte[] Picture { get { return (byte[])(this.entity.dto["Picture"].HasValues ? this.entity.dto["Picture"] : null); } set { this.entity.dto["Picture"] = new JValue(value); } }
+        public string Email { get { return (string)(this.entity.dto["Email"].HasValues ? this.entity.dto["Email"] : null); } set { this.entity.dto["Email"] = new JValue(value); } }
+        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = new JValue(value); } }
+        public bool Active { get { return (bool)this.entity.dto["Active"]; } set { this.entity.dto["Active"] = new JValue(value); } }
+        public string Username { get { return (string)this.entity.dto["Username"]; } set { this.entity.dto["Username"] = new JValue(value); } }
+        public string Password { get { return (string)(this.entity.dto["Password"].HasValues ? this.entity.dto["Password"] : null); } set { this.entity.dto["Password"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<Payment> Payments { get { return this.entity.NavigateMulti("Staff", "Payments").Select( it => new Payment(it) ); } }
@@ -583,10 +584,10 @@ namespace Server.Models.DataAccess
 
         public Entity entity { get; private set; }
         
-        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = value; } }
-        public sbyte ManagerStaffId { get { return (sbyte)this.entity.dto["ManagerStaffId"]; } set { this.entity.dto["ManagerStaffId"] = value; } }
-        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = value; } }
-        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = value; } }
+        public sbyte StoreId { get { return (sbyte)this.entity.dto["StoreId"]; } set { this.entity.dto["StoreId"] = new JValue(value); } }
+        public sbyte ManagerStaffId { get { return (sbyte)this.entity.dto["ManagerStaffId"]; } set { this.entity.dto["ManagerStaffId"] = new JValue(value); } }
+        public short AddressId { get { return (short)this.entity.dto["AddressId"]; } set { this.entity.dto["AddressId"] = new JValue(value); } }
+        public DateTime LastUpdate { get { return (DateTime)this.entity.dto["LastUpdate"]; } set { this.entity.dto["LastUpdate"] = new JValue(value); } }
         
         [JsonIgnore]
         public IEnumerable<Customer> Customers { get { return this.entity.NavigateMulti("Store", "Customers").Select( it => new Customer(it) ); } }

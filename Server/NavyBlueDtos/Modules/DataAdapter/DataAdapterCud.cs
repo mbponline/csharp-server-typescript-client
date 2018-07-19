@@ -105,7 +105,7 @@ namespace NavyBlueDtos
                 var identityPropertyName = Utils.GetIdentityPropertyName(calculatedProperties, metadataSrv.EntityTypes[entityTypeName].Key);
                 if (!string.IsNullOrEmpty(identityPropertyName))
                 {
-                    var dtonew = new Dto() { { identityPropertyName, (int)result } };
+                    var dtonew = new Dto() { { identityPropertyName, new JValue(result) } };
                     return this.dataAdapterRead.FetchOne(entityTypeName, dtonew, null);
                 }
                 else

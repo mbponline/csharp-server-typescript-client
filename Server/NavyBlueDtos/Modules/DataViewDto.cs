@@ -236,7 +236,7 @@ namespace NavyBlueDtos
         static class Utils
         {
 
-            public static bool CompareByKey(IDictionary<string, object> l, IDictionary<string, object> r, string[] keyNames)
+            public static bool CompareByKey(IDictionary<string, JValue> l, IDictionary<string, JValue> r, string[] keyNames)
             {
                 var found = true;
                 foreach (var keyName in keyNames)
