@@ -1,138 +1,145 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace NavyBlueDtos
 {
-    public static class ApiProvider
+    public class ApiProviderDto
     {
+        private readonly MetadataSrv.Metadata metadataSrv;
+        private readonly DataViewDto dataViewDto;
 
-        public static ResultSerialResponse HandleGet(string entitySetName, QueryParams queryParams, DataServiceDto dataServiceDto)
+        public ApiProviderDto(MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            this.metadataSrv = metadataSrv;
+            this.dataViewDto = dataViewDto;
+        }
+
+        public ResultSerialResponse HandleGet(string entitySetName, QueryParams queryParams)
+        {
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            var resultSerialResponse = ResultSerialUtils.FetchResponseData(entityTypeName, queryObject, "crud", dataServiceDto);
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            var resultSerialResponse = ResultSerialUtils.FetchResponseData(entityTypeName, queryObject, "crud", this.metadataSrv, this.dataViewDto);
             return resultSerialResponse;
         }
 
-        public static ResultSingleSerialData HandleGetSingle(string entitySetName, QueryParams queryParams, DataServiceDto dataServiceDto)
+        public ResultSingleSerialData HandleGetSingle(string entitySetName, QueryParams queryParams)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataServiceDto.MetadataSrv))
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderDtoUtils.ValidKeys(entityTypeName, queryObject.Keys, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialData = dataServiceDto.DataViewDto.GetSingleItem(entityTypeName, queryObject.Keys.FirstOrDefault(), queryObject.Expand);
+            var resultSingleSerialData = this.dataViewDto.GetSingleItem(entityTypeName, queryObject.Keys.FirstOrDefault(), queryObject.Expand);
             return resultSingleSerialData;
         }
 
-        public static ResultSerialData HandleGetMany(string entitySetName, QueryParams queryParams, DataServiceDto dataServiceDto)
+        public ResultSerialData HandleGetMany(string entitySetName, QueryParams queryParams)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() == 0 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataServiceDto.MetadataSrv))
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() == 0 || !ApiProviderDtoUtils.ValidKeys(entityTypeName, queryObject.Keys, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSerialData = dataServiceDto.DataViewDto.GetMultipleItems(entityTypeName, queryObject.Keys, queryObject.Expand);
+            var resultSerialData = this.dataViewDto.GetMultipleItems(entityTypeName, queryObject.Keys, queryObject.Expand);
             return resultSerialData;
         }
 
-        public static ResultSingleSerialData HandleInsertEntity(string entitySetName, Dto dto, DataServiceDto dataServiceDto)
+        public ResultSingleSerialData HandleInsertEntity(string entitySetName, Dto dto)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (!ApiProviderUtils.ValidDtoKey(entityTypeName, dto, dataServiceDto.MetadataSrv))
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (!ApiProviderDtoUtils.ValidDtoKey(entityTypeName, dto, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialData = dataServiceDto.DataViewDto.InsertItem(entityTypeName, dto);
+            var resultSingleSerialData = this.dataViewDto.InsertItem(entityTypeName, dto);
             return resultSingleSerialData;
         }
 
-        public static List<ResultSingleSerialData> HandleInsertEntityBatch(string entitySetName, IEnumerable<Dto> dtos, DataServiceDto dataServiceDto)
+        public List<ResultSingleSerialData> HandleInsertEntityBatch(string entitySetName, IEnumerable<Dto> dtos)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, dataServiceDto.MetadataSrv))
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (!ApiProviderDtoUtils.ValidKeys(entityTypeName, dtos, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialDataList = dataServiceDto.DataViewDto.InsertItems(entityTypeName, dtos);
+            var resultSingleSerialDataList = this.dataViewDto.InsertItems(entityTypeName, dtos);
             return resultSingleSerialDataList;
         }
 
-        public static ResultSingleSerialData HandleUpdateEntity(string entitySetName, QueryParams queryParams, Dto dto, DataServiceDto dataServiceDto)
+        public ResultSingleSerialData HandleUpdateEntity(string entitySetName, QueryParams queryParams, Dto dto)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataServiceDto.MetadataSrv))
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderDtoUtils.ValidKeys(entityTypeName, queryObject.Keys, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            if (!ApiProviderUtils.ValidDto(entityTypeName, queryObject.Keys.FirstOrDefault(), dto, dataServiceDto.MetadataSrv))
+            if (!ApiProviderDtoUtils.ValidDto(entityTypeName, queryObject.Keys.FirstOrDefault(), dto, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialData = dataServiceDto.DataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys.FirstOrDefault()));
+            var resultSingleSerialData = this.dataViewDto.UpdateItem(entityTypeName, DalUtils.Extend(dto, queryObject.Keys.FirstOrDefault()));
             return resultSingleSerialData;
         }
 
-        public static List<ResultSingleSerialData> HandleUpdateEntityBatch(string entitySetName, IEnumerable<Dto> dtos, DataServiceDto dataServiceDto)
+        public List<ResultSingleSerialData> HandleUpdateEntityBatch(string entitySetName, IEnumerable<Dto> dtos)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, dataServiceDto.MetadataSrv))
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (!ApiProviderDtoUtils.ValidKeys(entityTypeName, dtos, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialDataList = dataServiceDto.DataViewDto.UpdateItems(entityTypeName, dtos);
+            var resultSingleSerialDataList = this.dataViewDto.UpdateItems(entityTypeName, dtos);
             return resultSingleSerialDataList;
         }
 
-        public static ResultSingleSerialData HandleDeleteEntity(string entitySetName, QueryParams queryParams, DataServiceDto dataServiceDto)
+        public ResultSingleSerialData HandleDeleteEntity(string entitySetName, QueryParams queryParams)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderUtils.ValidDtoKey(entityTypeName, queryObject.Keys.FirstOrDefault(), dataServiceDto.MetadataSrv))
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() != 1 || !ApiProviderDtoUtils.ValidDtoKey(entityTypeName, queryObject.Keys.FirstOrDefault(), this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSingleSerialData = dataServiceDto.DataViewDto.DeleteItem(entityTypeName, queryObject.Keys.FirstOrDefault());
+            var resultSingleSerialData = this.dataViewDto.DeleteItem(entityTypeName, queryObject.Keys.FirstOrDefault());
             return resultSingleSerialData;
         }
 
         //// in aceasta varianta informatiile de stergere sunt trimise in body ca dtos[]
-        //public static ResultSerialData HandleDeleteEntityBatch1(string entitySetName,  dtos, DataServiceDto dataServiceDto)
+        //public ResultSerialData HandleDeleteEntityBatch1(string entitySetName, Dto[] dtos)
         //{
-        //    entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.Metadata);
-        //    var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.Metadata);
-        //    if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, dataServiceDto.Metadata))
+        //    entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
+        //    var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+        //    if (!ApiProviderUtils.ValidKeys(entityTypeName, dtos, this.metadataSrv))
         //    {
         //        throw new DtosException(code: 400, message: "Bad Request");
         //    }
-        //    var resultSerialData = dataServiceDto.DataViewDto.DeleteItems(entityTypeName, dtos);
+        //    var resultSerialData = this.dataViewDto.DeleteItems(entityTypeName, dtos);
         //    return resultSerialData;
         //}
 
         // in aceasta varianta informatiile de stergere sunt trimise in query string
         // similar cu handleGetMany
-        public static ResultSerialData HandleDeleteEntityBatch(string entitySetName, QueryParams queryParams, DataServiceDto dataServiceDto)
+        public ResultSerialData HandleDeleteEntityBatch(string entitySetName, QueryParams queryParams)
         {
-            entitySetName = ApiProviderUtils.FixEntitySetNameCase(entitySetName, dataServiceDto.MetadataSrv);
+            entitySetName = ApiProviderDtoUtils.FixEntitySetNameCase(entitySetName, this.metadataSrv);
             var queryObject = QueryUtils.RenderQueryObject(queryParams);
-            var entityTypeName = ApiProviderUtils.GetEntityTypeName(entitySetName, dataServiceDto.MetadataSrv);
-            if (queryObject.Keys == null || queryObject.Keys.Count() == 0 || !ApiProviderUtils.ValidKeys(entityTypeName, queryObject.Keys, dataServiceDto.MetadataSrv))
+            var entityTypeName = ApiProviderDtoUtils.GetEntityTypeName(entitySetName, this.metadataSrv);
+            if (queryObject.Keys == null || queryObject.Keys.Count() == 0 || !ApiProviderDtoUtils.ValidKeys(entityTypeName, queryObject.Keys, this.metadataSrv))
             {
                 throw new DtosException(code: 400, message: "Bad Request");
             }
-            var resultSerialData = dataServiceDto.DataViewDto.DeleteItems(entityTypeName, queryObject.Keys);
+            var resultSerialData = this.dataViewDto.DeleteItems(entityTypeName, queryObject.Keys);
             return resultSerialData;
         }
 

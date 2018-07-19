@@ -6,9 +6,8 @@ namespace NavyBlueDtos
 {
     public static partial class ResultSerialUtils
     {
-        public static ResultSerialResponse FetchResponseData(string entityTypeName, QueryObject queryObject, string apiRouteRoot, DataServiceDto dataServiceDto)
+        public static ResultSerialResponse FetchResponseData(string entityTypeName, QueryObject queryObject, string apiRouteRoot, MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto)
         {
-            var dataViewDto = dataServiceDto.DataViewDto;
             var count = dataViewDto.Count(entityTypeName, queryObject);
             const int maxTop = 40;
             var skip = queryObject.Skip != null ? (int)queryObject.Skip : 0;
@@ -16,9 +15,9 @@ namespace NavyBlueDtos
             var top = Math.Min(topNext, maxTop);
             var skipNext = skip + top;
             var nextLinkQueryString = GetNextLinkQueryString(queryObject, skipNext, topNext);
-            var entitySetName = dataServiceDto.MetadataSrv.EntityTypes[entityTypeName].EntitySetName;
+            var entitySetName = metadataSrv.EntityTypes[entityTypeName].EntitySetName;
             var nextLink = skipNext < Math.Min(topNext, count) ? string.Format("api/datasource/{0}/{1}?{2}", apiRouteRoot, entitySetName, nextLinkQueryString) : null;
-            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, dataServiceDto.MetadataSrv);
+            var queryObjectLocal = GetQueryObject(entityTypeName, queryObject, skip, top, metadataSrv);
             var resultSerialData = dataViewDto.GetItems(entityTypeName, queryObjectLocal);
             if (resultSerialData.TotalCount == 0)
             {
