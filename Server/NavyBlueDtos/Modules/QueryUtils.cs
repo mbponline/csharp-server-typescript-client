@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -129,7 +130,7 @@ namespace NavyBlueDtos
          * ... will become:
          * keys=[ { key1: 1, key2: 4}, { key1: 2, key2: 5 }, { key1: 2, key2: 6 }, { key1: 4, key2: 7 } ]
          */
-		private static IEnumerable<Dto> GetKeyFromString(string keys)
+        private static IEnumerable<Dto> GetKeyFromString(string keys)
         {
             var keyValueSet = new Dictionary<string, int[]>();
             var count = 0;
@@ -156,7 +157,7 @@ namespace NavyBlueDtos
                 var resultItem = new Dto();
                 foreach (var keyValue in keyValueSet)
                 {
-                    resultItem.Add(keyValue.Key, keyValue.Value[i]);
+                    resultItem.Add(keyValue.Key, new JValue(keyValue.Value[i]));
                 }
                 result.Add(resultItem);
             }
@@ -168,7 +169,7 @@ namespace NavyBlueDtos
          * ... will become:
          * keys=key1:1,2,3,4;key2:4,5,6,7
          */
-		private static string GetStringFromKey(IEnumerable<Dto> keys)
+        private static string GetStringFromKey(IEnumerable<Dto> keys)
         {
             var keySet = new Dictionary<string, List<object>>();
             foreach (var dto in keys)

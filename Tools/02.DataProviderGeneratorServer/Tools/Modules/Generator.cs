@@ -71,6 +71,7 @@ namespace Tools.Modules
             br.WriteLine("using NavyBlueDtos;");
             br.WriteLine("using NavyBlueEntities;");
             br.WriteLine("using Newtonsoft.Json;");
+            br.WriteLine("using Newtonsoft.Json.Linq;");
             br.WriteLine("using System;");
             br.WriteLine("using System.Collections.Generic;");
             br.WriteLine("using System.Configuration;");

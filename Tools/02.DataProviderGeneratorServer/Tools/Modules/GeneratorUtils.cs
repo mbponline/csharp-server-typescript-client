@@ -13,10 +13,16 @@ namespace Tools.Modules
         {
             foreach (var property in properties)
             {
-                var nullable = property.Value.Nullable ? "?" : string.Empty;
                 var type = dbTypeConvert[property.Value.Type];
-                nullable = (new string[] { "string", "object", "byte[]" }).Contains(type) ? string.Empty : nullable;
-                br.WriteLine(string.Format("public {0}{1} {2} {{ get {{ return ({0}{1})this.entity.dto[\"{2}\"]; }} set {{ this.entity.dto[\"{2}\"] = value; }} }}", type, nullable, property.Key));
+                if (property.Value.Nullable)
+                {
+                    var nullable = (new string[] { "string", "object", "byte[]" }).Contains(type) ? string.Empty : "?";
+                    br.WriteLine(string.Format("public {0}{2} {1} {{ get {{ return ({0}{2})(this.entity.dto[\"{1}\"].HasValues ? this.entity.dto[\"{1}\"] : null); }} set {{ this.entity.dto[\"{1}\"] = new JValue(value); }} }}", type, property.Key, nullable));
+                }
+                else
+                {
+                    br.WriteLine(string.Format("public {0} {1} {{ get {{ return ({0})this.entity.dto[\"{1}\"]; }} set {{ this.entity.dto[\"{1}\"] = new JValue(value); }} }}", type, property.Key));
+                }
             }
             br.WriteLine();
         }

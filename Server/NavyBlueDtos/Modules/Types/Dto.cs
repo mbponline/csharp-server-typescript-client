@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace NavyBlueDtos
 {
 
-    public class Dto : Dictionary<string, object>
+    public class Dto : Dictionary<string, JValue>
     {
         public Dto()
             : base()
@@ -14,7 +15,7 @@ namespace NavyBlueDtos
         {
             foreach (var item in entityType.Properties)
             {
-                this[item.Key] = item.Value.Default;
+                this[item.Key] = new JValue(item.Value.Default);
 
             }
         }

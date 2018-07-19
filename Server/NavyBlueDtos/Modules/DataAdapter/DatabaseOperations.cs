@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -79,7 +80,11 @@ namespace NavyBlueDtos
                                 var dto = new Dto();
                                 for (int i = 0; i < rdr.FieldCount; i++)
                                 {
-                                    dto.Add(rdr.GetName(i), rdr.GetValue(i));
+
+                                    //var dotNetType = rdr.GetFieldType(i);
+                                    //var sqlType = rdr.GetDataTypeName(i);
+                                    //var specificType = rdr.GetProviderSpecificFieldType(i);
+                                    dto.Add(rdr.GetName(i), new JValue(rdr.GetValue(i)));
                                 }
                                 dtos.Add(dto);
                             }
