@@ -23,7 +23,7 @@ namespace Server.Controllers.Dtos
         [HttpGet]
         public ResultSerialResponse Get(string entitySetName, [FromUri] QueryParams queryParams)
         {
-            return ApiProvider.HandleGet(entitySetName, queryParams, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleGet(entitySetName, queryParams);
         }
 
         // GET: api/datasource/crud/single/{entitySetName}?keys=key1:{key1}
@@ -31,7 +31,7 @@ namespace Server.Controllers.Dtos
         [HttpGet]
         public ResultSingleSerialData GetSingle(string entitySetName, [FromUri] QueryParams queryParams)
         {
-            return ApiProvider.HandleGetSingle(entitySetName, queryParams, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleGetSingle(entitySetName, queryParams);
         }
 
         // GET: api/datasource/crud/many/{entitySetName}?keys=key1:1,2,3,4;key2:4,5,6,7
@@ -39,7 +39,7 @@ namespace Server.Controllers.Dtos
         [HttpGet]
         public ResultSerialData GetMany(string entitySetName, [FromUri] QueryParams queryParams)
         {
-            return ApiProvider.HandleGetMany(entitySetName, queryParams, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleGetMany(entitySetName, queryParams);
         }
 
         // PUT: api/datasource/crud/{entitySetName}?keys=key1:{key1}
@@ -48,7 +48,7 @@ namespace Server.Controllers.Dtos
         public ResultSingleSerialData Put(string entitySetName, [FromUri] QueryParams queryParams, [FromBody] JObject jdto)
         {
             var dto = jdto.ToObject<Dto>();
-            return ApiProvider.HandleUpdateEntity(entitySetName, queryParams, dto, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleUpdateEntity(entitySetName, queryParams, dto);
         }
 
         // PATCH: api/datasource/crud/{entitySetName}?keys=key1:{key1}
@@ -57,7 +57,7 @@ namespace Server.Controllers.Dtos
         public ResultSingleSerialData Patch(string entitySetName, [FromUri] QueryParams queryParams, [FromBody] JObject jdto)
         {
             var dto = jdto.ToObject<Dto>();
-            return ApiProvider.HandleUpdateEntity(entitySetName, queryParams, dto, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleUpdateEntity(entitySetName, queryParams, dto);
         }
 
         // POST: api/datasource/crud/{entitySetName}
@@ -66,7 +66,7 @@ namespace Server.Controllers.Dtos
         public ResultSingleSerialData Post(string entitySetName, [FromBody] JObject jdto)
         {
             var dto = jdto.ToObject<Dto>();
-            return ApiProvider.HandleInsertEntity(entitySetName, dto, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleInsertEntity(entitySetName, dto);
         }
 
         // DELETE: api/datasource/crud/{entitySetName}?keys=key1:{key1}
@@ -74,7 +74,7 @@ namespace Server.Controllers.Dtos
         [HttpDelete]
         public ResultSingleSerialData Delete(string entitySetName, [FromUri] QueryParams queryParams)
         {
-            return ApiProvider.HandleDeleteEntity(entitySetName, queryParams, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleDeleteEntity(entitySetName, queryParams);
         }
 
         // PUT: api/datasource/crud/batch/{entitySetName}
@@ -87,7 +87,7 @@ namespace Server.Controllers.Dtos
             {
                 dtos.Add(jdto.ToObject<Dto>());
             }
-            return ApiProvider.HandleUpdateEntityBatch(entitySetName, dtos.ToArray(), this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleUpdateEntityBatch(entitySetName, dtos.ToArray());
         }
 
         // PATCH: api/datasource/crud/batch/{entitySetName}
@@ -100,7 +100,7 @@ namespace Server.Controllers.Dtos
             {
                 dtos.Add(jdto.ToObject<Dto>());
             }
-            return ApiProvider.HandleUpdateEntityBatch(entitySetName, dtos.ToArray(), this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleUpdateEntityBatch(entitySetName, dtos.ToArray());
         }
 
         // POST: api/datasource/crud/batch/{entitySetName}
@@ -113,7 +113,7 @@ namespace Server.Controllers.Dtos
             {
                 dtos.Add(jdto.ToObject<Dto>());
             }
-            return ApiProvider.HandleInsertEntityBatch(entitySetName, dtos.ToArray(), this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleInsertEntityBatch(entitySetName, dtos.ToArray());
         }
 
         //// DELETE: api/datasource/crud/batch/{entitySetName}
@@ -126,7 +126,7 @@ namespace Server.Controllers.Dtos
         //    {
         //        dtos.Add(jdto.ToObject<Dto>());
         //    }
-        //    return ApiProvider.HandleDeleteEntityBatch1(entitySetName, dtos.ToArray(), this.dataServiceDto);
+        //    return this.dataServiceDto.ApiProviderDto.HandleDeleteEntityBatch1(entitySetName, dtos.ToArray());
         //}
 
         // DELETE: api/datasource/crud/batch/{entitySetName}?keys=key1:1,2,3,4;key2:4,5,6,7
@@ -134,7 +134,7 @@ namespace Server.Controllers.Dtos
         [HttpDelete]
         public ResultSerialData DeleteBatch(string entitySetName, [FromUri] QueryParams queryParams)
         {
-            return ApiProvider.HandleDeleteEntityBatch(entitySetName, queryParams, this.dataServiceDto);
+            return this.dataServiceDto.ApiProviderDto.HandleDeleteEntityBatch(entitySetName, queryParams);
         }
     }
 }

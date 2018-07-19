@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace NavyBlueDtos
 {
-    public static class ApiProviderUtils
+    public static class ApiProviderDtoUtils
     {
         public static string FixEntitySetNameCase(string entitySetName, MetadataSrv.Metadata metadataSrv)
         {

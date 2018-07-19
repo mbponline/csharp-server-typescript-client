@@ -7,6 +7,7 @@ namespace NavyBlueDtos
     {
         public MetadataSrv.Metadata MetadataSrv { get; private set; }
         public DataViewDto DataViewDto { get; private set; }
+        public ApiProviderDto ApiProviderDto { get; private set; }
 
         public DataServiceDto(string pathMetadata, string connectionString)
         {
@@ -18,6 +19,7 @@ namespace NavyBlueDtos
             var dataAdapterRead = new DataAdapterRead(this.MetadataSrv, dialect, databaseOperations);
             var dataAdapterCud = new DataAdapterCud(this.MetadataSrv, dialect, dataAdapterRead, databaseOperations);
             this.DataViewDto = new DataViewDto(this.MetadataSrv, dataAdapterRead, dataAdapterCud);
+            this.ApiProviderDto = new ApiProviderDto(this.MetadataSrv, this.DataViewDto);
         }
 
     }
