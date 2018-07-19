@@ -1,5 +1,5 @@
-﻿using Server.Models.Utils.DAL;
-using Server.Models.Utils.DAL.Common;
+﻿using NavyBlueDtos;
+using Server.Models.DataAccess;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;

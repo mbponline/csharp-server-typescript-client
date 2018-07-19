@@ -68,14 +68,15 @@ namespace Tools.Modules
                 .WriteLine("//------------------------------------------------------------------------------")
                 .WriteLine();
 
+            br.WriteLine("using NavyBlueDtos;");
+            br.WriteLine("using NavyBlueEntities;");
             br.WriteLine("using Newtonsoft.Json;");
-            br.WriteLine("using Server.Models.Utils.DAL.Common;");
             br.WriteLine("using System;");
             br.WriteLine("using System.Collections.Generic;");
             br.WriteLine("using System.Configuration;");
             br.WriteLine("using System.Linq;");
             br.WriteLine("using System.Web.Hosting;");
-            br.WriteLine("using MetadataSrv = Server.Models.Utils.DAL.Common.MetadataSrv;");
+            br.WriteLine("using MetadataSrv = NavyBlueDtos.MetadataSrv;");
             br.WriteLine();
 
             br.WriteLine("namespace " + metadataSrv.Namespace);
@@ -86,7 +87,7 @@ namespace Tools.Modules
             // DataService
             br.WriteLine("public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>");
             br.BeginBlock("{");
-            br.WriteLine("public DataService(string metadataFileName = \"\", string connectionString = \"\") : base(metadataFileName, connectionString)");
+            br.WriteLine("public DataService(string pathMetadata, string connectionString) : base(pathMetadata, connectionString)");
             br.BeginBlock("{");
             br.WriteLine("this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()");
             br.BeginBlock("{")

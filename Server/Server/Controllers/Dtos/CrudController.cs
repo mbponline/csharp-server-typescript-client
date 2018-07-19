@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using Server.Models.Utils.DAL.Common;
+﻿using NavyBlueDtos;
+using Newtonsoft.Json.Linq;
+using Server.Models.DataAccess;
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Cors;

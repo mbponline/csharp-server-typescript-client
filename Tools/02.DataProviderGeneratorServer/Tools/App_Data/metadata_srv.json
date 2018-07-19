@@ -2,7 +2,7 @@
   "dialect": "MYSQL",
   "version": "v0.0.1",
   "description": "5.7.20",
-  "namespace": "Server.Models.Utils.DAL",
+  "namespace": "Server.Models.DataAccess",
   "multiplicity": {
     "multi": "multi",
     "single": "single"

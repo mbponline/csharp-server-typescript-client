@@ -18,6 +18,18 @@ Get-ChildItem ".\Server\Server\bin" -Directory | foreach ($_) {Remove-Item $_.fu
 Remove-Item -path ".\Server\Server\obj\*" -Include *.*
 Get-ChildItem ".\Server\Server\obj" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
 
+### Server/NavyBlueDtos
+Remove-Item -Path ".\Server\NavyBlueDtos\bin\*" -Include *.*
+Get-ChildItem ".\Server\NavyBlueDtos\bin" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+Remove-Item -path ".\Server\NavyBlueDtos\obj\*" -Include *.*
+Get-ChildItem ".\Server\NavyBlueDtos\obj" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+
+### Server/NavyBlueEntities
+Remove-Item -Path ".\Server\NavyBlueEntities\bin\*" -Include *.*
+Get-ChildItem ".\Server\NavyBlueEntities\bin" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+Remove-Item -path ".\Server\NavyBlueEntities\obj\*" -Include *.*
+Get-ChildItem ".\Server\NavyBlueEntities\obj" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+
 
 ### Tools/DatabaseSchemaGenerator
 Remove-Item -Path ".\Tools\01.DatabaseSchemaGenerator\.vs\" -Recurse -Force -ErrorAction SilentlyContinue
