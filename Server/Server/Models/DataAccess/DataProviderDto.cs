@@ -1,6 +1,4 @@
 ﻿using NavyBlueDtos;
-using System.Configuration;
-using System.Web.Hosting;
 
 namespace Server.Models.DataAccess
 {
@@ -8,9 +6,9 @@ namespace Server.Models.DataAccess
     {
         public static DataServiceDto CreateDataServiceInstance()
         {
-            var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            var dataServiceDto = new DataServiceDto(pathMetadata, connectionString);
+            var metadataSrv = DataProviderConfig.GetMetadataSrv();
+            var connectionString = DataProviderConfig.GetConnectionString();
+            var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);
             return dataServiceDto;
         }
     }

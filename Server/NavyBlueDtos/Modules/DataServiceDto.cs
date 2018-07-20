@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-
+﻿
 namespace NavyBlueDtos
 {
     public class DataServiceDto
@@ -10,18 +8,17 @@ namespace NavyBlueDtos
         public ApiProviderDto ApiProviderDto { get; private set; }
         public ResultSerialUtils ResultSerialUtils { get; private set; }
 
-        public DataServiceDto(string pathMetadata, string connectionString)
+        public DataServiceDto(MetadataSrv.Metadata metadataSrv, string connectionString)
         {
-            var metadataJsonText = File.ReadAllText(Path.Combine(pathMetadata, "metadata_srv.json"));
-            this.MetadataSrv = JsonConvert.DeserializeObject<MetadataSrv.Metadata>(metadataJsonText);
+            this.MetadataSrv = metadataSrv;
 
-            var dialect = this.MetadataSrv.Dialect();
+            var dialect = metadataSrv.Dialect();
             var databaseOperations = new DatabaseOperations(dialect, connectionString);
-            var dataAdapterRead = new DataAdapterRead(this.MetadataSrv, dialect, databaseOperations);
-            var dataAdapterCud = new DataAdapterCud(this.MetadataSrv, dialect, dataAdapterRead, databaseOperations);
-            this.DataViewDto = new DataViewDto(this.MetadataSrv, dataAdapterRead, dataAdapterCud);
-            this.ResultSerialUtils = new ResultSerialUtils("crud", this.MetadataSrv, this.DataViewDto);
-            this.ApiProviderDto = new ApiProviderDto(this.MetadataSrv, this.DataViewDto, this.ResultSerialUtils);
+            var dataAdapterRead = new DataAdapterRead(metadataSrv, dialect, databaseOperations);
+            var dataAdapterCud = new DataAdapterCud(metadataSrv, dialect, dataAdapterRead, databaseOperations);
+            this.DataViewDto = new DataViewDto(metadataSrv, dataAdapterRead, dataAdapterCud);
+            this.ResultSerialUtils = new ResultSerialUtils("crud", metadataSrv, this.DataViewDto);
+            this.ApiProviderDto = new ApiProviderDto(metadataSrv, this.DataViewDto, this.ResultSerialUtils);
         }
 
     }

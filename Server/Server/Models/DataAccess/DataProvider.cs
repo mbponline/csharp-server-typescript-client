@@ -13,15 +13,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Web.Hosting;
 using MetadataSrv = NavyBlueDtos.MetadataSrv;
 
 namespace Server.Models.DataAccess
 {
     public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>
     {
-        public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)
+        protected DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)
         {
             this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()
             {
@@ -32,9 +30,9 @@ namespace Server.Models.DataAccess
 
         public static DataService CreateDataServiceInstance()
         {
-            var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            var dataServiceDto = new DataServiceDto(pathMetadata, connectionString);
+            var metadataSrv = DataProviderConfig.GetMetadataSrv();
+            var connectionString = DataProviderConfig.GetConnectionString();
+            var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);
             var dataService = new DataService(dataServiceDto);
             return dataService;
         }

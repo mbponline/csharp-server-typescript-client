@@ -74,8 +74,6 @@ namespace Tools.Modules
             br.WriteLine("using Newtonsoft.Json.Linq;");
             br.WriteLine("using System;");
             br.WriteLine("using System.Collections.Generic;");
-            br.WriteLine("using System.Configuration;");
-            br.WriteLine("using System.Web.Hosting;");
             br.WriteLine("using MetadataSrv = NavyBlueDtos.MetadataSrv;");
             br.WriteLine();
 
@@ -87,7 +85,7 @@ namespace Tools.Modules
             // DataService
             br.WriteLine("public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>");
             br.BeginBlock("{");
-            br.WriteLine("public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)");
+            br.WriteLine("protected DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)");
             br.BeginBlock("{");
             br.WriteLine("this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()");
             br.BeginBlock("{")
@@ -98,9 +96,9 @@ namespace Tools.Modules
 
             br.WriteLine("public static DataService CreateDataServiceInstance()");
             br.BeginBlock("{")
-                .WriteLine("var pathMetadata = HostingEnvironment.MapPath(@\"~/App_Data\");")
-                .WriteLine("var connectionString = ConfigurationManager.ConnectionStrings[\"DefaultConnection\"].ConnectionString;")
-                .WriteLine("var dataServiceDto = new DataServiceDto(pathMetadata, connectionString);")
+                .WriteLine("var metadataSrv = DataProviderConfig.GetMetadataSrv();")
+                .WriteLine("var connectionString = DataProviderConfig.GetConnectionString();")
+                .WriteLine("var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);")
                 .WriteLine("var dataService = new DataService(dataServiceDto);")
                 .WriteLine("return dataService;");
             br.EndBlock("}", false);

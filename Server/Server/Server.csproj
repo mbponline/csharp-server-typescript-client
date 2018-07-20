@@ -94,6 +94,7 @@
     <Compile Include="Models\DataAccess\DataProviderDto.cs" />
     <Compile Include="Controllers\Dtos\CrudController.cs" />
     <Compile Include="Controllers\Dtos\CrudOperationsController.cs" />
+    <Compile Include="Models\DataAccess\DataProviderConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\metadata_cli.json" />
