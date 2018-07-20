@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Models\DataAccess\DataProvider.cs" />
+    <Compile Include="Models\DataAccess\DataProviderConfig.cs" />
     <Compile Include="Models\DataAccess\DataProviderDto.cs" />
     <Compile Include="Controllers\Dtos\CrudController.cs" />
     <Compile Include="Controllers\Dtos\CrudOperationsController.cs" />

@@ -34,7 +34,7 @@ namespace Server.Controllers.Dtos
 
             var resultSerialData = this.dataServiceDto.DataViewDto.GetItems("Film", queryObject);
             return resultSerialData;
-            //var resultSerialResponse = ResultSerialUtils.FetchResponseData("Film", queryObject, "crud", this.dataServiceDto);
+            //var resultSerialResponse = this.dataServiceDto.ResultSerialUtils.FetchResponseData("Film", queryObject);
             //return resultSerialResponse;
         }
 
