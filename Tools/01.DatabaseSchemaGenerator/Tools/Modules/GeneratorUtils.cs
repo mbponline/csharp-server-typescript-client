@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DatabaseTypes = Tools.Modules.Common.Database.Types;
 using MetadataSrv = Tools.Modules.Common.MetadataSrv;
 
@@ -36,29 +37,35 @@ namespace Tools.Modules
             return tableName;
         }
 
+        // Info util: [7 Plural Spelling Rules](https://howtospell.co.uk/pluralrules.php)
+        // Info util: [Regular Expressions (Regex) Tutorial](https://www.youtube.com/watch?v=sa-TUpSx1JA)
         public static string Pluralize(this string tableName)
         {
-            var lastCharacter = tableName.Substring(tableName.Length - 1);
-            if (lastCharacter == "y")
-            {
-                return tableName.Substring(0, tableName.Length - 1) + "ies";
-            }
-            else if (lastCharacter == "s")
-            {
-                if (tableName.Substring(tableName.Length - 2) == "ss")
-                {
-                    return tableName + "es";
-                }
-                return tableName;
-            }
-            else if (lastCharacter == "o")
+            MatchCollection matches;
+
+            if (Regex.IsMatch(tableName, @"\w+(ch|s|sh|x|z)$"))
             {
                 return tableName + "es";
             }
-            else
+
+            matches = Regex.Matches(tableName, @"(\w+)(f|fe)$");
+            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
             {
-                return tableName + "s";
+                return matches[0].Groups[1].Value + "ves";
             }
+
+            matches = Regex.Matches(tableName, @"(\w+[^aeiou])y$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "ies";
+            }
+
+            if (Regex.IsMatch(tableName, @"\w+[^aeiou]o$"))
+            {
+                return tableName + "es";
+            }
+
+            return tableName + "s";
         }
 
         public static bool ToBoolean(this int val)
