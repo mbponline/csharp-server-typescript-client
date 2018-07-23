@@ -128,6 +128,24 @@ namespace ToolsTests.Modules
         }
 
         [TestMethod]
+        public void TestIncrementNumberedString()
+        {
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("car"), "car1");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("volcano1"), "volcano2");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("penny3"), "penny4");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("witness9"), "witness10");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("waitress19"), "waitress20");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("potato20"), "potato21");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("country99"), "country100");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("journey0"), "journey1");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("tomato00"), "tomato01");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("glass01"), "glass02");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("journey000"), "journey001");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("bus09"), "bus010");
+            Assert.AreEqual(GeneratorUtils.IncrementNumberedString("box089"), "box090");
+        }
+
+        [TestMethod]
         public void TestToBoolean()
         {
             Assert.AreEqual(GeneratorUtils.ToBoolean(0), false);
@@ -135,5 +153,6 @@ namespace ToolsTests.Modules
             Assert.AreEqual(GeneratorUtils.ToBoolean(5), true);
             Assert.AreEqual(GeneratorUtils.ToBoolean(-1), false);
         }
+
     }
 }

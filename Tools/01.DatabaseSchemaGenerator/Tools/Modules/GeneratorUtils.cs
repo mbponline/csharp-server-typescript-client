@@ -151,23 +151,27 @@ namespace Tools.Modules
         public static string GetNavigationPropertyName(this Dictionary<string, MetadataSrv.NavigationProperty> navigationProperties, string proposedName)
         {
             var result = proposedName;
-
             if (navigationProperties.ContainsKey(proposedName))
             {
-                var last = proposedName.Substring(proposedName.Length - 1);
-                int n;
-                var isNumeric = int.TryParse(last, out n);
-                if (isNumeric)
-                {
-                    result = proposedName.Substring(0, proposedName.Length - 1) + (n + 1).ToString();
-                }
-                else
-                {
-                    result = proposedName + "1";
-                }
+                result = IncrementNumberedString(proposedName);
                 result = navigationProperties.GetNavigationPropertyName(result);
             }
+            return result;
+        }
 
+        public static string IncrementNumberedString(string str)
+        {
+            var result = str;
+            var matches = Regex.Matches(str, @"(\w+?0*)(\d+)$");
+            if (matches.Count > 0)
+            {
+                var n = int.Parse(matches[0].Groups[2].Value);
+                result = matches[0].Groups[1].Value + (n + 1).ToString();
+            }
+            else
+            {
+                result = str + "1";
+            }
             return result;
         }
     }
