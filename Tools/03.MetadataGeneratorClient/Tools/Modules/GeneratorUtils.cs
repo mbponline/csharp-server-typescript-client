@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MetadataCli = Tools.Modules.Common.MetadataCli;
 
 namespace Tools.Modules
@@ -10,64 +11,107 @@ namespace Tools.Modules
     {
         public static string Singularize(this string tableName)
         {
-            if (tableName.Substring(tableName.Length - 1) == "s")
-            {
-                if (tableName.Substring(tableName.Length - 2) == "ss")
-                {
-                    return tableName;
-                }
+            MatchCollection matches;
 
-                return tableName.Remove(tableName.Length - 1);
+            matches = Regex.Matches(tableName, @"(\w+i)ves$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "fe";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+)ves$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "f";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+[^aeiou])ies$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "y";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+o)es$");
+            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+(sh|x|ch|ss|s))es$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
+            }
+
+            if (Regex.IsMatch(tableName, @"\w+ss$"))
+            {
+                return tableName;
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+)s$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
             }
 
             return tableName;
         }
 
+        // Info util: [7 Plural Spelling Rules](https://howtospell.co.uk/pluralrules.php)
+        // Info util: [Regular Expressions (Regex) Tutorial](https://www.youtube.com/watch?v=sa-TUpSx1JA)
         public static string Pluralize(this string tableName)
         {
-            var lastCharacter = tableName.Substring(tableName.Length - 1);
-            if (lastCharacter == "y")
-            {
-                return tableName.Substring(0, tableName.Length - 1) + "ies";
-            }
-            else if (lastCharacter == "s")
-            {
-                if (tableName.Substring(tableName.Length - 2) == "ss")
-                {
-                    return tableName + "es";
-                }
-                return tableName;
-            }
-            else if (lastCharacter == "o")
+            MatchCollection matches;
+
+            if (Regex.IsMatch(tableName, @"\w+(ch|s|sh|x|z)$"))
             {
                 return tableName + "es";
             }
-            else
+
+            matches = Regex.Matches(tableName, @"(\w+)(f|fe)$");
+            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
             {
-                return tableName + "s";
+                return matches[0].Groups[1].Value + "ves";
             }
+
+            matches = Regex.Matches(tableName, @"(\w+[^aeiou])y$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "ies";
+            }
+
+            if (Regex.IsMatch(tableName, @"\w+[^aeiou]o$"))
+            {
+                return tableName + "es";
+            }
+
+            return tableName + "s";
         }
 
         public static string GetNavigationPropertyName(this Dictionary<string, MetadataCli.NavigationProperty> navigationProperties, string proposedName)
         {
             var result = proposedName;
-
             if (navigationProperties.ContainsKey(proposedName))
             {
-                var last = proposedName.Substring(proposedName.Length - 1);
-                int n;
-                var isNumeric = int.TryParse(last, out n);
-                if (isNumeric)
-                {
-                    result = proposedName.Substring(0, proposedName.Length - 1) + (n + 1).ToString();
-                }
-                else
-                {
-                    result = proposedName + "1";
-                }
+                result = IncrementNumberedString(proposedName);
                 result = navigationProperties.GetNavigationPropertyName(result);
             }
+            return result;
+        }
 
+        public static string IncrementNumberedString(string str)
+        {
+            var result = str;
+            var matches = Regex.Matches(str, @"(\w+?0*)(\d+)$");
+            if (matches.Count > 0)
+            {
+                var n = int.Parse(matches[0].Groups[2].Value);
+                result = matches[0].Groups[1].Value + (n + 1).ToString();
+            }
+            else
+            {
+                result = str + "1";
+            }
             return result;
         }
 
