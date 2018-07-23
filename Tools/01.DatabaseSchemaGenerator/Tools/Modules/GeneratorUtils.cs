@@ -101,6 +101,33 @@ namespace Tools.Modules
             return tableName + "s";
         }
 
+        public static string GetNavigationPropertyName(this Dictionary<string, MetadataSrv.NavigationProperty> navigationProperties, string proposedName)
+        {
+            var result = proposedName;
+            if (navigationProperties.ContainsKey(proposedName))
+            {
+                result = IncrementNumberedString(proposedName);
+                result = navigationProperties.GetNavigationPropertyName(result);
+            }
+            return result;
+        }
+
+        public static string IncrementNumberedString(string str)
+        {
+            var result = str;
+            var matches = Regex.Matches(str, @"(\w+?0*)(\d+)$");
+            if (matches.Count > 0)
+            {
+                var n = int.Parse(matches[0].Groups[2].Value);
+                result = matches[0].Groups[1].Value + (n + 1).ToString();
+            }
+            else
+            {
+                result = str + "1";
+            }
+            return result;
+        }
+
         public static bool ToBoolean(this int val)
         {
             return val <= 0 ? false : true;
@@ -148,32 +175,6 @@ namespace Tools.Modules
             return defaultValue;
         }
 
-        public static string GetNavigationPropertyName(this Dictionary<string, MetadataSrv.NavigationProperty> navigationProperties, string proposedName)
-        {
-            var result = proposedName;
-            if (navigationProperties.ContainsKey(proposedName))
-            {
-                result = IncrementNumberedString(proposedName);
-                result = navigationProperties.GetNavigationPropertyName(result);
-            }
-            return result;
-        }
-
-        public static string IncrementNumberedString(string str)
-        {
-            var result = str;
-            var matches = Regex.Matches(str, @"(\w+?0*)(\d+)$");
-            if (matches.Count > 0)
-            {
-                var n = int.Parse(matches[0].Groups[2].Value);
-                result = matches[0].Groups[1].Value + (n + 1).ToString();
-            }
-            else
-            {
-                result = str + "1";
-            }
-            return result;
-        }
     }
 
 }
