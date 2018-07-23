@@ -24,14 +24,47 @@ namespace Tools.Modules
 
         public static string Singularize(this string tableName)
         {
-            if (tableName.Substring(tableName.Length - 1) == "s")
-            {
-                if (tableName.Substring(tableName.Length - 2) == "ss")
-                {
-                    return tableName;
-                }
+            MatchCollection matches;
 
-                return tableName.Remove(tableName.Length - 1);
+            matches = Regex.Matches(tableName, @"(\w+i)ves$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "fe";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+)ves$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "f";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+[^aeiou])ies$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value + "y";
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+o)es$");
+            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+(sh|x|ch|ss|s))es$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
+            }
+
+            if (Regex.IsMatch(tableName, @"\w+ss$"))
+            {
+                return tableName;
+            }
+
+            matches = Regex.Matches(tableName, @"(\w+)s$");
+            if (matches.Count > 0)
+            {
+                return matches[0].Groups[1].Value;
             }
 
             return tableName;

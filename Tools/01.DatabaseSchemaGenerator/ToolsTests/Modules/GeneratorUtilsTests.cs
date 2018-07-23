@@ -18,9 +18,57 @@ namespace ToolsTests.Modules
         [TestMethod]
         public void TestSingularize()
         {
+            Assert.AreEqual(GeneratorUtils.Singularize("files"), "file");
+            Assert.AreEqual(GeneratorUtils.Singularize("centres"), "centre");
+            Assert.AreEqual(GeneratorUtils.Singularize("girls"), "girl");
+            Assert.AreEqual(GeneratorUtils.Singularize("books"), "book");
+            Assert.AreEqual(GeneratorUtils.Singularize("computers"), "computer");
+            Assert.AreEqual(GeneratorUtils.Singularize("ambitions"), "ambition");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("washes"), "wash");
+            Assert.AreEqual(GeneratorUtils.Singularize("boxes"), "box");
+            Assert.AreEqual(GeneratorUtils.Singularize("matches"), "match");
+            Assert.AreEqual(GeneratorUtils.Singularize("glasses"), "glass");
+            Assert.AreEqual(GeneratorUtils.Singularize("buses"), "bus");
+            Assert.AreEqual(GeneratorUtils.Singularize("businesses"), "business");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("knives"), "knife");
+            Assert.AreEqual(GeneratorUtils.Singularize("lives"), "life");
+            Assert.AreEqual(GeneratorUtils.Singularize("wives"), "wife");
+            Assert.AreEqual(GeneratorUtils.Singularize("shelves"), "shelf");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("cliffs"), "cliff");
+            Assert.AreEqual(GeneratorUtils.Singularize("sniffs"), "sniff");
+            Assert.AreEqual(GeneratorUtils.Singularize("scoffs"), "scoff");
+            Assert.AreEqual(GeneratorUtils.Singularize("toffs"), "toff");
+            Assert.AreEqual(GeneratorUtils.Singularize("stiffs"), "stiff");
+            Assert.AreEqual(GeneratorUtils.Singularize("tiffs"), "tiff");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("boys"), "boy");
+            Assert.AreEqual(GeneratorUtils.Singularize("journeys"), "journey");
+            Assert.AreEqual(GeneratorUtils.Singularize("keys"), "key");
+            Assert.AreEqual(GeneratorUtils.Singularize("trays"), "tray");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("countries"), "country");
+            Assert.AreEqual(GeneratorUtils.Singularize("babies"), "baby");
+            Assert.AreEqual(GeneratorUtils.Singularize("bodies"), "body");
+            Assert.AreEqual(GeneratorUtils.Singularize("memories"), "memory");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("radios"), "radio");
+            Assert.AreEqual(GeneratorUtils.Singularize("stereos"), "stereo");
+            Assert.AreEqual(GeneratorUtils.Singularize("videos"), "video");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("heroes"), "hero");
+            Assert.AreEqual(GeneratorUtils.Singularize("potatoes"), "potato");
+            Assert.AreEqual(GeneratorUtils.Singularize("volcanoes"), "volcano");
+            Assert.AreEqual(GeneratorUtils.Singularize("tomatoes"), "tomato");
+
             Assert.AreEqual(GeneratorUtils.Singularize("cars"), "car");
-            Assert.AreEqual(GeneratorUtils.Singularize("car"), "car");
-            Assert.AreEqual(GeneratorUtils.Singularize("witness"), "witness");
+            Assert.AreEqual(GeneratorUtils.Singularize("pennies"), "penny");
+            Assert.AreEqual(GeneratorUtils.Singularize("witnesses"), "witness");
+            Assert.AreEqual(GeneratorUtils.Singularize("waitresses"), "waitress");
+
+            Assert.AreEqual(GeneratorUtils.Singularize("addresses"), "address");
         }
 
         [TestMethod]
