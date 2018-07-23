@@ -39,6 +39,14 @@ Get-ChildItem ".\Tools\01.DatabaseSchemaGenerator\Tools\bin" -Directory | foreac
 Remove-Item -path ".\Tools\01.DatabaseSchemaGenerator\Tools\obj\*" -Include *.*
 Get-ChildItem ".\Tools\01.DatabaseSchemaGenerator\Tools\obj" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
 
+### Tools/DatabaseSchemaGenerator/Tests
+Remove-Item -Path ".\Tools\01.DatabaseSchemaGenerator\TestResults" -Recurse -ErrorAction SilentlyContinue
+Remove-Item -Path ".\Tools\01.DatabaseSchemaGenerator\ToolsTests\bin\*" -Include *.*
+Get-ChildItem ".\Tools\01.DatabaseSchemaGenerator\ToolsTests\bin" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+Remove-Item -path ".\Tools\01.DatabaseSchemaGenerator\ToolsTests\obj\*" -Include *.*
+Get-ChildItem ".\Tools\01.DatabaseSchemaGenerator\ToolsTests\obj" -Directory | foreach ($_) {Remove-Item $_.fullname -Recurse}
+
+
 ### Tools/DataProviderGeneratorServer
 Remove-Item -Path ".\Tools\02.DataProviderGeneratorServer\.vs\" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path ".\Tools\02.DataProviderGeneratorServer\packages\" -Recurse -ErrorAction SilentlyContinue

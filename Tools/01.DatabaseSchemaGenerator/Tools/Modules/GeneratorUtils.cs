@@ -63,7 +63,7 @@ namespace Tools.Modules
 
         public static bool ToBoolean(this int val)
         {
-            return val == 0 ? false : true;
+            return val <= 0 ? false : true;
         }
 
         public static object GetDefaultValue(DatabaseTypes.Column column)
