@@ -44,10 +44,14 @@ namespace Tools.Modules
                 return matches[0].Groups[1].Value + "y";
             }
 
-            matches = Regex.Matches(tableName, @"(\w+o)es$");
-            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
+            if (!Regex.IsMatch(tableName, @"\w+ff$"))
             {
-                return matches[0].Groups[1].Value;
+                matches = Regex.Matches(tableName, @"(\w+o)es$");
+                if (matches.Count > 0)
+                {
+                    return matches[0].Groups[1].Value;
+
+                }
             }
 
             matches = Regex.Matches(tableName, @"(\w+(sh|x|ch|ss|s))es$");
@@ -81,10 +85,13 @@ namespace Tools.Modules
                 return tableName + "es";
             }
 
-            matches = Regex.Matches(tableName, @"(\w+)(f|fe)$");
-            if (!Regex.IsMatch(tableName, @"\w+ff$") && matches.Count > 0)
+            if (!Regex.IsMatch(tableName, @"\w+ff$"))
             {
-                return matches[0].Groups[1].Value + "ves";
+                matches = Regex.Matches(tableName, @"(\w+)(f|fe)$");
+                if (matches.Count > 0)
+                {
+                    return matches[0].Groups[1].Value + "ves";
+                }
             }
 
             matches = Regex.Matches(tableName, @"(\w+[^aeiou])y$");
