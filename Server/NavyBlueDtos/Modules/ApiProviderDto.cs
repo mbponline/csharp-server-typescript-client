@@ -5,15 +5,15 @@ namespace NavyBlueDtos
 {
     public class ApiProviderDto
     {
-        private readonly MetadataSrv.Metadata metadataSrv;
         private readonly DataViewDto dataViewDto;
         private readonly ResultSerialUtils resultSerialUtils;
+        private readonly MetadataSrv.Metadata metadataSrv;
 
-        public ApiProviderDto(MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto, ResultSerialUtils resultSerialUtils)
+        public ApiProviderDto(DataViewDto dataViewDto, ResultSerialUtils resultSerialUtils, MetadataSrv.Metadata metadataSrv)
         {
-            this.metadataSrv = metadataSrv;
             this.dataViewDto = dataViewDto;
             this.resultSerialUtils = resultSerialUtils;
+            this.metadataSrv = metadataSrv;
         }
 
         public ResultSerialResponse HandleGet(string entitySetName, QueryParams queryParams)

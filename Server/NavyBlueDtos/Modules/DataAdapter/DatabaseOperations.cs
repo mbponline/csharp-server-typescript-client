@@ -11,13 +11,13 @@ namespace NavyBlueDtos
 
     internal class DatabaseOperations
     {
-        private readonly Dialect dialect;
         private readonly string connectionString;
+        private readonly Dialect dialect;
 
-        public DatabaseOperations(Dialect dialect, string connectionString)
+        public DatabaseOperations(string connectionString, Dialect dialect)
         {
-            this.dialect = dialect;
             this.connectionString = connectionString;
+            this.dialect = dialect;
         }
 
         // connectionString = @"Data Source=.\SQLEXPRESS2008;Initial Catalog=QualityControlDb04;Integrated Security=True;MultipleActiveResultSets=True", "System.Data.SqlClient"

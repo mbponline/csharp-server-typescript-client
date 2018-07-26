@@ -96,9 +96,9 @@ namespace Tools.Modules
 
             br.WriteLine("public static DataService CreateDataServiceInstance()");
             br.BeginBlock("{")
-                .WriteLine("var metadataSrv = DataProviderConfig.GetMetadataSrv();")
                 .WriteLine("var connectionString = DataProviderConfig.GetConnectionString();")
-                .WriteLine("var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);")
+                .WriteLine("var metadataSrv = DataProviderConfig.GetMetadataSrv();")
+                .WriteLine("var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);")
                 .WriteLine("var dataService = new DataService(dataServiceDto);")
                 .WriteLine("return dataService;");
             br.EndBlock("}", false);

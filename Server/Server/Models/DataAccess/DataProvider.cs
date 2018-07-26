@@ -30,9 +30,9 @@ namespace Server.Models.DataAccess
 
         public static DataService CreateDataServiceInstance()
         {
-            var metadataSrv = DataProviderConfig.GetMetadataSrv();
             var connectionString = DataProviderConfig.GetConnectionString();
-            var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);
+            var metadataSrv = DataProviderConfig.GetMetadataSrv();
+            var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);
             var dataService = new DataService(dataServiceDto);
             return dataService;
         }

@@ -6,9 +6,9 @@ namespace Server.Models.DataAccess
     {
         public static DataServiceDto CreateDataServiceInstance()
         {
-            var metadataSrv = DataProviderConfig.GetMetadataSrv();
             var connectionString = DataProviderConfig.GetConnectionString();
-            var dataServiceDto = new DataServiceDto(metadataSrv, connectionString);
+            var metadataSrv = DataProviderConfig.GetMetadataSrv();
+            var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);
             return dataServiceDto;
         }
     }

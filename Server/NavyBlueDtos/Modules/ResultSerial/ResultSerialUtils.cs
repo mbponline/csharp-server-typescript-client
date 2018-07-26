@@ -6,15 +6,15 @@ namespace NavyBlueDtos
 {
     public class ResultSerialUtils
     {
+        private readonly DataViewDto dataViewDto;
         private readonly string apiRouteRoot;
         private readonly MetadataSrv.Metadata metadataSrv;
-        private readonly DataViewDto dataViewDto;
 
-        public ResultSerialUtils(string apiRouteRoot, MetadataSrv.Metadata metadataSrv, DataViewDto dataViewDto)
+        public ResultSerialUtils(DataViewDto dataViewDto, string apiRouteRoot, MetadataSrv.Metadata metadataSrv)
         {
+            this.dataViewDto = dataViewDto;
             this.apiRouteRoot = apiRouteRoot;
             this.metadataSrv = metadataSrv;
-            this.dataViewDto = dataViewDto;
         }
 
         public ResultSerialResponse FetchResponseData(string entityTypeName, QueryObject queryObject)

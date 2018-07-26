@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,15 +6,15 @@ namespace NavyBlueDtos
 {
     public class DataViewDto
     {
-        private readonly MetadataSrv.Metadata metadataSrv;
         private readonly DataAdapterRead dataAdapterRead;
         private readonly DataAdapterCud dataAdapterCud;
+        private readonly MetadataSrv.Metadata metadataSrv;
 
-        internal DataViewDto(MetadataSrv.Metadata metadataSrv, DataAdapterRead dataAdapterRead, DataAdapterCud dataAdapterCud)
+        internal DataViewDto(DataAdapterRead dataAdapterRead, DataAdapterCud dataAdapterCud, MetadataSrv.Metadata metadataSrv)
         {
-            this.metadataSrv = metadataSrv;
             this.dataAdapterRead = dataAdapterRead;
             this.dataAdapterCud = dataAdapterCud;
+            this.metadataSrv = metadataSrv;
         }
 
         /**

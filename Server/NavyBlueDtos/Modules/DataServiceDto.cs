@@ -8,17 +8,17 @@ namespace NavyBlueDtos
         public ApiProviderDto ApiProviderDto { get; private set; }
         public ResultSerialUtils ResultSerialUtils { get; private set; }
 
-        public DataServiceDto(MetadataSrv.Metadata metadataSrv, string connectionString)
+        public DataServiceDto(string connectionString, MetadataSrv.Metadata metadataSrv)
         {
             this.MetadataSrv = metadataSrv;
 
             var dialect = metadataSrv.Dialect();
-            var databaseOperations = new DatabaseOperations(dialect, connectionString);
-            var dataAdapterRead = new DataAdapterRead(metadataSrv, dialect, databaseOperations);
-            var dataAdapterCud = new DataAdapterCud(metadataSrv, dialect, dataAdapterRead, databaseOperations);
-            this.DataViewDto = new DataViewDto(metadataSrv, dataAdapterRead, dataAdapterCud);
-            this.ResultSerialUtils = new ResultSerialUtils("crud", metadataSrv, this.DataViewDto);
-            this.ApiProviderDto = new ApiProviderDto(metadataSrv, this.DataViewDto, this.ResultSerialUtils);
+            var databaseOperations = new DatabaseOperations(connectionString, dialect);
+            var dataAdapterRead = new DataAdapterRead(databaseOperations, dialect, metadataSrv);
+            var dataAdapterCud = new DataAdapterCud(dataAdapterRead, databaseOperations, dialect, metadataSrv);
+            this.DataViewDto = new DataViewDto(dataAdapterRead, dataAdapterCud, metadataSrv);
+            this.ResultSerialUtils = new ResultSerialUtils(this.DataViewDto, "crud", metadataSrv);
+            this.ApiProviderDto = new ApiProviderDto(this.DataViewDto, this.ResultSerialUtils, metadataSrv);
         }
 
     }

@@ -7,17 +7,17 @@ namespace NavyBlueDtos
 
     internal class DataAdapterCud
     {
-        private MetadataSrv.Metadata metadataSrv;
-        private readonly Dialect dialect;
         private readonly DataAdapterRead dataAdapterRead;
         private readonly DatabaseOperations databaseOperations;
+        private readonly Dialect dialect;
+        private MetadataSrv.Metadata metadataSrv;
 
-        public DataAdapterCud(MetadataSrv.Metadata metadataSrv, Dialect dialect, DataAdapterRead dataAdapterRead, DatabaseOperations databaseOperations)
+        public DataAdapterCud(DataAdapterRead dataAdapterRead, DatabaseOperations databaseOperations, Dialect dialect, MetadataSrv.Metadata metadataSrv)
         {
-            this.metadataSrv = metadataSrv;
-            this.dialect = dialect;
             this.dataAdapterRead = dataAdapterRead;
             this.databaseOperations = databaseOperations;
+            this.dialect = dialect;
+            this.metadataSrv = metadataSrv;
         }
 
         public ResultSerialData UpdateEntity(string entityTypeName, JObject entity, Dto dto, bool returnUpdated = false)

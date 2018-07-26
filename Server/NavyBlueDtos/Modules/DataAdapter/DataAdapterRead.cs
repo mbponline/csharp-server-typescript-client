@@ -9,20 +9,20 @@ namespace NavyBlueDtos
 
     internal class DataAdapterRead
     {
-        private readonly MetadataSrv.Metadata metadataSrv;
-        private readonly Dialect dialect;
         private readonly DatabaseOperations databaseOperations;
+        private readonly Dialect dialect;
+        private readonly MetadataSrv.Metadata metadataSrv;
 
-        public DataAdapterRead(MetadataSrv.Metadata metadataSrv, Dialect dialect, DatabaseOperations databaseOperations)
+        public DataAdapterRead(DatabaseOperations databaseOperations, Dialect dialect, MetadataSrv.Metadata metadataSrv)
         {
-            this.metadataSrv = metadataSrv;
-            this.dialect = dialect;
             this.databaseOperations = databaseOperations;
+            this.dialect = dialect;
+            this.metadataSrv = metadataSrv;
         }
 
         internal int Count(string entityTypeName, QueryObject queryObject)
         {
-            var entityTypeQueries = Utils.BuildEntityTypeQueries(entityTypeName, queryObject, this.metadataSrv, this.dialect);
+            var entityTypeQueries = Utils.BuildEntityTypeQueries(entityTypeName, queryObject, this.dialect, this.metadataSrv);
             var countRows = this.databaseOperations.CountQuery(entityTypeQueries.QueryCount);
             return countRows;
         }
@@ -54,7 +54,7 @@ namespace NavyBlueDtos
 
         internal ResultSerialData Fetch(string entityTypeName, QueryObject queryObject)
         {
-            var queries = Utils.GetQueryResult(entityTypeName, queryObject, this.metadataSrv, this.dialect);
+            var queries = Utils.GetQueryResult(entityTypeName, queryObject, this.dialect, this.metadataSrv);
             var resultSerialData = new ResultSerialData();
             foreach (var et in queries)
             {
@@ -87,11 +87,11 @@ namespace NavyBlueDtos
         static class Utils
         {
 
-            internal static List<QueryResult> GetQueryResult(string entityTypeName, QueryObject queryObject, MetadataSrv.Metadata metadataSrv, Dialect dialect)
+            internal static List<QueryResult> GetQueryResult(string entityTypeName, QueryObject queryObject, Dialect dialect, MetadataSrv.Metadata metadataSrv)
             {
                 var result = new List<QueryResult>();
 
-                var entityTypeQueries = BuildEntityTypeQueries(entityTypeName, queryObject, metadataSrv, dialect);
+                var entityTypeQueries = BuildEntityTypeQueries(entityTypeName, queryObject, dialect, metadataSrv);
 
                 var queryRoot = entityTypeQueries.QueryRoot;
 
@@ -124,12 +124,12 @@ namespace NavyBlueDtos
                             result.Add(new QueryResult()
                             {
                                 EntityTypeName = entityTypeNameLocal,
-                                QueryText = NavigationBranchToQueryText(entityTypeName, queryRoot, navs, metadataSrv, dialect)
+                                QueryText = NavigationBranchToQueryText(entityTypeName, queryRoot, navs, dialect, metadataSrv)
                             });
                         }
                         else
                         {
-                            foundEntityType.QueryText += " UNION " + NavigationBranchToQueryText(entityTypeName, queryRoot, navs, metadataSrv, dialect);
+                            foundEntityType.QueryText += " UNION " + NavigationBranchToQueryText(entityTypeName, queryRoot, navs, dialect, metadataSrv);
                         }
                     }
                 }
@@ -137,7 +137,7 @@ namespace NavyBlueDtos
                 return result;
             }
 
-            internal static EntityTypeQueries BuildEntityTypeQueries(string entityTypeName, QueryObject queryObject, MetadataSrv.Metadata metadataSrv, Dialect dialect)
+            internal static EntityTypeQueries BuildEntityTypeQueries(string entityTypeName, QueryObject queryObject, Dialect dialect, MetadataSrv.Metadata metadataSrv)
             {
                 var select = "it.*";
                 var filter = string.Empty;
@@ -321,7 +321,7 @@ namespace NavyBlueDtos
                 return select;
             }
 
-            internal static string NavigationBranchToQueryText(string entityTypeName, string entityTypeQuery, List<MetadataSrv.NavigationProperty> navBranch, MetadataSrv.Metadata metadataSrv, Dialect dialect)
+            internal static string NavigationBranchToQueryText(string entityTypeName, string entityTypeQuery, List<MetadataSrv.NavigationProperty> navBranch, Dialect dialect, MetadataSrv.Metadata metadataSrv)
             {
                 // A INNER JOIN B ON A.IdDepartament = B.IdDepartament AND A.IdPersoana = B.IdPersoana INNER JOIN C ON ...
                 var entityTypeNameLocal = entityTypeName;
