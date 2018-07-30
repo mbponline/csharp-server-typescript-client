@@ -44,17 +44,7 @@ namespace Tools.Modules
                 return matches[0].Groups[1].Value + "y";
             }
 
-            if (!Regex.IsMatch(tableName, @"\w+ff$"))
-            {
-                matches = Regex.Matches(tableName, @"(\w+o)es$");
-                if (matches.Count > 0)
-                {
-                    return matches[0].Groups[1].Value;
-
-                }
-            }
-
-            matches = Regex.Matches(tableName, @"(\w+(sh|x|ch|ss|s))es$");
+            matches = Regex.Matches(tableName, @"(\w+(o|sh|x|ch|ss|s))es$");
             if (matches.Count > 0)
             {
                 return matches[0].Groups[1].Value;
