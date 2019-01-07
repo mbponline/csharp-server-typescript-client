@@ -82,26 +82,51 @@ namespace Tools.Modules
 
             //var json = JsonConvert.SerializeObject(result, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
 
+            // DataProvider
+            br.WriteLine("public interface IDataProvider");
+            br.BeginBlock("{")
+                .WriteLine("DataService CreateDataServiceInstance();");
+            br.EndBlock("}");
+
+            br.WriteLine("public class DataProvider : IDataProvider");
+            br.BeginBlock("{")
+                .WriteLine("private readonly IDataProviderDto dataProviderDto;")
+                .WriteLine();
+
+            br.WriteLine("public DataProvider(IDataProviderDto dataProviderDto)");
+            br.BeginBlock("{")
+                .WriteLine("this.dataProviderDto = dataProviderDto;");
+            br.EndBlock("}");
+
+            br.WriteLine("public DataService CreateDataServiceInstance()");
+            br.BeginBlock("{")
+                .WriteLine("var dataServiceDto = this.dataProviderDto.CreateDataServiceInstance();")
+                .WriteLine("var dataService = new DataService(dataServiceDto);")
+                .WriteLine("return dataService;");
+            br.EndBlock("}", false);
+
+            br.EndBlock("}");
+
             // DataService
             br.WriteLine("public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>");
             br.BeginBlock("{");
-            br.WriteLine("protected DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)");
+            br.WriteLine("public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)");
             br.BeginBlock("{");
             br.WriteLine("this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()");
             br.BeginBlock("{")
                 .WriteLine("Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, dataServiceDto.MetadataSrv) },")
                 .WriteLine("Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(dataServiceDto.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(dataServiceDto.DataViewDto) }");
             br.EndBlock("};", false);
-            br.EndBlock("}");
-
-            br.WriteLine("public static DataService CreateDataServiceInstance()");
-            br.BeginBlock("{")
-                .WriteLine("var connectionString = DataProviderConfig.GetConnectionString();")
-                .WriteLine("var metadataSrv = DataProviderConfig.GetMetadataSrv();")
-                .WriteLine("var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);")
-                .WriteLine("var dataService = new DataService(dataServiceDto);")
-                .WriteLine("return dataService;");
             br.EndBlock("}", false);
+
+            // br.WriteLine("public static DataService CreateDataServiceInstance()");
+            // br.BeginBlock("{")
+            //     .WriteLine("var connectionString = DataProviderConfig.GetConnectionString();")
+            //     .WriteLine("var metadataSrv = DataProviderConfig.GetMetadataSrv();")
+            //     .WriteLine("var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);")
+            //     .WriteLine("var dataService = new DataService(dataServiceDto);")
+            //     .WriteLine("return dataService;");
+            // br.EndBlock("}", false);
 
             br.EndBlock("}");
 

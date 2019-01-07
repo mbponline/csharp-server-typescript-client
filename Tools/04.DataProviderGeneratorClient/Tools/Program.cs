@@ -30,9 +30,11 @@ namespace Tools
     {
         public static string GetPathToAppData()
         {
-            var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase; //.Location
-            path = path.Substring(8);
-            for (int i = 0; i < 3; i++)
+            //var path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase; //.Location
+            var path = AppContext.BaseDirectory;
+            //path = path.Substring(8);
+            // Info credit: https://social.msdn.microsoft.com/Forums/vstudio/en-US/decc53b0-2f53-4aae-b86b-6e786c5f8d90/navigate-up-4-levels-in-directoryfolder-path-to-create-string-reference-to-a-specific-folder?forum=csharpgeneral
+            for (int i = 0; i < 4; i++)
             {
                 path = Path.GetDirectoryName(path);
             }
@@ -46,7 +48,7 @@ namespace Tools
             var path = AppContext.BaseDirectory;
             //path = path.Substring(8);
             // Info credit: https://social.msdn.microsoft.com/Forums/vstudio/en-US/decc53b0-2f53-4aae-b86b-6e786c5f8d90/navigate-up-4-levels-in-directoryfolder-path-to-create-string-reference-to-a-specific-folder?forum=csharpgeneral
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 path = Path.GetDirectoryName(path);
             }

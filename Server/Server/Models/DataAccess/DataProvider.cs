@@ -17,24 +17,37 @@ using MetadataSrv = NavyBlueDtos.MetadataSrv;
 
 namespace Server.Models.DataAccess
 {
+    public interface IDataProvider
+    {
+        DataService CreateDataServiceInstance();
+    }
+
+    public class DataProvider : IDataProvider
+    {
+        private readonly IDataProviderDto dataProviderDto;
+
+        public DataProvider(IDataProviderDto dataProviderDto)
+        {
+            this.dataProviderDto = dataProviderDto;
+        }
+
+        public DataService CreateDataServiceInstance()
+        {
+            var dataServiceDto = this.dataProviderDto.CreateDataServiceInstance();
+            var dataService = new DataService(dataServiceDto);
+            return dataService;
+        }
+    }
+
     public class DataService : DataServiceEntity<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>
     {
-        protected DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)
+        public DataService(DataServiceDto dataServiceDto) : base(dataServiceDto)
         {
             this.From = new ServiceLocation<LocalEntityViews, LocalDtoViews, RemoteEntityViews, RemoteDtoViews>()
             {
                 Local = new ViewType<LocalEntityViews, LocalDtoViews>() { EntityView = new LocalEntityViews(this.DataContext), DtoView = new LocalDtoViews(this.DataContext, dataServiceDto.MetadataSrv) },
                 Remote = new ViewType<RemoteEntityViews, RemoteDtoViews>() { EntityView = new RemoteEntityViews(dataServiceDto.DataViewDto, this.DataContext), DtoView = new RemoteDtoViews(dataServiceDto.DataViewDto) }
             };
-        }
-
-        public static DataService CreateDataServiceInstance()
-        {
-            var connectionString = DataProviderConfig.GetConnectionString();
-            var metadataSrv = DataProviderConfig.GetMetadataSrv();
-            var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);
-            var dataService = new DataService(dataServiceDto);
-            return dataService;
         }
     }
 

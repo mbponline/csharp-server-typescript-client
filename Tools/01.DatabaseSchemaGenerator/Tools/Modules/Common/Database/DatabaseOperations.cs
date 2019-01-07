@@ -1,37 +1,51 @@
-﻿using System;
+﻿using Dapper;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using WebMatrix.Data;
-using WebMatrix.Data.StronglyTyped;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace Tools.Modules.Common.Database
 {
 
     internal class DatabaseOperations
     {
-        private WebMatrix.Data.Database db;
+        private string _dialect;
+        private string _connectionString;
 
         public DatabaseOperations(string dialect, string connectionString)
         {
-            var provider = "";
-            switch (dialect)
-            {
-                case "MSSQL":
-                    provider = "System.Data.SqlClient";
-                    break;
-                case "MYSQL":
-                    provider = "MySql.Data.MySqlClient";
-                    break;
-                default:
-                    throw new ArgumentException("Unknown dialect");
-            }
-            this.db = WebMatrix.Data.Database.OpenConnectionString(connectionString, provider);
+            this._dialect = dialect;
+            this._connectionString = connectionString;
         }
 
-        public IEnumerable<T> Query<T>(string queryText, params object[] args)
+        public IEnumerable<T> Query<T>(string queryText)
         {
-            var rows = db.Query<T>(queryText, args);
+            var rows = Enumerable.Empty<T>();
+            switch (this._dialect)
+            {
+                case "MSSQL":
+                    using (var sqlConnection = new SqlConnection(this._connectionString))
+                    {
+                        sqlConnection.Open();
+                        rows = sqlConnection.Query<T>(queryText);
+                        sqlConnection.Close();
+                    }
+                    break;
+                case "MYSQL":
+                    using (var sqlConnection = new MySqlConnection(this._connectionString))
+                    {
+                        sqlConnection.Open();
+                        rows = sqlConnection.Query<T>(queryText);
+                        sqlConnection.Close();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
             return rows;
         }
+
 
     }
 

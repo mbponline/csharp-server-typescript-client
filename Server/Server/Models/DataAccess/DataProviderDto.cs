@@ -2,12 +2,25 @@
 
 namespace Server.Models.DataAccess
 {
-    public static class DataProviderDto
+
+    public interface IDataProviderDto
     {
-        public static DataServiceDto CreateDataServiceInstance()
+        DataServiceDto CreateDataServiceInstance();
+    }
+
+    public class DataProviderDto : IDataProviderDto
+    {
+        private readonly IDataProviderConfig dataProviderConfig;
+
+        public DataProviderDto(IDataProviderConfig dataProviderConfig)
         {
-            var connectionString = DataProviderConfig.GetConnectionString();
-            var metadataSrv = DataProviderConfig.GetMetadataSrv();
+            this.dataProviderConfig = dataProviderConfig;
+        }
+
+        public DataServiceDto CreateDataServiceInstance()
+        {
+            var connectionString = this.dataProviderConfig.GetConnectionString();
+            var metadataSrv = this.dataProviderConfig.GetMetadataSrv();
             var dataServiceDto = new DataServiceDto(connectionString, metadataSrv);
             return dataServiceDto;
         }

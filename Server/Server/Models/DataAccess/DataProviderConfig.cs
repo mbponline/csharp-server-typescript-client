@@ -1,25 +1,41 @@
-﻿using Newtonsoft.Json;
-using System.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.IO;
-using System.Web.Hosting;
 using MetadataSrv = NavyBlueDtos.MetadataSrv;
 
 namespace Server.Models.DataAccess
 {
-
-    public static class DataProviderConfig
+    public interface IDataProviderConfig
     {
+        string GetConnectionString();
+        MetadataSrv.Metadata GetMetadataSrv();
+    }
 
-        public static string GetConnectionString()
+    public class DataProviderConfig : IDataProviderConfig
+    {
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IConfiguration configuration;
+
+        public DataProviderConfig(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            this.hostingEnvironment = hostingEnvironment;
+            this.configuration = configuration;
+        }
+
+        public string GetConnectionString()
+        {
+            // var connectionString = "Server=localhost;Database=sakila;Uid=root;Pwd=Pass@word1;";
+            var connectionString = this.configuration.GetValue<string>("App:DefaultConnection");
             return connectionString;
         }
 
-        public static MetadataSrv.Metadata GetMetadataSrv()
+        public MetadataSrv.Metadata GetMetadataSrv()
         {
-            var pathMetadata = HostingEnvironment.MapPath(@"~/App_Data");
-            var metadataJsonText = File.ReadAllText(Path.Combine(pathMetadata, "metadata_srv.json"));
+            var pathMetadataRelative = this.configuration.GetValue<string>("App:AppData");
+            var pathMetadata = Path.Combine(this.hostingEnvironment.ContentRootPath + pathMetadataRelative, "metadata_srv.json");
+            var metadataJsonText = File.ReadAllText(pathMetadata);
             var metadataSrv = JsonConvert.DeserializeObject<MetadataSrv.Metadata>(metadataJsonText);
             return metadataSrv;
         }

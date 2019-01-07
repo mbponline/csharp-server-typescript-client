@@ -1,19 +1,18 @@
-﻿using NavyBlueDtos;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Server.Models.DataAccess;
-using System.Collections.Generic;
-using System.Web.Http;
-using System.Web.Http.Cors;
+using NavyBlueDtos;
 
 namespace Server.Controllers.Dtos
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [RoutePrefix("api/datasource/crud")]
-    public class CrudController : ApiController
+    [Produces("application/json")]
+    [Route("api/datasource/crud")]
+    public class CrudController : Controller
     {
-        public CrudController()
+        public CrudController(IDataProviderDto dataProviderDto)
         {
-            this.dataServiceDto = DataProviderDto.CreateDataServiceInstance();
+            this.dataServiceDto = dataProviderDto.CreateDataServiceInstance();
         }
 
         private readonly DataServiceDto dataServiceDto;
@@ -21,7 +20,7 @@ namespace Server.Controllers.Dtos
         // GET: api/datasource/crud/{entitySetName}?skip=20&top=10
         [Route("{entitySetName}")]
         [HttpGet]
-        public ResultSerialResponse Get(string entitySetName, [FromUri] QueryParams queryParams)
+        public ResultSerialResponse Get(string entitySetName, [FromQuery] QueryParams queryParams)
         {
             return this.dataServiceDto.ApiProviderDto.HandleGet(entitySetName, queryParams);
         }
@@ -29,7 +28,7 @@ namespace Server.Controllers.Dtos
         // GET: api/datasource/crud/single/{entitySetName}?keys=key1:{key1}
         [Route("single/{entitySetName}")]
         [HttpGet]
-        public ResultSingleSerialData GetSingle(string entitySetName, [FromUri] QueryParams queryParams)
+        public ResultSingleSerialData GetSingle(string entitySetName, [FromQuery] QueryParams queryParams)
         {
             return this.dataServiceDto.ApiProviderDto.HandleGetSingle(entitySetName, queryParams);
         }
@@ -37,7 +36,7 @@ namespace Server.Controllers.Dtos
         // GET: api/datasource/crud/many/{entitySetName}?keys=key1:1,2,3,4;key2:4,5,6,7
         [Route("many/{entitySetName}")]
         [HttpGet]
-        public ResultSerialData GetMany(string entitySetName, [FromUri] QueryParams queryParams)
+        public ResultSerialData GetMany(string entitySetName, [FromQuery] QueryParams queryParams)
         {
             return this.dataServiceDto.ApiProviderDto.HandleGetMany(entitySetName, queryParams);
         }
@@ -45,7 +44,7 @@ namespace Server.Controllers.Dtos
         // PUT: api/datasource/crud/{entitySetName}?keys=key1:{key1}
         [Route("{entitySetName}")]
         [HttpPut]
-        public ResultSingleSerialData Put(string entitySetName, [FromUri] QueryParams queryParams, [FromBody] JObject jdto)
+        public ResultSingleSerialData Put(string entitySetName, [FromQuery] QueryParams queryParams, [FromBody] JObject jdto)
         {
             var dto = jdto.ToObject<Dto>();
             return this.dataServiceDto.ApiProviderDto.HandleUpdateEntity(entitySetName, queryParams, dto);
@@ -54,7 +53,7 @@ namespace Server.Controllers.Dtos
         // PATCH: api/datasource/crud/{entitySetName}?keys=key1:{key1}
         [Route("{entitySetName}")]
         [HttpPatch]
-        public ResultSingleSerialData Patch(string entitySetName, [FromUri] QueryParams queryParams, [FromBody] JObject jdto)
+        public ResultSingleSerialData Patch(string entitySetName, [FromQuery] QueryParams queryParams, [FromBody] JObject jdto)
         {
             var dto = jdto.ToObject<Dto>();
             return this.dataServiceDto.ApiProviderDto.HandleUpdateEntity(entitySetName, queryParams, dto);
@@ -72,7 +71,7 @@ namespace Server.Controllers.Dtos
         // DELETE: api/datasource/crud/{entitySetName}?keys=key1:{key1}
         [Route("{entitySetName}")]
         [HttpDelete]
-        public ResultSingleSerialData Delete(string entitySetName, [FromUri] QueryParams queryParams)
+        public ResultSingleSerialData Delete(string entitySetName, [FromQuery] QueryParams queryParams)
         {
             return this.dataServiceDto.ApiProviderDto.HandleDeleteEntity(entitySetName, queryParams);
         }
@@ -132,7 +131,7 @@ namespace Server.Controllers.Dtos
         // DELETE: api/datasource/crud/batch/{entitySetName}?keys=key1:1,2,3,4;key2:4,5,6,7
         [Route("{entitySetName}")]
         [HttpDelete]
-        public ResultSerialData DeleteBatch(string entitySetName, [FromUri] QueryParams queryParams)
+        public ResultSerialData DeleteBatch(string entitySetName, [FromQuery] QueryParams queryParams)
         {
             return this.dataServiceDto.ApiProviderDto.HandleDeleteEntityBatch(entitySetName, queryParams);
         }
