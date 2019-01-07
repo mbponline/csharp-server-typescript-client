@@ -354,7 +354,7 @@ namespace NavyBlueDtos
                 return string.Join(" AND ", result);
             }
 
-            internal static string GetFilterFromKey(string[] keyNames, Dto partialEntity)
+            internal static string GetFilterFromKey(string[] keyNames, Dto dto)
             {
                 var result = new List<string>();
                 if (keyNames.Length == 0)
@@ -363,16 +363,16 @@ namespace NavyBlueDtos
                 }
                 foreach (var keyName in keyNames)
                 {
-                    if (!partialEntity.ContainsKey(keyName))
+                    if (!dto.ContainsKey(keyName))
                     {
                         throw new Exception("Key fiels not present");
                     }
-                    result.Add(keyName + "=" + partialEntity[keyName]);
+                    result.Add(keyName + "=" + dto[keyName]);
                 }
                 return string.Join(" AND ", result);
             }
 
-            internal static string GetFilterFromKeyMultiple(string[] keyNames, IEnumerable<Dto> partialEntity)
+            internal static string GetFilterFromKeyMultiple(string[] keyNames, IEnumerable<Dto> dtos)
             {
                 var result = new List<string>();
                 if (keyNames.Length == 0)
@@ -381,9 +381,9 @@ namespace NavyBlueDtos
                 }
                 if (keyNames.Length == 1)
                 {
-                    return keyNames[0] + " IN (" + string.Join(",", partialEntity.Select((it) => it[keyNames[0]])) + ")";
+                    return keyNames[0] + " IN (" + string.Join(",", dtos.Select((it) => it[keyNames[0]])) + ")";
                 }
-                foreach (var dto in partialEntity)
+                foreach (var dto in dtos)
                 {
                     var dtoFilter = new List<string>();
                     foreach (var keyName in keyNames)
